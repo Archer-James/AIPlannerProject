@@ -1,6 +1,7 @@
 # Megdalia Bromhal - 26 Sept. 2024
 # User class
 
+#Adding comments for Sprint0 - Archer
 class User:
     """A class that represents a user for the system."""
     username: str
