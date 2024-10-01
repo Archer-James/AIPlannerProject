@@ -1,3 +1,4 @@
+# using datetime package to get date, time, and duration
 from datetime import date, time, timedelta
 
 class Task:
@@ -12,6 +13,7 @@ class Task:
     assigned_block_start_time: time
     assigned_block_duration: timedelta
 
+    #initialize all of the attributes
     def __init__(self, recur_frequency: str, due_date: date, is_deleted: bool,
                  task_name: str, description: str, task_id: int, priority_level: str,
                  assigned_block_date: date, assigned_block_start_time: time, assigned_block_duration: timedelta):
