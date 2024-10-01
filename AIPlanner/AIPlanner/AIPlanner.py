@@ -29,7 +29,7 @@ def index() -> rx.Component:
                 size="5",
             ),
             rx.link(
-                rx.button("Click!"),
+                rx.button("Clicks!"),
                 href="https://reflex.dev/docs/getting-started/introduction/",
                 is_external=True,
             ),
