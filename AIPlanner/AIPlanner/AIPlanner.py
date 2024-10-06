@@ -2,6 +2,7 @@
 
 import reflex as rx
 from rxconfig import config
+from AIPlanner.database import QueryUser # Database
 # from pages.signup import signup # Sign up page
 
 #to run test environment
@@ -38,6 +39,10 @@ def index() -> rx.Component:
                 href="/signup",
                 is_external=False,
             ),
+            #rx.link(
+            #    rx.button("Show Users"),
+            #    href="/database"
+            #)
             spacing="5",
             justify="center",
             min_height="85vh",
