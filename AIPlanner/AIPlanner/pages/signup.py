@@ -7,8 +7,9 @@ import reflex as rx
 def signup() -> rx.Component:
     # Signup page 
     return rx.container(
+        rx.color_mode.button(position="top-right"),
         rx.vstack(
-            rx.heading("Sign Up!", size="0"),
+            rx.heading("Sign Up!", size="7"),
             rx.input(placeholder="Enter email address", size='lg'),
             rx.input(placeholder="Enter password", type="password", size='lg'),
             rx.button("Submit"), # on_click=lambda: print("Signed up!")

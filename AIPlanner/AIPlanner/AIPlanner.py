@@ -24,6 +24,18 @@ def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
+        rx.hstack(
+            rx.link(
+                rx.button("Sign Up!"),
+                href="/signup",
+                is_external=False,
+            ),
+            spacing="5",
+            justify="right",
+            min_height="0.01vh",
+        ),
+    ), rx.container(
+        rx.color_mode.button(position="top-right"),
         rx.vstack(
             rx.heading("Welcome to Reflex!", size="9"),
             rx.text(
@@ -36,17 +48,14 @@ def index() -> rx.Component:
                 href="https://reflex.dev/docs/getting-started/introduction/",
                 is_external=True,
             ),
-            rx.link(
-                rx.button("Sign Up!"),
-                href="/signup",
-                is_external=False,
-            ),
             spacing="5",
             justify="center",
-            min_height="85vh",
+            min_height="50vh", # Changing to 50 to squish it up more
         ),
         rx.logo(),
     )
+
+
 
 
 app = rx.App()
