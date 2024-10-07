@@ -11,7 +11,12 @@ def signup() -> rx.Component:
             rx.heading("Sign Up!", size="0"),
             rx.input(placeholder="Enter email address", size='lg'),
             rx.input(placeholder="Enter password", type="password", size='lg'),
-            rx.button("Submit", on_click=lambda: print("Signed up!")),
+            rx.button("Submit"), # on_click=lambda: print("Signed up!")
+            rx.link(
+                rx.button("Go back"),
+                href = "/",
+                is_external=False,
+            ),
             spacing="5",
             justify="center",
             min_height="85vh"

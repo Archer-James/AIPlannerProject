@@ -2,7 +2,10 @@
 
 import reflex as rx
 from rxconfig import config
-# from pages.signup import signup # Sign up page
+
+# Importing pages
+from AIPlanner.pages.signup import signup # Sign up page
+
 
 #to run test environment
 #>cd AIPlanner
@@ -45,25 +48,6 @@ def index() -> rx.Component:
         rx.logo(),
     )
 
-def signup() -> rx.Component:
-    # Signup page 
-    return rx.container(
-        rx.vstack(
-            rx.heading("Sign Up!", size="0"),
-            rx.input(placeholder="Enter email address", size='lg'),
-            rx.input(placeholder="Enter password", type="password", size='lg'),
-            rx.button("Submit"),  # on_click=lambda: print("Signed up!")
-            rx.link(
-                rx.button("Go back"),
-                href = "/",
-                is_external=False,
-            ),
-            spacing="5",
-            justify="center",
-            min_height="85vh"
-        ),
-        rx.logo()
-    )
 
 app = rx.App()
 app.add_page(index)
