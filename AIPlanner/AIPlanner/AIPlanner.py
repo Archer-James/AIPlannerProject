@@ -2,12 +2,14 @@
 
 import reflex as rx
 from rxconfig import config
+
+
 # from pages.signup import signup # Sign up page
 
-#to run test environment
-#>cd AIPlanner
-#>py -3 -m venv .venv
-#>reflex run
+# to run test environment
+# >cd AIPlanner
+# >py -3 -m venv .venv
+# >reflex run
 # open http://localhost:3000/
 
 
@@ -38,12 +40,18 @@ def index() -> rx.Component:
                 href="/signup",
                 is_external=False,
             ),
+            rx.link(
+                rx.button("calendar", on_click=rx.redirect('/calendar')),
+                href="/calendar",
+                is_external=False,
+            ),
             spacing="5",
             justify="center",
             min_height="85vh",
         ),
         rx.logo(),
     )
+
 
 def signup() -> rx.Component:
     # Signup page 
@@ -55,7 +63,7 @@ def signup() -> rx.Component:
             rx.button("Submit"),  # on_click=lambda: print("Signed up!")
             rx.link(
                 rx.button("Go back"),
-                href = "/",
+                href="/",
                 is_external=False,
             ),
             spacing="5",
@@ -65,9 +73,18 @@ def signup() -> rx.Component:
         rx.logo()
     )
 
+
+def calendar() -> rx.Component:
+    # Welcome Page (Index)
+    return rx.vstack(
+            rx.heading("Calendar", size="0"),
+        ),
+
+
+
 app = rx.App()
 app.add_page(index)
-
+app.add_page(calendar, route='/calendar')
 
 # Megdalia Bromhal - 30 Sept. 2024
 # Adding a signup page (as defined in pages.signup)
