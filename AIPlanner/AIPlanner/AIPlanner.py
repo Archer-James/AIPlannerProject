@@ -51,9 +51,6 @@ def index() -> rx.Component:
 
 app = rx.App()
 app.add_page(index)
-
-
-# Megdalia Bromhal - 30 Sept. 2024
 # Adding a signup page (as defined in pages.signup)
 app.add_page(signup)
 
