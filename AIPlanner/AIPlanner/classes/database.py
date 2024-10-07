@@ -7,6 +7,9 @@ class User(rx.Model, table=True):
     canvas_hash_id: int
     password: str
 
+    class Meta:
+        primary_key = "canvas_hash_id"
+
 class Task(rx.Model, table=True):
     recur_frequency: int
     due_date: date

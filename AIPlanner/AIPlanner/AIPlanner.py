@@ -2,8 +2,9 @@
 
 import reflex as rx
 from rxconfig import config
-from AIPlanner.database import QueryUser # Database
+from AIPlanner.classes.database import QueryUser # Database
 # from pages.signup import signup # Sign up page
+from AIPlanner.pages.userlist import userlist
 
 #to run test environment
 #>cd AIPlanner
@@ -39,10 +40,11 @@ def index() -> rx.Component:
                 href="/signup",
                 is_external=False,
             ),
-            #rx.link(
-            #    rx.button("Show Users"),
-            #    href="/database"
-            #)
+            rx.link(
+                rx.button("Show All Users"),
+                href="/userlist",
+                is_external=False,
+            ),
             spacing="5",
             justify="center",
             min_height="85vh",
@@ -73,6 +75,7 @@ def signup() -> rx.Component:
 app = rx.App()
 app.add_page(index)
 
+app.add_page(userlist)
 
 # Megdalia Bromhal - 30 Sept. 2024
 # Adding a signup page (as defined in pages.signup)
