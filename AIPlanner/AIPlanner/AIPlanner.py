@@ -40,6 +40,7 @@ def index() -> rx.Component:
                 href="/signup",
                 is_external=False,
             ),
+            # calendar button
             rx.link(
                 rx.button("calendar", on_click=rx.redirect('/calendar')),
                 href="/calendar",
@@ -75,15 +76,15 @@ def signup() -> rx.Component:
 
 
 def calendar() -> rx.Component:
-    # Welcome Page (Index)
+    # Calendar page
     return rx.vstack(
-            rx.heading("Calendar", size="0"),
-        ),
-
+        rx.heading("Calendar", size="0"),
+    ),
 
 
 app = rx.App()
 app.add_page(index)
+# calendar page defined as new page
 app.add_page(calendar, route='/calendar')
 
 # Megdalia Bromhal - 30 Sept. 2024
