@@ -1,5 +1,6 @@
 # Importing necessary modules
 import reflex as rx
+import AIPlanner.classes.user as user
 
 
 class SignupState(rx.State):
@@ -23,8 +24,24 @@ class SignupState(rx.State):
             return rx.toast(f"Invalid info entered. Not processed.")
         
         else:
-            return rx.toast(f"Processing sign up email {self.email} password {self.password}. Please stay on page...", duration=None)
+
+            #new_user = user.User(self.email, None, self.password) # Making a new user
+
+            new_user = user.create_user(username=self.email, canvas_hash_id=None, password=self.password)
+            
+            return rx.toast(f"Processing sign up email {self.email} password {self.password}. Please stay on page...", duration=5)
             self.processing = False # Reset processing back to False
+            #return SignupState.processing_page()
+        
+
+    # def processing_page(self) -> rx.Component:
+    #     return rx.card(
+    #         rx.vstack(
+    #             rx.text("Processing...please stay on page")
+    #         )
+    #     )
+
+
             
             
 
@@ -35,6 +52,8 @@ class SignupState(rx.State):
             return "Processing..."
         else:
             return ""
+
+
 
 
 def signup_form() -> rx.Component:
