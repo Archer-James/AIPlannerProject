@@ -53,7 +53,15 @@ def index() -> rx.Component:
 
 
 
-app = rx.App()
+app = rx.App(
+    theme=rx.theme(
+        appearance="light",
+        has_background=True,
+        radius="large",
+        accent_color="pink",
+        panel_background="translucent",
+    )
+)
 app.add_page(index)
 # Adding a signup page (as defined in pages.signup)
 app.add_page(signup)
