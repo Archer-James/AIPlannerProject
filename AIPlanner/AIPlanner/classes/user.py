@@ -50,7 +50,7 @@ def create_user(username, canvas_hash_id, password):
 def append_user_csv(new_user: User):
 
     try:
-        with open("AIPlanner/data/user_databasef.csv", mode='a') as f:
+        with open("AIPlanner/data/user_database.csv", mode='a') as f:
             writer = csv.writer(f)
             writer.writerow([new_user.get_username(), new_user.get_canvas_hash_id(), new_user.get_password()])
 

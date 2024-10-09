@@ -1,6 +1,7 @@
 # Importing necessary modules
 import reflex as rx
 import AIPlanner.classes.user as user
+import AIPlanner.classes.database as database
 
 
 class SignupState(rx.State):
@@ -26,6 +27,19 @@ class SignupState(rx.State):
             
         new_user, success_code = user.create_user(username=self.email, canvas_hash_id=None, password=self.password)
         
+        database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
+
+        # new_user = database.AddUser()
+        # new_user.username = self.email
+        # new_user.canvas_hash_id = None
+        # new_user.password = self.password
+
+        # new_user.set_username(self.email)
+        # new_user.set_password(self.password)
+        # new_user.set_canvas_hash_id(None)
+
+        # database.AddUser.add_user(new_user)
+
         # If error message throughout saving process, tells user, otherwise says successful
         if success_code == 0:
             print("Success")
