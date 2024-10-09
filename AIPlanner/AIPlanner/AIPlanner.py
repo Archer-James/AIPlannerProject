@@ -5,6 +5,8 @@ from rxconfig import config
 
 # Importing pages
 from AIPlanner.pages.signup import signup # Sign up page
+from AIPlanner.pages.processing import processing # Processing page used in sign up page
+from AIPlanner.pages.success import success # Success page shown after successful sign up
 
 
 #to run test environment
@@ -65,6 +67,11 @@ app = rx.App(
 app.add_page(index)
 # Adding a signup page (as defined in pages.signup)
 app.add_page(signup)
+# Adding processing page (used in sign up page)
+app.add_page(processing)
+# Adding success page (used in sign up page)
+app.add_page(success)
+
 
 if __name__ == "__main__":
     app.run()

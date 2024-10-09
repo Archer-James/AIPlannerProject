@@ -20,20 +20,24 @@ class SignupState(rx.State):
         # User = database user
         # Email and password stored into database
 
-        if (self.email == "") or (self.password == ""):
-            return rx.toast(f"Invalid info entered. Not processed.")
-        
-        else:
-
-            #new_user = user.User(self.email, None, self.password) # Making a new user
-
-            new_user = user.create_user(username=self.email, canvas_hash_id=None, password=self.password)
+        # if (self.email == "") or (self.password == ""):
+        #     return rx.toast(f"Invalid info entered. Not processed.")
+        # else:
             
-            return rx.toast(f"Processing sign up email {self.email} password {self.password}. Please stay on page...", duration=5)
-            self.processing = False # Reset processing back to False
-            #return SignupState.processing_page()
+        new_user, success_code = user.create_user(username=self.email, canvas_hash_id=None, password=self.password)
         
+        # If error message throughout saving process, tells user, otherwise says successful
+        if success_code == 0:
+            print("Success")
+            #return rx.toast(f"Success! Please go to home page")
+            return rx.redirect("/success")
+        elif success_code == 1:
+            print("Error saving data")
+            return rx.toast(f"Error in saving data. Please try again.")
+            # Unfortunately right now with filename errors it just makes a new file and writes to that..
 
+            # return rx.redirect("/processing")
+        
     # def processing_page(self) -> rx.Component:
     #     return rx.card(
     #         rx.vstack(
@@ -41,17 +45,13 @@ class SignupState(rx.State):
     #         )
     #     )
 
-
-            
-            
-
-    @rx.var
-    def processing_msg(self) -> str:
-        # Computed var that updates automatically when state changes
-        if self.processing == True:
-            return "Processing..."
-        else:
-            return ""
+    # @rx.var
+    # def processing_msg(self) -> str:
+    #     # Computed var that updates automatically when state changes
+    #     if self.processing == True:
+    #         return "Processing..."
+    #     else:
+    #         return "Submit!"
 
 
 
@@ -90,58 +90,66 @@ def signup_form() -> rx.Component:
                     required=True,
                 ),
             ),
-            rx.button("Sign up", type="submit"),
+            rx.button("Submit", type="submit"),
             on_submit=SignupState.submit,
             reset_on_submit=True,
         ),
+        spacing="50",
+        justify="center",
     )
 
 
-def render_user_entries(title: str):
-    return rx.vstack(
-        rx.text(title, color="gray", font_size="11px", weight="bold"),
-        #rx.chakra.input(),
-        width="100%",
+# def render_user_entries(title: str):
+#     return rx.vstack(
+#         rx.text(title, color="gray", font_size="11px", weight="bold"),
+#         #rx.chakra.input(),
+#         width="100%",
 
-    )
+#     )
 
 
-def render_signup_form():
-    return rx.vstack(
-        rx.hstack(
-            rx.icon(tag="lock", size=28, color="rgba(127, 127, 127, 1)"),
-            width="100%",
-            height="55px",
-            bg="#181818",
-            border_radius="10px 10px 0px 0px",
-            display="flex",
-            justify_content="center",
-            align_items="center",
+# def render_signup_form():
+#     return rx.vstack(
+#         rx.hstack(
+#             rx.icon(tag="lock", size=28, color="rgba(127, 127, 127, 1)"),
+#             width="100%",
+#             height="55px",
+#             bg="#181818",
+#             border_radius="10px 10px 0px 0px",
+#             display="flex",
+#             justify_content="center",
+#             align_items="center",
 
-        ),
-        rx.vstack(
-            render_user_entries("Enter email address"),
-            width="100%",
-            padding=""
-        ),
-        width=["100%", "100%", "65%", "50%", "35%"],
-        bg="rgba(21, 21, 21, 0.55)",
-        border="0.75px solid #2e2e2e",
-        border_radius="10px",
-        box_shadow="0px 8px 16px 6px rgba(0, 0, 0, 0.25)",
+#         ),
+#         rx.vstack(
+#             render_user_entries("Enter email address"),
+#             width="100%",
+#             padding=""
+#         ),
+#         width=["100%", "100%", "65%", "50%", "35%"],
+#         bg="rgba(21, 21, 21, 0.55)",
+#         border="0.75px solid #2e2e2e",
+#         border_radius="10px",
+#         box_shadow="0px 8px 16px 6px rgba(0, 0, 0, 0.25)",
 
-    )
+#     )
 
 
 def signup() -> rx.Component:
     # Signup page 
-    return rx.center(
+    return rx.container(
         #render_signup_form(),
         signup_form(),
+        rx.link(
+            rx.button("Go back"),
+            href="/",
+            is_external=False,
+            position="top-right",
+            ),
         width="100%",
         height="100vh",
         padding="2em",
-        bg="bronze", # Background
+        bg="grey", # Background
     )
     # return rx.container(
     #     rx.color_mode.button(position="top-right"),

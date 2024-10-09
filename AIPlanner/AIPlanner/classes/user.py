@@ -42,15 +42,23 @@ class User:
 def create_user(username, canvas_hash_id, password):
     new_user = User(username=username, canvas_hash_id=canvas_hash_id, password=password)
     
-    append_user_csv(new_user=new_user)
-    return new_user
+    success_code = append_user_csv(new_user=new_user)
+
+    return new_user, success_code
 
 
 def append_user_csv(new_user: User):
-    with open("AIPlanner/data/user_database.csv", mode='a') as f:
-        writer = csv.writer(f)
-        writer.writerow([new_user.get_username(), new_user.get_canvas_hash_id(), new_user.get_password()])
+
+    try:
+        with open("AIPlanner/data/user_databasef.csv", mode='a') as f:
+            writer = csv.writer(f)
+            writer.writerow([new_user.get_username(), new_user.get_canvas_hash_id(), new_user.get_password()])
+
+            return 0
         
+    except (FileNotFoundError, PermissionError, IOError, csv.Error, Exception) as e:
+        return 1
+            
     
 def show_database():
     for usr in user_database:
@@ -65,4 +73,4 @@ def show_example_data():
     for user in EXAMPLE_USER:
         print(User.describe_account(user))
 
-append_user_csv(create_user('bobby@gmail.com', int('55555'), 'imcoolman'))
+# append_user_csv(create_user('bobby@gmail.com', int('55555'), 'imcoolman'))
