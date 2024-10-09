@@ -22,14 +22,42 @@ class Task(rx.Model, table=True):
     assigned_block_start_time: time
     assigned_block_duration: timedelta
 
-class QueryUser(rx.State):
-    name: str
-    users: list[User]
+class UserManagementState(rx.State):
+    users: list[User] = []  # To hold the list of users
+    message: str = ""        # To display success or error messages
 
-    def get_users(self):
+    def fetch_all_users(self):
         with rx.session() as session:
-            self.users = session.exec(
-                User.select().where(
-                    User.username.contains(self.name)
+            try:
+                # Retrieve all users from the database
+                self.users = session.exec(User.select()).all()
+                self.message = f"Retrieved {len(self.users)} users."
+            except Exception as e:
+                self.message = f"Error retrieving users: {e}"
+    
+    def get_user_data(self):
+        return [{"username": user.username, "canvas_hash_id": user.canvas_hash_id} for user in self.users]
+
+        
+class AddUser(rx.State):
+    username: str
+    canvas_hash_id: int
+    password: str
+
+    def set_username(self, value: str):
+        self.username = value
+
+    def set_canvas_hash_id(self, value: int):
+        self.canvas_hash_id = value
+
+    def set_password(self, value: str):
+        self.password = value
+
+    def add_user(self):
+        with rx.session() as session:
+            session.add(
+                User(
+                    username=self.username, canvas_hash_id=self.canvas_hash_id, password=self.password
                 )
-            ).all()
+            )
+            session.commit()
