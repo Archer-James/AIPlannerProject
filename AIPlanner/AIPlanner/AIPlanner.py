@@ -77,7 +77,7 @@ app.add_page(index)
 
 app.add_page(userlist)
 
-app.add_page(signup)
+app.add_page(signup, on_load=UserManagementState.fetch_all_users)
 
 
 if __name__ == "__main__":

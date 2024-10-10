@@ -28,16 +28,10 @@ class UserManagementState(rx.State):
 
     def fetch_all_users(self):
         with rx.session() as session:
-            try:
                 # Retrieve all users from the database
                 self.users = session.exec(User.select()).all()
                 self.message = f"Retrieved {len(self.users)} users."
-            except Exception as e:
-                self.message = f"Error retrieving users: {e}"
-    
-    def get_user_data(self):
-        return [{"username": user.username, "canvas_hash_id": user.canvas_hash_id} for user in self.users]
-
+                print(self.users)
         
 class AddUser(rx.State):
     username: str
