@@ -2,6 +2,7 @@
 import reflex as rx
 import AIPlanner.classes.user as user
 import AIPlanner.classes.database as database
+import AIPlanner.pages.processing as processing
 
 
 class SignupState(rx.State):
@@ -15,39 +16,42 @@ class SignupState(rx.State):
         self.password = signup_data.get('password')
 
         self.processing = True
-        # self.update()
-        
-        # Processing logic here, where we would sign up user
-        # User = database user
-        # Email and password stored into database
-
-        # if (self.email == "") or (self.password == ""):
-        #     return rx.toast(f"Invalid info entered. Not processed.")
-        # else:
             
+        # Create a new user with csv testing database
         new_user, success_code = user.create_user(username=self.email, canvas_hash_id=None, password=self.password)
         
-        database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
+        # Error handling the submit form
+        try:
+            
+            # Need processing message!!!
+            is_processing = True
 
-        # new_user = database.AddUser()
-        # new_user.username = self.email
-        # new_user.canvas_hash_id = None
-        # new_user.password = self.password
+            # Create a new user with Reflex database
+            database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
 
-        # new_user.set_username(self.email)
-        # new_user.set_password(self.password)
-        # new_user.set_canvas_hash_id(None)
+            return rx.redirect('/success')
+        
+        # If error, tell user to try again
+        except Exception as e:
+            return rx.toast(f"Error occurred while saving data. Please try again.")
 
-        # database.AddUser.add_user(new_user)
+
+# Make a dynamic variable to show processing  
+# @rx.var(cache=True)
+# def processing_msg():
+#     return ["Processing...Please stay on page." if is_processing else ""]
+
+        # print(database.UserManagementState.fetch_all_users())
+        # print(database.UserManagementState.get_user_data())
 
         # If error message throughout saving process, tells user, otherwise says successful
-        if success_code == 0:
-            print("Success")
-            #return rx.toast(f"Success! Please go to home page")
-            return rx.redirect("/success")
-        elif success_code == 1:
-            print("Error saving data")
-            return rx.toast(f"Error in saving data. Please try again.")
+        # if success_code == 0:
+        #     print("Success")
+        #     #return rx.toast(f"Success! Please go to home page")
+        #     return rx.redirect("/success")
+        # elif success_code == 1:
+        #     print("Error saving data")
+        #     return rx.toast(f"Error in saving data. Please try again.")
             # Unfortunately right now with filename errors it just makes a new file and writes to that..
 
             # return rx.redirect("/processing")
@@ -66,8 +70,6 @@ class SignupState(rx.State):
     #         return "Processing..."
     #     else:
     #         return "Submit!"
-
-
 
 
 def signup_form() -> rx.Component:
@@ -108,6 +110,7 @@ def signup_form() -> rx.Component:
             on_submit=SignupState.submit,
             reset_on_submit=True,
         ),
+        # rx.text(msg=processing_msg()),
         spacing="50",
         justify="center",
     )

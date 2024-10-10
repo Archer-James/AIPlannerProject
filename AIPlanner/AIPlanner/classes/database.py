@@ -68,17 +68,17 @@ class AddUser(rx.State):
 
 
 def create_user(username:str, canvas_hash_id:int, password:str):
+    """
+    Function that creates a User function and calls add_user function with that User object.
+    """
     new_user = User(username=username, canvas_hash_id=canvas_hash_id, password=password)
     add_user(new_user=new_user)
     
 
 def add_user(new_user:User):
+    """
+    Starts a database session and adds the new_user User object into the database.
+    """
     with rx.session() as session:
-        session.add(
-            # User(
-            #     username=self.username, canvas_hash_id=self.canvas_hash_id, password=self.password
-            # )
-            new_user
-            
-        )
+        session.add(new_user)
         session.commit()

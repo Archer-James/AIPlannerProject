@@ -1,4 +1,6 @@
 import reflex as rx
+import AIPlanner.pages.userlist as Userlist
+import AIPlanner.classes.database as database
 
 
 def render_success_page():
@@ -17,6 +19,7 @@ def render_success_page():
                 ),
             ),
         ),
+        Userlist.userlist(),
     )
 
 
