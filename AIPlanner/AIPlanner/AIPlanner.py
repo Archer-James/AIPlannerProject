@@ -13,9 +13,54 @@ from rxconfig import config
 
 class State(rx.State):
     """The app state."""
-
+    task_name: str = ""
+    task_description: str = ""
+    priority: str = "Medium"
+    date_time: str = ""
+    def apply_task(self):
+        print(f"Task applied: {self.task_name}")
     ...
 
+def task_input_form():
+    return rx.box(
+        rx.hstack(
+            rx.input(
+                placeholder="Task Name",
+                on_change=State.set_task_name,
+                flex=1,
+                #border_right="2px solid #E2E8F0",
+                #border_left="2px solid #E2E8F0",
+            ),
+            rx.input(
+                placeholder="Task Description",
+                on_change=State.set_task_description,
+                flex=1,
+                #border_right="2px solid #E2E8F0",
+                #border_left="2px solid #E2E8F0",
+            ),
+            rx.select(
+                ["Low", "Medium", "High"],
+                placeholder="Priority: Medium",
+                on_change=State.set_priority,
+                flex=1,
+                #border_right="2px solid #E2E8F0",
+                #border_left="2px solid #E2E8F0",
+            ),
+            rx.input(
+                placeholder="Set Date/Time",
+                type_="datetime-local",
+                on_change=State.set_date_time,
+                flex=1,
+                #border_left="2px solid #E2E8F0",
+                #border_right="2px solid #E2E8F0",
+            ),
+            rx.button("Apply Task", on_click=State.apply_task, flex=1),
+            spacing="0",
+            #border="2px solid #E2E8F0",
+            border_radius="md",
+        ),
+        width="100%",
+    )
 
 def index() -> rx.Component:
     # Welcome Page (Index)
@@ -38,9 +83,11 @@ def index() -> rx.Component:
                 href="/signup",
                 is_external=False,
             ),
+            task_input_form(),
             spacing="5",
             justify="center",
             min_height="85vh",
+        
         ),
         rx.logo(),
     )
