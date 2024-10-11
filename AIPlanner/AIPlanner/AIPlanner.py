@@ -18,7 +18,6 @@ class State(rx.State):
     priority: str = "Medium"
     date_time: str = ""
     show_error: bool = False
-    show_description_modal: bool = False
 
     # Need to connect this with database
     def apply_task(self):
@@ -26,12 +25,25 @@ class State(rx.State):
             self.show_error = True
         else:
             self.show_error = False
-            print(f"Task applied: {self.task_name, self.task_description, self.priority}")
+            print(f"Task applied: {self.task_name, self.task_description, self.priority, self.date_time}")
+            self.task_name = ""
+            self.task_description = ""
+            self.priority = "Medium"
+            self.date_time = ""
 
     def set_task_name(self, task_name: str):
         self.task_name = task_name
         if self.task_name.strip():
             self.show_error = False
+    
+    def set_task_description(self, task_description: str):
+        self.task_description = task_description
+
+    def set_priority(self, priority: str):
+        self.priority = priority
+
+    def set_date_time(self, date_time: str):
+        self.date_time = date_time
     
     ...
 
@@ -42,6 +54,7 @@ def task_input_form():
                 rx.input(
                     placeholder="Task Name",
                     on_change=State.set_task_name,
+                    value=State.task_name,
                     flex=1,
                     #border_right="2px solid #E2E8F0",
                     #border_left="2px solid #E2E8F0",
@@ -49,6 +62,7 @@ def task_input_form():
                 rx.input(
                     placeholder="Task Description",
                     on_change=State.set_task_description,
+                    value=State.task_description,
                     flex=1,
                     #border_right="2px solid #E2E8F0",
                     #border_left="2px solid #E2E8F0",
@@ -57,6 +71,7 @@ def task_input_form():
                     ["Low", "Medium", "High"],
                     placeholder="Priority: Medium",
                     on_change=State.set_priority,
+                    value=State.priority,
                     flex=1,
                     #border_right="2px solid #E2E8F0",
                     #border_left="2px solid #E2E8F0",
@@ -65,6 +80,7 @@ def task_input_form():
                     placeholder="Set Date/Time",
                     type_="datetime-local",
                     on_change=State.set_date_time,
+                    value=State.date_time,
                     flex=1,
                     #border_left="2px solid #E2E8F0",
                     #border_right="2px solid #E2E8F0",
