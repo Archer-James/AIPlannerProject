@@ -17,47 +17,68 @@ class State(rx.State):
     task_description: str = ""
     priority: str = "Medium"
     date_time: str = ""
+    show_error: bool = False
+    show_description_modal: bool = False
+
+    # Need to connect this with database
     def apply_task(self):
-        print(f"Task applied: {self.task_name}")
+        if not self.task_name.strip():
+            self.show_error = True
+        else:
+            self.show_error = False
+            print(f"Task applied: {self.task_name, self.task_description, self.priority}")
+
+    def set_task_name(self, task_name: str):
+        self.task_name = task_name
+        if self.task_name.strip():
+            self.show_error = False
+    
     ...
 
 def task_input_form():
     return rx.box(
-        rx.hstack(
-            rx.input(
-                placeholder="Task Name",
-                on_change=State.set_task_name,
-                flex=1,
-                #border_right="2px solid #E2E8F0",
-                #border_left="2px solid #E2E8F0",
+        rx.vstack(
+            rx.hstack(
+                rx.input(
+                    placeholder="Task Name",
+                    on_change=State.set_task_name,
+                    flex=1,
+                    #border_right="2px solid #E2E8F0",
+                    #border_left="2px solid #E2E8F0",
+                ),
+                rx.input(
+                    placeholder="Task Description",
+                    on_change=State.set_task_description,
+                    flex=1,
+                    #border_right="2px solid #E2E8F0",
+                    #border_left="2px solid #E2E8F0",
+                ),
+                rx.select(
+                    ["Low", "Medium", "High"],
+                    placeholder="Priority: Medium",
+                    on_change=State.set_priority,
+                    flex=1,
+                    #border_right="2px solid #E2E8F0",
+                    #border_left="2px solid #E2E8F0",
+                ),
+                rx.input(
+                    placeholder="Set Date/Time",
+                    type_="datetime-local",
+                    on_change=State.set_date_time,
+                    flex=1,
+                    #border_left="2px solid #E2E8F0",
+                    #border_right="2px solid #E2E8F0",
+                ),
+                rx.button("Apply Task", on_click=State.apply_task, flex=1),
+                spacing="0",
+                #border="2px solid #E2E8F0",
+                border_radius="md",
             ),
-            rx.input(
-                placeholder="Task Description",
-                on_change=State.set_task_description,
-                flex=1,
-                #border_right="2px solid #E2E8F0",
-                #border_left="2px solid #E2E8F0",
+            rx.cond(
+                    State.show_error,
+                    rx.text("Task name is required", color="red", font_size="sm"),
             ),
-            rx.select(
-                ["Low", "Medium", "High"],
-                placeholder="Priority: Medium",
-                on_change=State.set_priority,
-                flex=1,
-                #border_right="2px solid #E2E8F0",
-                #border_left="2px solid #E2E8F0",
-            ),
-            rx.input(
-                placeholder="Set Date/Time",
-                type_="datetime-local",
-                on_change=State.set_date_time,
-                flex=1,
-                #border_left="2px solid #E2E8F0",
-                #border_right="2px solid #E2E8F0",
-            ),
-            rx.button("Apply Task", on_click=State.apply_task, flex=1),
-            spacing="0",
-            #border="2px solid #E2E8F0",
-            border_radius="md",
+            align_items = "stretch",
         ),
         width="100%",
     )
