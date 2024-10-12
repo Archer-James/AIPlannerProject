@@ -23,6 +23,9 @@ class State(rx.State):
 
 
 def index() -> rx.Component:
+    """
+    Home page of AIPlanner.
+    """
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),

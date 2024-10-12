@@ -6,12 +6,20 @@ import AIPlanner.pages.processing as processing
 
 
 class SignupState(rx.State):
+    """
+    Signup page.
+    """
     email: str = ""
     password: str = "" # Passwords are usually strings in web development, apparently
     processing: bool = False
 
 
     def submit(self, signup_data):
+        """
+        Function that handles user's data when user signs up. Saves username and password into database.
+
+        param signup_data: data the user enters into the signup form (i.e. username and password)
+        """
         self.email = signup_data.get('email')
         self.password = signup_data.get('password')
 
@@ -32,7 +40,7 @@ class SignupState(rx.State):
             return rx.redirect('/success')
         
         # If error, tell user to try again
-        except Exception as e:
+        except Exception:
             return rx.toast(f"Error occurred while saving data. Please try again.")
 
 

@@ -1,7 +1,7 @@
 import reflex as rx
 from AIPlanner.classes.database import *
 
-def display_users(state: UserManagementState): 
+def display_users(state: UserManagementState):
     user_data = state.get_user_data()  # Get user data
 
     # Prepare the list of components
