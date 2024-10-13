@@ -1,10 +1,11 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
 import reflex as rx
-from rxconfig import config
-from reflex_calendar import calendar
 
-#from pages.signup import signup  # Sign up page
+
+# from pages.signup import signup  # Sign up page
+
+from AIPlanner.CreateCal import GenCalendar
 
 
 # to run test environment
@@ -19,56 +20,59 @@ class State(rx.State):
 
     ...
 
-
 def index() -> rx.Component:
-    # Welcome Page (Index)
-    return rx.fragment(
-        rx.el.style(
-            """
-        body {
-            font-family: Arial, sans-serif;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            width: 14.28%; /* 7 columns */
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        td {
-            height: 100px;
-            vertical-align: top;
-        }
-        .empty {
-            background-color: #f9f9f9;
-        }
-    """
+    # Home Page - Calendar
+    return rx.center(
+        calendar_component(),
+        padding="50px",
+        
+    )
+
+month_year = GenCalendar.get_month_year_label
+
+def calendar_component():
+    return rx.vstack(
+        # Display current month and year
+        rx.button("Load Calendar", on_click=GenCalendar.init_calendar),
+        # Navigation buttons for previous and next months
+        
+        rx.hstack(
+            rx.button("Previous", on_click=GenCalendar.prev_month),
+            rx.button("Next", on_click=GenCalendar.next_month),
         ),
-        rx.box(
-            rx.heading(id="monthYear", as_="h1", size="8"),
-            rx.table.root(
-                rx.table.header(
-                    rx.table.row(
-                        rx.table.column_header_cell("Sun"),
-                        rx.table.column_header_cell("Mon"),
-                        rx.table.column_header_cell("Tue"),
-                        rx.table.column_header_cell("Wed"),
-                        rx.table.column_header_cell("Thu"),
-                        rx.table.column_header_cell("Fri"),
-                        rx.table.column_header_cell("Sat"),
+
+        # Create the table for the calendar
+        
+                # Table header for days of the week
+        rx.table.root(
+            
+            rx.table.header(
+                rx.table.row(
+                    rx.table.column_header_cell("Sun", scope = "col"),
+                    rx.table.column_header_cell("Mon",scope = "col"),
+                    rx.table.column_header_cell("Tues",scope = "col"),
+                    rx.table.column_header_cell("Wed",scope = "col"),
+                    rx.table.column_header_cell("Thurs",scope="col"),
+                    rx.table.column_header_cell("Fri",scope = "col"),
+                    rx.table.column_header_cell("Sat",scope = "col"),
                     )
                 ),
-                rx.table.body(id="calendarBody"),
-            ),
             
+                # Table body for days in the month
+            rx.table.body(
+                rx.foreach(GenCalendar.dates, lambda week: rx.table.row(
+                    rx.foreach(week, lambda day: rx.table.cell(day, text_align="center", padding="10px"))
+    ))),
         ),
-    )
+        width="100%",
+    
+            padding="20px",
+        ),
+        
+    
+
+
+
 
 
 def signup() -> rx.Component:
@@ -90,8 +94,6 @@ def signup() -> rx.Component:
         ),
         rx.logo()
     )
-
-
 
 
 app = rx.App()
