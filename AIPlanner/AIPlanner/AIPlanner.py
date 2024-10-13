@@ -2,9 +2,10 @@
 
 import reflex as rx
 from rxconfig import config
+from reflex_calendar import calendar
 
+#from pages.signup import signup  # Sign up page
 
-# from pages.signup import signup # Sign up page
 
 # to run test environment
 # >cd AIPlanner
@@ -21,41 +22,57 @@ class State(rx.State):
 
 def index() -> rx.Component:
     # Welcome Page (Index)
-    return rx.container(
-        rx.color_mode.button(position="top-right"),
-        rx.vstack(
-            rx.heading("Welcome to Reflex!", size="9"),
-            rx.text(
-                "Get started by editing ",
-                rx.code(f"{config.app_name}/{config.app_name}.py"),
-                size="5",
-            ),
-            rx.link(
-                rx.button("Clicks!"),
-                href="https://reflex.dev/docs/getting-started/introduction/",
-                is_external=True,
-            ),
-            rx.link(
-                rx.button("Sign Up!"),
-                href="/signup",
-                is_external=False,
-            ),
-            # calendar button
-            rx.link(
-                rx.button("calendar", on_click=rx.redirect('/calendar')),
-                href="/calendar",
-                is_external=False,
-            ),
-            spacing="5",
-            justify="center",
-            min_height="85vh",
+    return rx.fragment(
+        rx.el.style(
+            """
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            width: 14.28%; /* 7 columns */
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        td {
+            height: 100px;
+            vertical-align: top;
+        }
+        .empty {
+            background-color: #f9f9f9;
+        }
+    """
         ),
-        rx.logo(),
+        rx.box(
+            rx.heading(id="monthYear", as_="h1", size="8"),
+            rx.table.root(
+                rx.table.header(
+                    rx.table.row(
+                        rx.table.column_header_cell("Sun"),
+                        rx.table.column_header_cell("Mon"),
+                        rx.table.column_header_cell("Tue"),
+                        rx.table.column_header_cell("Wed"),
+                        rx.table.column_header_cell("Thu"),
+                        rx.table.column_header_cell("Fri"),
+                        rx.table.column_header_cell("Sat"),
+                    )
+                ),
+                rx.table.body(id="calendarBody"),
+            ),
+            
+        ),
     )
 
 
 def signup() -> rx.Component:
-    # Signup page 
+    # Signup page
     return rx.container(
         rx.vstack(
             rx.heading("Sign Up!", size="0"),
@@ -75,17 +92,10 @@ def signup() -> rx.Component:
     )
 
 
-def calendar() -> rx.Component:
-    # Calendar page
-    return rx.vstack(
-        rx.heading("Calendar", size="0"),
-    ),
 
 
 app = rx.App()
 app.add_page(index)
-# calendar page defined as new page
-app.add_page(calendar, route='/calendar')
 
 # Megdalia Bromhal - 30 Sept. 2024
 # Adding a signup page (as defined in pages.signup)
