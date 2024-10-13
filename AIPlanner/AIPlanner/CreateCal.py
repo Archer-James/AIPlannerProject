@@ -18,7 +18,6 @@ class GenCalendar(rx.State):
     label: string
         Title of the calendar
     """
-    # Define reactive state variables for month and year
     now = datetime.now()
     current_month: int = now.month
     current_year: int = now.year
