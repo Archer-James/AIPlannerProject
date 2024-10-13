@@ -21,6 +21,9 @@ class State(rx.State):
     ...
 
 def index() -> rx.Component:
+    """
+    Home page initializer
+    """
     # Home Page - Calendar
     return rx.center(
         calendar_component(),
@@ -31,6 +34,9 @@ def index() -> rx.Component:
 month_year = GenCalendar.get_month_year_label
 
 def calendar_component():
+    """
+    Calendar initializer and caller
+    """
     return rx.vstack(
         # Display current month and year
         rx.button("Load Calendar", on_click=GenCalendar.init_calendar),
@@ -42,8 +48,9 @@ def calendar_component():
         ),
 
         # Create the table for the calendar
-        
-                # Table header for days of the week
+        rx.heading(GenCalendar.label, size = "lg"),    
+
+         # Table header for days of the week
         rx.table.root(
             
             rx.table.header(
