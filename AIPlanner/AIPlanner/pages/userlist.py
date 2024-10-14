@@ -1,7 +1,17 @@
+"""userlist script
+
+Displays users in the database.
+"""
+
 import reflex as rx
 from AIPlanner.classes.database import *
 
+
 def display_users(state: UserManagementState):
+    """
+    For each user in the database, return their username and canvas hash id.
+    If no users found, return "No users found"
+    """
     user_data = state.get_user_data()  # Get user data
 
     # Prepare the list of components
@@ -17,8 +27,11 @@ def display_users(state: UserManagementState):
 
     return rx.vstack(*components)  # Create a vstack from the components list
 
-    
+
 def userlist(state=UserManagementState) -> rx.Component:
+    """
+    Calls display_users to display all users in database.
+    """
 
     # User list debugging page 
     return rx.container(
@@ -31,4 +44,4 @@ def userlist(state=UserManagementState) -> rx.Component:
         min_height="85vh",
     )
 
-
+#Eof

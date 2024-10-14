@@ -1,4 +1,6 @@
-"""Welcome to Reflex! This file outlines the steps to create a basic app."""
+"""Home page of AIPlanner project.
+
+"""
 
 import reflex as rx
 from rxconfig import config
@@ -24,8 +26,13 @@ class State(rx.State):
     date_time: str = ""
     show_error: bool = False
 
+
     # Need to connect this with database
     def apply_task(self):
+        """
+        Checks if user has entered invalid task.
+        Else, prints out task with attributes and resets attributes to blank.
+        """
         if not self.task_name.strip():
             self.show_error = True
         else:
@@ -36,23 +43,38 @@ class State(rx.State):
             self.priority = "Medium"
             self.date_time = ""
 
+
     def set_task_name(self, task_name: str):
+        """
+        Sets user-entered task name as task's name.
+        Checks that entered correctly.
+        """
         self.task_name = task_name
         if self.task_name.strip():
             self.show_error = False
-    
+
+
     def set_task_description(self, task_description: str):
+        """
+        Sets user-entered task description as task description.
+        """
         self.task_description = task_description
 
+
     def set_priority(self, priority: str):
+        """Sets user-entered task priority as task priority."""
         self.priority = priority
 
+
     def set_date_time(self, date_time: str):
+        """
+        Sets user-entered date/time due as the data and time task is due.
+        """
         self.date_time = date_time
-    
-    ...
+
 
 def task_input_form():
+    """Task form on home page that allows user to define and add a task."""
     return rx.box(
         rx.vstack(
             rx.hstack(
@@ -120,7 +142,7 @@ def index() -> rx.Component:
             task_input_form(),
             spacing="5",
             justify="center",
-            min_height="15vh", # Squishing it up a tad so we can see the giant text 
+            min_height="15vh", # Squishing it up a tad so we can see the giant text
         
         ),
     ), rx.container(
@@ -140,8 +162,6 @@ def index() -> rx.Component:
     )
 
 
-
-
 app = rx.App(
     theme=rx.theme(
         appearance="light",
@@ -151,6 +171,7 @@ app = rx.App(
         panel_background="translucent",
     )
 )
+
 app.add_page(index)
 # Adding a signup page (as defined in pages.signup)
 app.add_page(signup)
