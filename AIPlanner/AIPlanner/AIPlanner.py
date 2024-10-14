@@ -120,7 +120,7 @@ def index() -> rx.Component:
             task_input_form(),
             spacing="5",
             justify="center",
-            min_height="85vh",
+            min_height="15vh", # Squishing it up a tad so we can see the giant text 
         
         ),
     ), rx.container(
