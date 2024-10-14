@@ -68,6 +68,7 @@ class SignupState(rx.State):
 
 
 def signup_form() -> rx.Component:
+    """Signup form page that allows the user to enter their email and password and click Submit"""
     return rx.card(
         rx.form(
             rx.hstack(
@@ -112,6 +113,7 @@ def signup_form() -> rx.Component:
     )
 
 def signup() -> rx.Component:
+    """Base page for signup component"""
     # Signup page 
     return rx.container(
         #render_signup_form(),
