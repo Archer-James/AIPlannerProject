@@ -2,6 +2,7 @@ import reflex as rx
 from AIPlanner.classes.database import *
 
 def display_usernames(state=UserManagementState):
+        """Function to display usernames"""
         return rx.vstack(
         rx.text(state.message),  # Display number of users retrieved
         rx.foreach(  # Use rx.foreach for list rendering
@@ -11,7 +12,7 @@ def display_usernames(state=UserManagementState):
     )
 
 def userlist(state=UserManagementState) -> rx.Component:
-
+    """Function to display user list"""
     # User list debugging page 
     return rx.container(
         rx.heading("User List", size="0"),
