@@ -138,36 +138,21 @@ def index() -> rx.Component:
                 rx.code(f"{config.app_name}/{config.app_name}.py"),
                 size="5",
             ),
+            rx.center(
+            calendar_component(),
+
             spacing="5",
             justify="center",
             min_height="50vh", # Changing to 50 to squish it up more
         ),
-        rx.logo(),
-    )
-
-
-
-
-app = rx.App(
-    theme=rx.theme(
-        appearance="light",
-        has_background=True,
-        radius="large",
-        accent_color="pink",
-        panel_background="translucent",
-    )
-)
-app.add_page(index)
-def index() -> rx.Component:
-    """
-    Home page initializer
-    """
-    # Home Page - Calendar
-    return rx.center(
-        calendar_component(),
-        padding="50px",
         
+        padding="50px",
     )
+    ),
+
+
+
+
 
 month_year = GenCalendar.get_month_year_label
 
@@ -215,29 +200,19 @@ def calendar_component():
         ),
         
 
-def signup() -> rx.Component:
-    # Signup page
-    return rx.container(
-        rx.vstack(
-            rx.heading("Sign Up!", size="0"),
-            rx.input(placeholder="Enter email address", size='lg'),
-            rx.input(placeholder="Enter password", type="password", size='lg'),
-            rx.button("Submit"),  # on_click=lambda: print("Signed up!")
-            rx.link(
-                rx.button("Go back"),
-                href="/",
-                is_external=False,
-            ),
-            spacing="5",
-            justify="center",
-            min_height="85vh"
-        ),
-        rx.logo()
+
+app = rx.App(
+    theme=rx.theme(
+        appearance="light",
+        has_background=True,
+        radius="large",
+        accent_color="pink",
+        panel_background="translucent",
     )
-
-
-app = rx.App()
+)
 app.add_page(index)
+
+
 
 # Megdalia Bromhal - 30 Sept. 2024
 # Adding a signup page (as defined in pages.signup)
