@@ -19,6 +19,8 @@ def render_success_page():
                 ),
             ),
         ),
+        rx.text(" -" * 25),
+        rx.text("Making sure user is added to database; will remove for final app"),
         Userlist.userlist(),
     )
 
