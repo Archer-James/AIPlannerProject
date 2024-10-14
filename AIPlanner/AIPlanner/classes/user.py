@@ -7,6 +7,7 @@ Includes getters and setters, as well as an example list.
 import csv
 
 
+#Adding comments for Sprint0 - Archer
 class User:
     """A class that represents a user for the system."""
     username: str
