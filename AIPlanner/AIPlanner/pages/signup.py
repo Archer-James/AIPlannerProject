@@ -9,45 +9,76 @@ import AIPlanner.classes.database as database
 # import AIPlanner.pages.processing as processing **Discuss in meeting**
 
 
+def check_passwords(password, password_check):
+    """
+    Checks if password is the same as the password check.
+
+    param password: rx password         the password the user enters
+    param password_check: rx password   the password the user enters into the check
+    returns True if passwords match, False otherwise
+    """
+    if password == password_check:
+        return True
+    else:
+        return False
+
+
 class SignupState(rx.State):
     """
     Signup page.
     """
     email: str = ""
     password: str = "" # Passwords are usually strings in web development, apparently
+    password_check: str = "" # We make the user enter their password twice so they can make sure it's correct
     processing_msg: str = "idle"
     is_processing: bool = False
 
 
     def submit(self, signup_data):
-         """
-         Function that handles user's data when user signs up. Saves username and password into database.
+        """
+        Function that handles user's data when user signs up. Saves username and password into database.
 
-         param signup_data: data the user enters into the signup form (i.e. username and password)
-         """
-         self.email = signup_data.get('email')
-         self.password = signup_data.get('password')
-         
-         print("Processing new account.")
-         #self.is_processing = True
-         #self.change_processing_msg()
-         # time.sleep(4)
-         # Need processing message!!!
-
-         try:
-            # Create a new user with Reflex database
-            database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
+        param signup_data: data the user enters into the signup form (i.e. username and password)
+        """
+        self.email = signup_data.get('email')
+        self.password = signup_data.get('password')
+        self.password_check = signup_data.get('password_check')
         
-            #self.is_processing = False # Changing back just in case
-            #self.change_processing_msg()
+        # Checking if password matches password check
+        if check_passwords(self.password, self.password_check) == True:
+            
+            # Checking that email is only 25 chars long max
+            if len(self.email) <= 25:
+                # Passwords match, so process account
+                print("Processing new account.")
+                #self.is_processing = True
+                #self.change_processing_msg()
+                # time.sleep(4)
+                # Need processing message!!!
 
-            print("Account created in rx database")
-            return rx.redirect('/success')
+                # Adding account to database
+                try:
+                    # Create a new user with Reflex database
+                    database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
+                
+                    #self.is_processing = False # Changing back just in case
+                    #self.change_processing_msg()
 
-         # If error, tell user to try again
-         except ModuleNotFoundError as e:
-            print(e)
-            return rx.toast("Error occurred while saving data. Please try again.")
+                    print("Account created in rx database")
+                    return rx.redirect('/success')
+
+                # If error, tell user to try again
+                except ModuleNotFoundError as e:
+                    print(e)
+                    return rx.toast("Error occurred while saving data. Please try again.")
+
+            # Email is too long; tell user
+            else:
+                return rx.toast("Email is too long. Please enter appropriate email.")
+        
+        # If passwords don't match, ask user to re-enter data
+        else:
+            return rx.toast("Passwords do not match. Please enter information again.")
     
 #         # Create a new user with csv testing database
 #         new_user, success_code = user.create_user(username=self.email, 
@@ -56,14 +87,14 @@ class SignupState(rx.State):
 #                                                   )
             
 
-    @rx.var(cache=True) # Cached variable
-    def set_processing_msg(self) -> str:
-        return f"{self.processing_msg}"
+    # @rx.var(cache=True) # Cached variable
+    # def set_processing_msg(self) -> str:
+    #     return f"{self.processing_msg}"
 
 
-    @rx.var(cache=True)
-    def change_processing_msg(self) ->str:
-        return str(self.processing_msg)
+    # @rx.var(cache=True)
+    # def change_processing_msg(self) ->str:
+    #     return str(self.processing_msg)
 
 
 def signup_form() -> rx.Component:
@@ -100,13 +131,22 @@ def signup_form() -> rx.Component:
                     type="password",
                     required=True,
                 ),
+                rx.text("Confirm password",
+                        rx.text.span("*", color="crimson")
+                ),
+                rx.input(
+                    placeholder="Confirm password *",
+                    name="password_check",
+                    type="password",
+                    required=True,
+                ),
             ),
             rx.button("Submit", type="submit"),
             on_submit=SignupState.submit,
             reset_on_submit=True,
         ),
         #rx.text(f"{SignupState.set_processing_msg}"),
-        rx.text(f"Status: {SignupState.change_processing_msg}"),
+        #rx.text(f"Status: {SignupState.change_processing_msg}"),
         spacing="50",
         justify="center",
     )
