@@ -1,6 +1,6 @@
 # Importing necessary modules
 
-from datetime import time
+# import time
 import reflex as rx
 from rxconfig import config
 from AIPlanner.classes.database import AddUser
@@ -27,35 +27,34 @@ class SignupState(rx.State):
          """
          self.email = signup_data.get('email')
          self.password = signup_data.get('password')
-            
+         
+         print("Processing new account.")
+         #self.is_processing = True
+         #self.change_processing_msg()
+         # time.sleep(4)
+         # Need processing message!!!
+
+         try:
+            # Create a new user with Reflex database
+            database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
+        
+            #self.is_processing = False # Changing back just in case
+            #self.change_processing_msg()
+
+            print("Account created in rx database")
+            return rx.redirect('/success')
+
+         # If error, tell user to try again
+         except ModuleNotFoundError as e:
+            print(e)
+            return rx.toast("Error occurred while saving data. Please try again.")
+    
 #         # Create a new user with csv testing database
 #         new_user, success_code = user.create_user(username=self.email, 
 #                                                   canvas_hash_id=None, 
 #                                                   password=self.password
 #                                                   )
-        
-         # Error handling the submit form
-         try:
             
-             print("Processing...")
-             self.is_processing = True
-             #self.change_processing_msg()
-            
-             time.sleep(4)
-             # Need processing message!!!
-
-             # Create a new user with Reflex database
-             database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
-
-             self.is_processing = False # Changing back just in case
-             self.change_processing_msg()
-
-             return rx.redirect('/success')
-        
-         # If error, tell user to try again
-         except Exception:
-             return rx.toast(f"Error occurred while saving data. Please try again.")
-        
 
     @rx.var(cache=True) # Cached variable
     def set_processing_msg(self) -> str:

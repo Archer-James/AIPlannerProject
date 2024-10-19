@@ -236,18 +236,10 @@ app = rx.App(
     )
 )
 app.add_page(index)
-
-
-
-# Megdalia Bromhal - 30 Sept. 2024
-# Adding a signup page (as defined in pages.signup)
-app.add_page(signup)
-# Adding processing page (used in sign up page)
-app.add_page(processing)
-# Adding success page (used in sign up page)
-app.add_page(success)
-# Adding debugging user list page
-app.add_page(userlist)
+app.add_page(signup) # Adding a signup page (as defined in pages.signup)
+app.add_page(processing) # Adding processing page (used in sign up page)
+app.add_page(success) # Adding success page (used in sign up page)
+app.add_page(userlist) # Adding debugging user list page
 # Adding a signup page, alternative, **Discuss in meeting**
 #app.add_page(signup, on_load=UserManagementState.fetch_all_users)
 
