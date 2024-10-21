@@ -1,6 +1,9 @@
 """Module containing classes and methods pertaining to the SQLite database built into Reflex"""
 from datetime import date, time, timedelta
+from typing import List, Optional
+
 import reflex as rx
+import sqlmodel
 from rxconfig import config
 
 class User(rx.Model, table=True):
@@ -15,10 +18,7 @@ class User(rx.Model, table=True):
     username: str
     canvas_hash_id: int
     password: str
-
-    class Meta:
-        """Metadata for User class"""
-        primary_key = "canvas_hash_id"
+    tasks: List["Task"] = sqlmodel.Relationship(back_populates="user")
 
 class Task(rx.Model, table=True):
     """Class that defines the Task table in the SQLite database"""
@@ -32,6 +32,8 @@ class Task(rx.Model, table=True):
     assigned_block_date: date
     assigned_block_start_time: time
     assigned_block_duration: timedelta
+    user_id: int = sqlmodel.Field(foreign_key="user.id")
+    user: Optional[User] = sqlmodel.Relationship(back_populates="tasks")
 
 class UserManagementState(rx.State):
     """Class that defines the state in which variables are held relating to user management"""
