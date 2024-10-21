@@ -32,13 +32,21 @@ class Task(rx.Model, table=True):
     assigned_block_date: date
     assigned_block_start_time: time
     assigned_block_duration: timedelta
-    user_id: int = sqlmodel.Field(foreign_key="user.id")
+    user_id: int = sqlmodel.Field(foreign_key="user.canvas_hash_id")
     user: Optional[User] = sqlmodel.Relationship(back_populates="tasks")
 
 class UserManagementState(rx.State):
     """Class that defines the state in which variables are held relating to user management"""
     users: list[User] = []  # To hold the list of users
     message: str = ""        # To display success or error messages
+    tasks: list[Task]
+
+    def get_user_tasks(self, user_id: int):
+        """Method to retrieve all tasks for a given user"""
+        with rx.session() as session:
+            self.tasks = session.exec(
+                Task.select().where(Task.user_id == user_id)
+            ).all()
 
     def fetch_all_users(self):
         """Method to retrieve all usernames in the database"""
