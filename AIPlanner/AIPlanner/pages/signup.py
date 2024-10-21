@@ -1,12 +1,21 @@
-"""Signup page that includes the signup form and the basic webpage.
-    Upon successful sign up, user's email and password stored in database.
+"""Signup page script.
+
+Includes the signup form, which enables users to enter their email and password and click submit.
+Clicking submit adds their information as a User object in the database, 
+    and takes them to a success page.
+The user must click "Go home" from the success page.
+User can also go back to the home page.
 """
 
-# import time
+
+# Importing necessary modules
+
+from datetime import time
+import time
 import reflex as rx
 from rxconfig import config
 from AIPlanner.classes.database import AddUser
-# import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
+# #import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
 import AIPlanner.classes.database as database
 # import AIPlanner.pages.processing as processing **Discuss in meeting**
 
@@ -38,7 +47,8 @@ class SignupState(rx.State):
 
     def submit(self, signup_data):
         """
-        Function that handles user's data when user signs up. Saves username and password into database.
+        Function that handles user's data when user signs up. 
+        Saves username and password into database.
 
         param signup_data: data the user enters into the signup form (i.e. username and password)
         """
@@ -97,10 +107,16 @@ class SignupState(rx.State):
     # @rx.var(cache=True)
     # def change_processing_msg(self) ->str:
     #     return str(self.processing_msg)
+    # @rx.var(cache=True)
+    # def change_processing_msg(self) ->str:
+    #     return str(self.processing_msg)
 
 
 def signup_form() -> rx.Component:
-    """Signup form page that allows the user to enter their email and password and click Submit"""
+    """
+    Signup form page that allows the user to enter their email and password, click submit.
+    Clicking submit will send the entered data to the database.
+    """
     return rx.card(
         rx.form(
             rx.hstack(
@@ -145,7 +161,7 @@ def signup_form() -> rx.Component:
             ),
             rx.button("Submit", type="submit"),
             on_submit=SignupState.submit,
-            reset_on_submit=True,
+            # reset_on_submit=True,
         ),
         #rx.text(f"{SignupState.set_processing_msg}"),
         #rx.text(f"Status: {SignupState.change_processing_msg}"),
@@ -154,7 +170,11 @@ def signup_form() -> rx.Component:
     )
 
 def signup() -> rx.Component:
-    """Base page for signup component"""
+    """
+    The base page for the signup page.
+    Includes the signup form component, and the link to go back to the home page.
+    """
+    # Signup page
     return rx.container(
         signup_form(),
         rx.link(
