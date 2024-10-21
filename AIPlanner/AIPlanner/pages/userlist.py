@@ -1,5 +1,11 @@
+"""userlist script
+
+Displays users in the database.
+"""
+
 import reflex as rx
 from AIPlanner.classes.database import *
+
 
 def display_usernames(state=UserManagementState):
         """Function to display usernames"""
@@ -18,6 +24,9 @@ def display_user_tasks(state=UserManagementState):
                
         )
 def userlist(state=UserManagementState) -> rx.Component:
+    """
+    Calls display_users to display all users in database.
+    """
     """Function to display user list"""
     # User list debugging page 
     return rx.container(
@@ -27,3 +36,5 @@ def userlist(state=UserManagementState) -> rx.Component:
         rx.button("Get all user tasks", on_click=lambda: state.get_user_tasks(1)), # Button to get user tasks (temporarily hardcoded 1 as user id, integrate with login later)
         rx.logo(),
     )
+
+#Eof

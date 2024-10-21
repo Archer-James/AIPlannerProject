@@ -1,21 +1,14 @@
-"""Signup page script.
-
-Includes the signup form, which enables users to enter their email and password and click submit.
-Clicking submit adds their information as a User object in the database, 
-    and takes them to a success page.
-The user must click "Go home" from the success page.
-User can also go back to the home page.
+"""Log in page for user.
+    Upon successful log in, data is checked in database for account.
+    If account found, user redirected to home screen.
+    If account not found, show generic error message that does not compromise user privacy.
 """
 
-
-# Importing necessary modules
-
-from datetime import time
-import time
+# import time
 import reflex as rx
 from rxconfig import config
 from AIPlanner.classes.database import AddUser
-# #import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
+# import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
 import AIPlanner.classes.database as database
 # import AIPlanner.pages.processing as processing **Discuss in meeting**
 
@@ -34,9 +27,9 @@ def check_passwords(password, password_check):
         return False
 
 
-class SignupState(rx.State):
+class LoginState(rx.State):
     """
-    Signup page.
+    Login state.
     """
     email: str = ""
     password: str = "" # Passwords are usually strings in web development, apparently
@@ -47,8 +40,7 @@ class SignupState(rx.State):
 
     def submit(self, signup_data):
         """
-        Function that handles user's data when user signs up. 
-        Saves username and password into database.
+        Function that handles user's data when user signs up. Saves username and password into database.
 
         param signup_data: data the user enters into the signup form (i.e. username and password)
         """
@@ -107,23 +99,19 @@ class SignupState(rx.State):
     # @rx.var(cache=True)
     # def change_processing_msg(self) ->str:
     #     return str(self.processing_msg)
-    # @rx.var(cache=True)
-    # def change_processing_msg(self) ->str:
-    #     return str(self.processing_msg)
 
 
-def signup_form() -> rx.Component:
+def login_form() -> rx.Component:
     """
-    Signup form page that allows the user to enter their email and password, click submit.
-    Clicking submit will send the entered data to the database.
+    Login form page that allows the user to enter their email and password and click Log in
     """
     return rx.card(
         rx.form(
             rx.hstack(
                 # rx.image(src='/pages/images/tangled_angel_guy.jpg'),
                 rx.vstack(
-                    rx.heading("Sign Up!"),
-                    rx.text("Make an account with us to save your data and access it later :)"),
+                    rx.heading("Log In!"),
+                    rx.text("Log into your account to access your data :)"),
                 ),
             ),
             rx.vstack(
@@ -149,19 +137,10 @@ def signup_form() -> rx.Component:
                     type="password",
                     required=True,
                 ),
-                rx.text("Confirm password",
-                        rx.text.span("*", color="crimson")
-                ),
-                rx.input(
-                    placeholder="Confirm password *",
-                    name="password_check",
-                    type="password",
-                    required=True,
-                ),
             ),
-            rx.button("Submit", type="submit"),
-            on_submit=SignupState.submit,
-            # reset_on_submit=True,
+            rx.button("Enter", type="submit"),
+            on_submit=LoginState.submit,
+            reset_on_submit=True,
         ),
         #rx.text(f"{SignupState.set_processing_msg}"),
         #rx.text(f"Status: {SignupState.change_processing_msg}"),
@@ -169,20 +148,24 @@ def signup_form() -> rx.Component:
         justify="center",
     )
 
-def signup() -> rx.Component:
-    """
-    The base page for the signup page.
-    Includes the signup form component, and the link to go back to the home page.
-    """
-    # Signup page
+def login() -> rx.Component:
+    """Base page for log in component"""
     return rx.container(
-        signup_form(),
+        #render_signup_form(),
+        login_form(),
         rx.link(
             rx.button("Go back"),
             href="/",
             is_external=False,
             position="top-right",
             ),
+        rx.heading("Don't have an account?"),
+        rx.link(
+            rx.button("Make an account instead"),
+            href="/signup",
+            is_external=False,
+            position="top-right",
+        ),
         width="100%",
         height="100vh",
         padding="2em",
