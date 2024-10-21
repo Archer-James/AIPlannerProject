@@ -30,6 +30,7 @@ class State(rx.State):
     priority: str = "Medium"
     date_time: str = ""
     show_error: bool = False
+    show_full_input: bool = False
 
     # Need to connect this with database
     def apply_task(self):
@@ -37,15 +38,23 @@ class State(rx.State):
         Apply task button that will give errors if there are missing required fields
         Will also reset after successful apply
         """
+        # if there is nothing in task name after removing white space, show an error
         if not self.task_name.strip():
             self.show_error = True
         else:
+            # need to create a task object and put it in database. Need to figure out
+            # can have task be added independently into database
+            # show what tasks are in the list by using database.py and userlist.py 
             self.show_error = False
             print(f"Task applied: {self.task_name, self.task_description, self.priority, self.date_time}")
             self.task_name = ""
             self.task_description = ""
             self.priority = "Medium"
             self.date_time = ""
+    
+    def toggle_full_input(self):
+        """Toggles the visibility of the full task name input."""
+        self.show_full_input = not self.show_full_input
 
     def set_task_name(self, task_name: str):
         """
@@ -77,58 +86,85 @@ class State(rx.State):
 
 def task_input_form():
     """
-    Task bar initializer that has task name, task description, priority, set date/time, and apply
+    Task bar initializer with task name, task description, priority, set date/time, and apply button.
     """
     return rx.box(
         rx.vstack(
+            # Task inputs arranged in a horizontal line
             rx.hstack(
-                rx.input(
-                    placeholder="Task Name",
-                    on_change=State.set_task_name,
-                    value=State.task_name,
-                    flex=1,
-                    #border_right="2px solid #E2E8F0",
-                    #border_left="2px solid #E2E8F0",
+                # Task name with integrated dropdown arrow in the same input box
+                rx.box(
+                    rx.input(
+                        placeholder="Task Name",
+                        on_change=State.set_task_name,
+                        value=State.task_name,
+                        flex=1,
+                        padding_right="30px",  # Space for the dropdown arrow inside
+                    ),
+                    rx.button(
+                        "▼",  # Dropdown arrow
+                        on_click=State.toggle_full_input,
+                        position="absolute",  # Positioned inside the input
+                        right="10px",  # Align it to the right inside the input
+                        top="50%",  # Vertically center the dropdown arrow
+                        transform="translateY(-50%)",  # Fix centering
+                        border="none",  # No border for the button
+                        background="transparent",  # Transparent background
+                        cursor="pointer",
+                        padding="0",  # Remove padding
+                    ),
+                    position="relative",  # Make sure the dropdown stays inside the input box
+                    width="100%",  # Full width for the task name input box
+                    flex=1,  # Allow it to take up space in the hstack
                 ),
+                # Task description input
                 rx.input(
                     placeholder="Task Description",
                     on_change=State.set_task_description,
                     value=State.task_description,
                     flex=1,
-                    #border_right="2px solid #E2E8F0",
-                    #border_left="2px solid #E2E8F0",
                 ),
+                # Priority dropdown
                 rx.select(
                     ["Low", "Medium", "High"],
                     placeholder="Priority: Medium",
                     on_change=State.set_priority,
                     value=State.priority,
                     flex=1,
-                    #border_right="2px solid #E2E8F0",
-                    #border_left="2px solid #E2E8F0",
                 ),
+                # Date and time input
                 rx.input(
                     placeholder="Set Date/Time",
                     type_="datetime-local",
                     on_change=State.set_date_time,
                     value=State.date_time,
                     flex=1,
-                    #border_left="2px solid #E2E8F0",
-                    #border_right="2px solid #E2E8F0",
                 ),
+                # Apply task button
                 rx.button("Apply Task", on_click=State.apply_task, flex=1),
-                spacing="0",
-                #border="2px solid #E2E8F0",
-                border_radius="md",
+                spacing="10px",  # Add a bit of spacing between the elements
             ),
+            # Conditionally show the larger input box when dropdown is clicked
             rx.cond(
-                    State.show_error,
-                    rx.text("Task name is required", color="red", font_size="sm"),
+                State.show_full_input,
+                rx.text_area(
+                    placeholder="Full Task Name",
+                    on_change=State.set_task_name,
+                    value=State.task_name,
+                    height="100px",  # Larger height for expanded input
+                    width="100%",    # Full width
+                )
             ),
-            align_items = "stretch",
+            # Error message
+            rx.cond(
+                State.show_error,
+                rx.text("Task name is required", color="red", font_size="sm"),
+            ),
+            align_items="stretch",
         ),
         width="100%",
     )
+
 
 def index() -> rx.Component:
     """
