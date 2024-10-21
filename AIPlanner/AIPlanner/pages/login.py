@@ -32,10 +32,74 @@ class LoginState(rx.State):
     Login state.
     """
     email: str = ""
-    password: str = "" # Passwords are usually strings in web development, apparently
-    password_check: str = "" # We make the user enter their password twice so they can make sure it's correct
-    processing_msg: str = "idle"
-    is_processing: bool = False
+    password: str = ""
+    # processing_msg: str = "idle"
+    # is_processing: bool = False
+
+
+    def search_for_user(self, login_data):
+        """
+        Searches for user in database.
+        If no user found, returns error statement.
+        If user found, user redirected to home page.
+        """
+        # Getting data from log in form
+        self.email = login_data.get('email')
+        self.password = login_data.get('password')
+
+        # Iterating through Reflex database
+        # for user in database.UserManagementState.users:
+        #     if (user.username == self.email) and (user.password == self.password):
+        #         user_found = True
+        #         break
+        
+        # Starting rx database session
+        with rx.session() as session:
+            user_found = session.exec(
+                database.User.select().where(
+                    database.User.username == self.email,
+                    database.User.password == self.password,
+                ),
+            ).first()
+
+
+        # rx.foreach(database.UserManagementState.users, lambda user: (
+        #     user_found := (user.username == self.email) and (user.password == self.password))
+        # )
+
+    #     class QueryUser(rx.State):
+    # name: str
+    # users: list[User]
+
+    # def get_users(self):
+    #     with rx.session() as session:
+    #         self.users = session.exec(
+    #             User.select().where(
+    #                 User.username.contains(self.name)
+    #             )
+    #         ).all()
+
+        # If user found, allow log in
+        if user_found:
+            print(f"User found: {user_found.username}, {user_found.password}, {user_found.canvas_hash_id}")
+            # Doesn't like tasks...
+            return rx.redirect('/')
+
+        # User not found
+        else:
+            return rx.toast("User not found with this email and password combination.")
+
+
+# def display_usernames(state=UserManagementState):
+#         """Function to display usernames"""
+#         return rx.vstack(
+#         rx.text(state.message),  # Display number of users retrieved
+#         rx.foreach(  # Use rx.foreach for list rendering
+#             state.users, 
+#             lambda user: rx.text(user.username)  # Create a text component for each username
+#         )
+#     )
+
 
 
     def submit(self, signup_data):
@@ -139,8 +203,8 @@ def login_form() -> rx.Component:
                 ),
             ),
             rx.button("Enter", type="submit"),
-            on_submit=LoginState.submit,
-            reset_on_submit=True,
+            on_submit=LoginState.search_for_user,
+            #reset_on_submit=True,
         ),
         #rx.text(f"{SignupState.set_processing_msg}"),
         #rx.text(f"Status: {SignupState.change_processing_msg}"),
