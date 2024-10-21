@@ -142,7 +142,7 @@ def task_input_form():
                 ),
                 # Apply task button
                 rx.button("Apply Task", on_click=State.apply_task, flex=1),
-                spacing="10px",  # Add a bit of spacing between the elements
+                spacing="0px",  # Add a bit of spacing between the elements
             ),
             # Conditionally show the larger input box when dropdown is clicked
             rx.cond(
