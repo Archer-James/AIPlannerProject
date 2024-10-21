@@ -55,15 +55,19 @@ class AddUser(rx.State):
     password: str
 
     def set_username(self, value: str):
+        """Initializing username"""
         self.username = value
 
     def set_canvas_hash_id(self, value: int):
+        """Initializing user canvas ID"""
         self.canvas_hash_id = value
 
     def set_password(self, value: str):
+        """Initializing user's password"""
         self.password = value
 
     def add_user(self, new_user):
+        """Function to add users"""
         with rx.session() as session:
             session.add(
                 User(
