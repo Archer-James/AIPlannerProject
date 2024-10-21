@@ -1,5 +1,7 @@
-"""Signup page that includes the signup form and the basic webpage.
-    Upon successful sign up, user's email and password stored in database.
+"""Log in page for user.
+    Upon successful log in, data is checked in database for account.
+    If account found, user redirected to home screen.
+    If account not found, show generic error message that does not compromise user privacy.
 """
 
 # import time
@@ -25,9 +27,9 @@ def check_passwords(password, password_check):
         return False
 
 
-class SignupState(rx.State):
+class LoginState(rx.State):
     """
-    Signup page.
+    Login state.
     """
     email: str = ""
     password: str = "" # Passwords are usually strings in web development, apparently
@@ -99,15 +101,17 @@ class SignupState(rx.State):
     #     return str(self.processing_msg)
 
 
-def signup_form() -> rx.Component:
-    """Signup form page that allows the user to enter their email and password and click Submit"""
+def login_form() -> rx.Component:
+    """
+    Login form page that allows the user to enter their email and password and click Log in
+    """
     return rx.card(
         rx.form(
             rx.hstack(
                 # rx.image(src='/pages/images/tangled_angel_guy.jpg'),
                 rx.vstack(
-                    rx.heading("Sign Up!"),
-                    rx.text("Make an account with us to save your data and access it later :)"),
+                    rx.heading("Log In!"),
+                    rx.text("Log into your account to access your data :)"),
                 ),
             ),
             rx.vstack(
@@ -133,18 +137,9 @@ def signup_form() -> rx.Component:
                     type="password",
                     required=True,
                 ),
-                rx.text("Confirm password",
-                        rx.text.span("*", color="crimson")
-                ),
-                rx.input(
-                    placeholder="Confirm password *",
-                    name="password_check",
-                    type="password",
-                    required=True,
-                ),
             ),
-            rx.button("Submit", type="submit"),
-            on_submit=SignupState.submit,
+            rx.button("Enter", type="submit"),
+            on_submit=LoginState.submit,
             reset_on_submit=True,
         ),
         #rx.text(f"{SignupState.set_processing_msg}"),
@@ -153,16 +148,24 @@ def signup_form() -> rx.Component:
         justify="center",
     )
 
-def signup() -> rx.Component:
-    """Base page for signup component"""
+def login() -> rx.Component:
+    """Base page for log in component"""
     return rx.container(
-        signup_form(),
+        #render_signup_form(),
+        login_form(),
         rx.link(
             rx.button("Go back"),
             href="/",
             is_external=False,
             position="top-right",
             ),
+        rx.heading("Don't have an account?"),
+        rx.link(
+            rx.button("Make an account instead"),
+            href="/signup",
+            is_external=False,
+            position="top-right",
+        ),
         width="100%",
         height="100vh",
         padding="2em",
