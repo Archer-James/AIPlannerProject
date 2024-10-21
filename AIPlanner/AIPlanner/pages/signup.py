@@ -9,10 +9,15 @@ User can also go back to the home page.
 
 
 # Importing necessary modules
+
+from datetime import time
 import time
 import reflex as rx
-#import AIPlanner.classes.user as user
+from rxconfig import config
+from AIPlanner.classes.database import AddUser
+# #import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
 import AIPlanner.classes.database as database
+# import AIPlanner.pages.processing as processing **Discuss in meeting**
 
 
 class SignupState(rx.State):
@@ -46,8 +51,8 @@ class SignupState(rx.State):
             time.sleep(2)
             # Need processing message!!!
 
-            # Create a new user with Reflex database
-            database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
+             # Create a new user with Reflex database
+             database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
 
             self.is_processing = False
 
@@ -121,7 +126,6 @@ def signup_form() -> rx.Component:
         spacing="50",
         justify="center",
     )
-
 
 def signup() -> rx.Component:
     """
