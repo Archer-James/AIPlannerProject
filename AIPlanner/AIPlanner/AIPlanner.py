@@ -30,7 +30,8 @@ class State(rx.State):
     priority: str = "Medium"
     date_time: str = ""
     show_error: bool = False
-    show_full_input: bool = False
+    show_full_task_input: bool = False
+    show_full_description_input: bool = False
 
     # Need to connect this with database
     def apply_task(self):
@@ -52,9 +53,13 @@ class State(rx.State):
             self.priority = "Medium"
             self.date_time = ""
     
-    def toggle_full_input(self):
+    def toggle_full_task_input(self):
         """Toggles the visibility of the full task name input."""
-        self.show_full_input = not self.show_full_input
+        self.show_full_task_input = not self.show_full_task_input
+        
+    def toggle_full_description_input(self):
+        """Toggles the visibility of the full task name input."""
+        self.show_full_description_input = not self.show_full_description_input
 
     def set_task_name(self, task_name: str):
         """
@@ -99,11 +104,11 @@ def task_input_form():
                         on_change=State.set_task_name,
                         value=State.task_name,
                         flex=1,
-                        padding_right="30px",  # Space for the dropdown arrow inside
+                        padding_right="0px",  # Space for the dropdown arrow inside
                     ),
                     rx.button(
                         "▼",  # Dropdown arrow
-                        on_click=State.toggle_full_input,
+                        on_click=State.toggle_full_task_input,
                         position="absolute",  # Positioned inside the input
                         right="10px",  # Align it to the right inside the input
                         top="50%",  # Vertically center the dropdown arrow
@@ -118,11 +123,29 @@ def task_input_form():
                     flex=1,  # Allow it to take up space in the hstack
                 ),
                 # Task description input
-                rx.input(
-                    placeholder="Task Description",
-                    on_change=State.set_task_description,
-                    value=State.task_description,
-                    flex=1,
+                rx.box(
+                    rx.input(
+                        placeholder="Task Description",
+                        on_change=State.set_task_description,
+                        value=State.task_description,
+                        flex=1,
+                        padding_right="0px",
+                    ),
+                    rx.button(
+                        "▼",  # Dropdown arrow
+                        on_click=State.toggle_full_description_input,
+                        position="absolute",  # Positioned inside the input
+                        right="10px",  # Align it to the right inside the input
+                        top="50%",  # Vertically center the dropdown arrow
+                        transform="translateY(-50%)",  # Fix centering
+                        border="none",  # No border for the button
+                        background="transparent",  # Transparent background
+                        cursor="pointer",
+                        padding="0",  # Remove padding
+                    ),
+                    position="relative",  # Make sure the dropdown stays inside the input box
+                    width="100%",  # Full width for the task name input box
+                    flex=1,  # Allow it to take up space in the hstack
                 ),
                 # Priority dropdown
                 rx.select(
@@ -146,13 +169,23 @@ def task_input_form():
             ),
             # Conditionally show the larger input box when dropdown is clicked
             rx.cond(
-                State.show_full_input,
+                State.show_full_task_input,
                 rx.text_area(
                     placeholder="Full Task Name",
                     on_change=State.set_task_name,
                     value=State.task_name,
-                    height="100px",  # Larger height for expanded input
-                    width="100%",    # Full width
+                    height="50px",  # Larger height for expanded input
+                    width="50%",    # Full width
+                )
+            ),
+            rx.cond(
+                State.show_full_description_input,
+                rx.text_area(
+                    placeholder="Full Description Name",
+                    on_change=State.set_task_description,
+                    value=State.task_description,
+                    height="50px",  # Larger height for expanded input
+                    width="50%",    # Full width
                 )
             ),
             # Error message
