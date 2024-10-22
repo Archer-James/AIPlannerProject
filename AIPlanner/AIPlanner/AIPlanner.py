@@ -133,6 +133,7 @@ def task_input_form():
                         on_change=State.set_task_description,
                         value=State.task_description,
                         flex=1,
+                        width = "200px",
                         padding_right="0px",
                     ),
                     rx.button(
@@ -148,7 +149,7 @@ def task_input_form():
                         padding="0",  # Remove padding
                     ),
                     position="relative",  # Make sure the dropdown stays inside the input box
-                    width="100%",  # Full width for the task name input box
+                    width="100%",  # Full width for the task description input box
                     flex=1,  # Allow it to take up space in the hstack
                 ),
                 # Priority dropdown
