@@ -1,4 +1,6 @@
-"""Welcome to Reflex! This file outlines the steps to create a basic app."""
+"""Home page of AIPlanner project.
+
+"""
 
 import reflex as rx
 from rxconfig import config
@@ -9,6 +11,7 @@ from AIPlanner.pages.processing import processing # Processing page used in sign
 from AIPlanner.pages.success import success # Success page shown after successful sign up
 from AIPlanner.classes.database import * # Database
 from AIPlanner.pages.userlist import userlist # Userlist debugging page
+from AIPlanner.pages.login import login # Log in page for existing users
 
 
 # from pages.signup import signup  # Sign up page
@@ -75,11 +78,13 @@ class State(rx.State):
         """
         self.task_description = task_description
 
+
     def set_priority(self, priority: str):
         """
         Setter for priority
         """
         self.priority = priority
+
 
     def set_date_time(self, date_time: str):
         """
@@ -87,7 +92,6 @@ class State(rx.State):
         """
         self.date_time = date_time
 
-    ...
 
 def task_input_form():
     """
@@ -213,6 +217,11 @@ def index() -> rx.Component:
                 is_external=False,
             ),
             rx.link(
+                rx.button("Log in!"),
+                href='/login',
+                is_external=False,
+            ),
+            rx.link(
                 rx.button("Show All Users"),
                 href="/userlist",
                 is_external=False,
@@ -304,21 +313,15 @@ app = rx.App(
         panel_background="translucent",
     )
 )
+
 app.add_page(index)
-
-
-
-# Megdalia Bromhal - 30 Sept. 2024
-# Adding a signup page (as defined in pages.signup)
-app.add_page(signup)
-# Adding processing page (used in sign up page)
-app.add_page(processing)
-# Adding success page (used in sign up page)
-app.add_page(success)
-# Adding debugging user list page
-app.add_page(userlist)
+app.add_page(signup) # Adding a signup page (as defined in pages.signup)
+app.add_page(processing) # Adding processing page (used in sign up page)
+app.add_page(success) # Adding success page (used in sign up page)
+app.add_page(userlist) # Adding debugging user list page
 # Adding a signup page, alternative, **Discuss in meeting**
 #app.add_page(signup, on_load=UserManagementState.fetch_all_users)
+app.add_page(login)
 
 
 if __name__ == "__main__":
