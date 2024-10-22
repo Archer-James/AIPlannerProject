@@ -17,3 +17,4 @@ examples/
 reflex.db
 requirements.txt
 venv
+.venv
