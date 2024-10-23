@@ -12,6 +12,8 @@ from AIPlanner.pages.success import success # Success page shown after successfu
 from AIPlanner.classes.database import * # Database
 from AIPlanner.pages.userlist import userlist # Userlist debugging page
 from AIPlanner.pages.login import login # Log in page for existing users
+from AIPlanner.pages.login import LoginState # Login State used to get the user's username
+from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
 
 
 # from pages.signup import signup  # Sign up page
@@ -182,49 +184,46 @@ def index() -> rx.Component:
         rx.color_mode.button(position="top-right"),
         rx.hstack(
             rx.link(
-                rx.button("Sign Up!"),
-                href="/signup",
-                is_external=False,
-            ),
-            rx.link(
-                rx.button("Log in!"),
-                href='/login',
-                is_external=False,
-            ),
-            rx.link(
                 rx.button("Show All Users"),
                 href="/userlist",
                 is_external=False,
             ),
             task_input_form(),
+            #show_account(),
+            #rx.text(LoginState.display_username),
+            rx.cond(
+                LoginState.username, # checking if exists
+                rx.hstack( # If the user is logged in
+                    rx.button("Log out", on_click=LoginState.logout),
+                    rx.text(f"Hello {LoginState.username}!"),),
+                rx.hstack( # If user is not logged in
+                    rx.button("Log in!", on_click=LoginState.direct_to_login),
+                    rx.button("Sign up!", on_click=SignupState.direct_to_signup),),
+            ),
             spacing="5",
             justify="center",
             min_height="15vh", # Squishing it up a tad so we can see the giant text
-
         ),
-    ), rx.container(
-        rx.color_mode.button(position="top-right"),
-        rx.vstack(
-            rx.heading("AIPlanner Home Page", size="9"),
-            rx.text(
-                "More coming soon! Currently coding ",
-                rx.code(f"{config.app_name}/{config.app_name}.py"),
-                size="5",
+        ), rx.container(
+            rx.color_mode.button(position="top-right"),
+            rx.vstack(
+                rx.heading("AIPlanner Home Page", size="9"),
+                rx.text(
+                    "More coming soon! Currently coding ",
+                    rx.code(f"{config.app_name}/{config.app_name}.py"),
+                    size="5",
+                ),
+                rx.center(
+                calendar_component(),
+
+                spacing="5",
+                justify="center",
+                min_height="50vh", # Changing to 50 to squish it up more
             ),
-            rx.center(
-            calendar_component(),
 
-            spacing="5",
-            justify="center",
-            min_height="50vh", # Changing to 50 to squish it up more
-        ),
-
-        padding="50px",
+            padding="50px",
+        )
     )
-    ),
-
-
-
 
 
 month_year = GenCalendar.get_month_year_label
