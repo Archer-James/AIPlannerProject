@@ -225,7 +225,7 @@ def weekly_component():
             padding="20px",
         ),
 
-@rx.page(on_load=GenWeeklyCal.init_week())
+@rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def index() -> rx.Component:
     # Welcome Page (Index)
     
@@ -265,7 +265,7 @@ def index() -> rx.Component:
             rx.button("Show Weekly View", on_click=State.toggle_weekly),
             #temporary both calendars, cond has a bug does not produce switchable button
             ),
-            #calendar_component(monthly_cal),
+            calendar_component(),
             weekly_component(),
         ),  
             margin_bottom="20px",

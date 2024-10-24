@@ -8,6 +8,6 @@ class Cals(rx.State):
     @classmethod
     def cals_init(cls):
         GenCalendar.init_calendar()
-        GenWeeklyCal.load_week()
+        GenWeeklyCal.init_week()
 
         
