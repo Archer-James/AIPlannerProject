@@ -17,6 +17,7 @@ class GenWeeklyCal(rx.State):
         Title of the calendar
     """
     now = datetime.now()
+    current_year: int = now.year
     current_week_start: datetime = now - timedelta(days=now.weekday())  # Start of the week (Monday)
     days: list[datetime] = []
     dates: list[list[str]] = []
@@ -25,9 +26,7 @@ class GenWeeklyCal(rx.State):
 
     def get_week_label(self):
         """Set the label variable to a string of the week for Title of calendar"""
-        week_start = self.current_week_start.strftime("%B %d, %Y")
-        week_end = (self.current_week_start + timedelta(days=6)).strftime("%B %d, %Y")
-        self.label = f"Week of {week_start} to {week_end}"
+        self.label = "Week of:"+str(self.now.day)
 
     def init_week(self):
         """Initialize the list of days in the current week"""
@@ -43,13 +42,14 @@ class GenWeeklyCal(rx.State):
         """Decrement week and reinitialize calendar"""
         self.current_week_start -= timedelta(weeks=1)
         self.init_week()
+        
 
     def make_dates(self):
         """
         Set dates list as list of numbers of days to iterate through
         """
         self.days = [self.current_week_start + timedelta(days=i) for i in range(7)]
-        self.dates = [[day.strftime("%A, %B %d") for day in self.days]]  # Format dates for display
+        self.dates = [[day.strftime(" %d") for day in self.days]]  # Format dates for display
         self.get_week_label()
 
     def init_week(self):

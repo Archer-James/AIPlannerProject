@@ -4,17 +4,17 @@ import reflex as rx
 from rxconfig import config
 
 # Importing pages
-from AIPlanner.pages.signup import signup  # Sign up page
-from AIPlanner.pages.processing import processing  # Processing page used in sign up page
-from AIPlanner.pages.success import success  # Success page shown after successful sign up
-from AIPlanner.classes.database import *  # Database
-from AIPlanner.pages.userlist import userlist  # Userlist debugging page
+from AIPlanner.pages.signup import signup # Sign up page
+from AIPlanner.pages.processing import processing # Processing page used in sign up page
+from AIPlanner.pages.success import success # Success page shown after successful sign up
+from AIPlanner.classes.database import * # Database
+from AIPlanner.pages.userlist import userlist # Userlist debugging page
+
 
 # from pages.signup import signup  # Sign up page
 
 from AIPlanner.CreateCal import GenCalendar
-from AIPlanner.CreateWeekly import GenWeeklyCal
-
+from AIPlanner.WeeklyCal import GenWeeklyCal
 
 # to run test environment
 # >cd AIPlanner
@@ -30,8 +30,7 @@ class State(rx.State):
     priority: str = "Medium"
     date_time: str = ""
     show_error: bool = False
-
-    cal_state: bool = True
+    show_weekly: bool = True
 
     # Need to connect this with database
     def apply_task(self):
@@ -75,16 +74,14 @@ class State(rx.State):
         """
         self.date_time = date_time
 
-    def toggle_cal_state(self):
-        if self.cal_state:
-            calendar_component_monthly()
-            self.cal_state = not self.cal_state
-        else:
-            calendar_component_weekly()
-            self.cal_state = not self.cal_state
+    def show(self) -> bool:
+        self.show_weekly = not (self.show_weekly)
+    
+    def toggle_weekly(self):
+        self.show_weekly = True
 
-    ...
-
+    def toggle_monthly(self):
+        self.show_weekly = False
 
 def task_input_form():
     """
@@ -98,16 +95,16 @@ def task_input_form():
                     on_change=State.set_task_name,
                     value=State.task_name,
                     flex=1,
-                    # border_right="2px solid #E2E8F0",
-                    # border_left="2px solid #E2E8F0",
+                    #border_right="2px solid #E2E8F0",
+                    #border_left="2px solid #E2E8F0",
                 ),
                 rx.input(
                     placeholder="Task Description",
                     on_change=State.set_task_description,
                     value=State.task_description,
                     flex=1,
-                    # border_right="2px solid #E2E8F0",
-                    # border_left="2px solid #E2E8F0",
+                    #border_right="2px solid #E2E8F0",
+                    #border_left="2px solid #E2E8F0",
                 ),
                 rx.select(
                     ["Low", "Medium", "High"],
@@ -115,8 +112,8 @@ def task_input_form():
                     on_change=State.set_priority,
                     value=State.priority,
                     flex=1,
-                    # border_right="2px solid #E2E8F0",
-                    # border_left="2px solid #E2E8F0",
+                    #border_right="2px solid #E2E8F0",
+                    #border_left="2px solid #E2E8F0",
                 ),
                 rx.input(
                     placeholder="Set Date/Time",
@@ -124,24 +121,111 @@ def task_input_form():
                     on_change=State.set_date_time,
                     value=State.date_time,
                     flex=1,
-                    # border_left="2px solid #E2E8F0",
-                    # border_right="2px solid #E2E8F0",
+                    #border_left="2px solid #E2E8F0",
+                    #border_right="2px solid #E2E8F0",
                 ),
                 rx.button("Apply Task", on_click=State.apply_task, flex=1),
                 spacing="0",
-                # border="2px solid #E2E8F0",
+                #border="2px solid #E2E8F0",
                 border_radius="md",
             ),
             rx.cond(
-                State.show_error,
-                rx.text("Task name is required", color="red", font_size="sm"),
+                    State.show_error,
+                    rx.text("Task name is required", color="red", font_size="sm"),
             ),
-            align_items="stretch",
+            align_items = "stretch",
         ),
         width="100%",
     )
 
 
+def calendar_component():
+    """
+    Calendar initializer and caller
+    """
+    return rx.vstack(
+        # Navigation buttons for previous and next months
+
+        rx.hstack(
+            rx.heading(GenCalendar.label, size = "lg"), 
+            rx.button("Previous", on_click=GenCalendar.prev_month),
+            rx.button("Next", on_click=GenCalendar.next_month),
+        ),
+ 
+        # Create the table for the calendar
+           
+
+         # Table header for days of the week
+        rx.table.root(
+
+            rx.table.header(
+                rx.table.row(
+                    rx.table.column_header_cell("Sun", scope = "col"),
+                    rx.table.column_header_cell("Mon",scope = "col"),
+                    rx.table.column_header_cell("Tues",scope = "col"),
+                    rx.table.column_header_cell("Wed",scope = "col"),
+                    rx.table.column_header_cell("Thurs",scope="col"),
+                    rx.table.column_header_cell("Fri",scope = "col"),
+                    rx.table.column_header_cell("Sat",scope = "col"),
+                    )
+                ),
+
+                # Table body for days in the month
+            rx.table.body(
+                rx.foreach(GenCalendar.dates, lambda week: rx.table.row(
+                    rx.foreach(week, lambda day: rx.table.cell(day, text_align="center", padding="10px"))
+    ))),
+        ),
+        width="100%",
+
+            padding="20px",
+        ),
+
+def weekly_component():
+    """
+    Calendar initializer and caller
+    """
+    return rx.vstack(
+        # Navigation buttons for previous and next months
+
+        rx.hstack(
+            rx.heading(GenWeeklyCal.label, size = "lg"), 
+            rx.button("Previous", on_click=GenWeeklyCal.prev_week),
+            rx.button("Next", on_click=GenWeeklyCal.next_week),
+        ),
+ 
+        # Create the table for the calendar
+           
+
+         # Table header for days of the week
+        rx.table.root(
+
+            rx.table.header(
+                rx.table.row(
+                    rx.table.column_header_cell("Sun", scope = "col"),
+                    rx.table.column_header_cell("Mon",scope = "col"),
+                    rx.table.column_header_cell("Tues",scope = "col"),
+                    rx.table.column_header_cell("Wed",scope = "col"),
+                    rx.table.column_header_cell("Thurs",scope="col"),
+                    rx.table.column_header_cell("Fri",scope = "col"),
+                    rx.table.column_header_cell("Sat",scope = "col"),
+                    )
+
+                ),
+
+                # Table body for days in the month
+            rx.table.body(
+                rx.foreach(GenWeeklyCal.dates, lambda week: rx.table.row(
+                    rx.foreach(week, lambda day: rx.table.cell(day, text_align="center", padding="10px"))
+    ))),
+        ),
+        width="100%",
+
+            padding="20px",
+        ),
+
+@rx.page(on_load=GenCalendar.init_calendar())
+@rx.page(on_load=GenWeeklyCal.init_week())
 def index() -> rx.Component:
     """
     Home page of AIPlanner.
@@ -163,7 +247,7 @@ def index() -> rx.Component:
             task_input_form(),
             spacing="5",
             justify="center",
-            min_height="15vh",  # Squishing it up a tad so we can see the giant text
+            min_height="15vh", # Squishing it up a tad so we can see the giant text
 
         ),
     ), rx.container(
@@ -174,113 +258,23 @@ def index() -> rx.Component:
                 "More coming soon! Currently coding ",
                 rx.code(f"{config.app_name}/{config.app_name}.py"),
                 size="5",
-            ),
-            rx.center(
-                rx.hstack(
-                    calendar_component_monthly(),
-                    rx.button("Week/Month", on_click=State.toggle_cal_state),
-                    rx.button("Load Calendar", on_click=GenCalendar.init_calendar),
-                ),
-                spacing="5",
-                justify="center",
-                min_height="50vh",  # Changing to 50 to squish it up more
-            ),
-
-            padding="50px",
-        )
-    ),
-
-
-month_year = GenCalendar.get_month_year_label
-
-
-def calendar_component_monthly():
-    """
-    Calendar initializer and caller
-    """
-    return rx.vstack(
-        # Display current month and year
-
-        # Navigation buttons for previous and next months
-
+            ), 
+            
+        
         rx.hstack(
-            rx.button("Previous", on_click=GenCalendar.prev_month),
-            rx.button("Next", on_click=GenCalendar.next_month),
-        ),
-
-        # Create the table for the calendar
-        rx.heading(GenCalendar.label, size="lg"),
-
-        # Table header for days of the week
-        rx.table.root(
-
-            rx.table.header(
-                rx.table.row(
-                    rx.table.column_header_cell("Sun", scope="col"),
-                    rx.table.column_header_cell("Mon", scope="col"),
-                    rx.table.column_header_cell("Tues", scope="col"),
-                    rx.table.column_header_cell("Wed", scope="col"),
-                    rx.table.column_header_cell("Thurs", scope="col"),
-                    rx.table.column_header_cell("Fri", scope="col"),
-                    rx.table.column_header_cell("Sat", scope="col"),
-                )
+            rx.button("Show Monthly View", on_click=State.toggle_monthly),
+            rx.button("Show Weekly View", on_click=State.toggle_weekly),
+            #temporary both calendars, cond has a bug does not produce switchable button
+            calendar_component(),
+            weekly_component(),
             ),
-
-            # Table body for days in the month
-            rx.table.body(
-                rx.foreach(GenCalendar.dates, lambda week: rx.table.row(
-                    rx.foreach(week, lambda day: rx.table.cell(day, text_align="center", padding="10px"))
-                ))),
+            margin_bottom="20px",
         ),
-        width="100%",
-
-        padding="20px",
-    ),
-
-
-def calendar_component_weekly():
-    """
-    Calendar initializer and caller
-    """
-    return rx.vstack(
-        # Display current month and year
-
-        # Navigation buttons for previous and next months
-
-        rx.hstack(
-            rx.button("Previous", on_click=GenWeeklyCal.prev_week()),
-            rx.button("Next", on_click=GenWeeklyCal.next_week()),
-        ),
-
-        # Create the table for the calendar
-        rx.heading(GenCalendar.label, size="lg"),
-
-        # Table header for days of the week
-        rx.table.root(
-
-            rx.table.header(
-                rx.table.row(
-                    rx.table.column_header_cell("Sun", scope="col"),
-                    rx.table.column_header_cell("Mon", scope="col"),
-                    rx.table.column_header_cell("Tues", scope="col"),
-                    rx.table.column_header_cell("Wed", scope="col"),
-                    rx.table.column_header_cell("Thurs", scope="col"),
-                    rx.table.column_header_cell("Fri", scope="col"),
-                    rx.table.column_header_cell("Sat", scope="col"),
-                )
-            ),
-
-            # Table body for days in the month
-            rx.table.body(
-                rx.foreach(GenWeeklyCal.dates, lambda week: rx.table.row(
-                    rx.foreach(week, lambda day: rx.table.cell(day, text_align="center", padding="10px"))
-                ))),
-        ),
-        width="100%",
-
-        padding="20px",
-    ),
-
+        
+        padding="50px",
+       
+    
+),
 
 app = rx.App(
     theme=rx.theme(
@@ -293,6 +287,8 @@ app = rx.App(
 )
 app.add_page(index)
 
+
+
 # Megdalia Bromhal - 30 Sept. 2024
 # Adding a signup page (as defined in pages.signup)
 app.add_page(signup)
@@ -303,8 +299,7 @@ app.add_page(success)
 # Adding debugging user list page
 app.add_page(userlist)
 # Adding a signup page, alternative, **Discuss in meeting**
-# app.add_page(signup, on_load=UserManagementState.fetch_all_users)
-
+#app.add_page(signup, on_load=UserManagementState.fetch_all_users)
 
 if __name__ == "__main__":
     app.run()
