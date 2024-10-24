@@ -15,6 +15,7 @@ from AIPlanner.pages.userlist import userlist # Userlist debugging page
 
 from AIPlanner.CreateCal import GenCalendar
 from AIPlanner.WeeklyCal import GenWeeklyCal
+from AIPlanner.call_cals import Cals
 
 # to run test environment
 # >cd AIPlanner
@@ -224,13 +225,11 @@ def weekly_component():
             padding="20px",
         ),
 
-@rx.page(on_load=GenCalendar.init_calendar())
 @rx.page(on_load=GenWeeklyCal.init_week())
 def index() -> rx.Component:
-    """
-    Home page of AIPlanner.
-    """
     # Welcome Page (Index)
+    
+    
     return rx.container(
         rx.color_mode.button(position="top-right"),
         rx.hstack(
@@ -260,14 +259,15 @@ def index() -> rx.Component:
                 size="5",
             ), 
             
-        
+        rx.vstack(
         rx.hstack(
             rx.button("Show Monthly View", on_click=State.toggle_monthly),
             rx.button("Show Weekly View", on_click=State.toggle_weekly),
             #temporary both calendars, cond has a bug does not produce switchable button
-            calendar_component(),
-            weekly_component(),
             ),
+            #calendar_component(monthly_cal),
+            weekly_component(),
+        ),  
             margin_bottom="20px",
         ),
         
