@@ -172,6 +172,22 @@ def task_input_form():
         width="100%",
     )
 
+def todo_component() -> rx.Component:
+    return rx.vstack(
+        rx.heading("To-do"),
+        rx.divider(),
+        rx.list.ordered(
+            #rx.foreach(
+              
+            #),
+        ),
+        bg="white",#place holder to see size of box
+        padding="1em",
+        border_radius="0.5em",
+        shadow="lg",
+        width="100%",     
+        height="440px"   
+    )
 
 def index() -> rx.Component:
     """
@@ -212,8 +228,10 @@ def index() -> rx.Component:
                 size="5",
             ),
             rx.center(
+                rx.hstack(
             calendar_component(),
-
+            todo_component(),
+                ),
             spacing="5",
             justify="center",
             min_height="50vh", # Changing to 50 to squish it up more
