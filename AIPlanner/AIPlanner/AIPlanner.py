@@ -10,11 +10,13 @@ from AIPlanner.pages.success import success # Success page shown after successfu
 from AIPlanner.classes.database import * # Database
 from AIPlanner.pages.userlist import userlist # Userlist debugging page
 
+
 from AIPlanner.pages.login import login # Log in page for existing users
 from AIPlanner.classes.taskform import task_input_form
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
 from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
+
 
 
 
@@ -41,15 +43,16 @@ def index() -> rx.Component:
     
     return rx.container(
         rx.color_mode.button(position="top-right"),
-
-        # User stack
         rx.hstack(
 
+ 
             rx.link(
                 rx.button("Sign Up!"),
                 href="/signup",
                 is_external=False,
             ),
+
+
 
             rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
             show_login_signup(), # rx condition that decides which buttons to show (login, signup, log out)
@@ -66,6 +69,7 @@ def index() -> rx.Component:
         # Developer & Task stack
         rx.hstack(
 
+
             rx.link(
                 rx.button("Show All Users"),
                 href="/userlist",
@@ -75,6 +79,7 @@ def index() -> rx.Component:
             spacing="5",
             justify="center",
             min_height="15vh", # Squishing it up a tad so we can see the giant text
+
         ),
     ), rx.container(
         rx.color_mode.button(position="top-right"),
@@ -88,16 +93,13 @@ def index() -> rx.Component:
         ),
       
 
+
+
         
         ), rx.container(
             rx.color_mode.button(position="top-right"),
             rx.vstack(
-                rx.heading("AIPlanner Home Page", size="9"),
-                rx.text(
-                    "More coming soon! Currently coding ",
-                    rx.code(f"{config.app_name}/{config.app_name}.py"),
-                    size="5",
-                ),
+               
                 rx.center(
                 calendar_component(),
 
@@ -109,7 +111,7 @@ def index() -> rx.Component:
             padding="50px",
         )
     )
-
+    ),
 
 def show_login_signup():
     """
@@ -137,6 +139,7 @@ def calendar_component():
         # Display current month and year
         rx.button("Load Calendar", on_click=GenCalendar.init_calendar),
         # Navigation buttons for previous and next months
+
 
 
         rx.hstack(
@@ -174,6 +177,7 @@ app.add_page(success)
 app.add_page(userlist)
 # Adding a signup page, alternative, **Discuss in meeting**
 #app.add_page(signup, on_load=UserManagementState.fetch_all_users)
+
 
 app.add_page(login) # Login page 
 app.add_page(canvas_connect) # Page user can connect Canvas tasks in
