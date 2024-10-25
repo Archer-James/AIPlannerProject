@@ -13,10 +13,9 @@ from AIPlanner.pages.userlist import userlist # Userlist debugging page
 
 # from pages.signup import signup  # Sign up page
 
-from AIPlanner.CreateCal import GenCalendar
-from AIPlanner.WeeklyCal import GenWeeklyCal
-from AIPlanner.call_cals import Cals
-
+from AIPlanner.classes.CreateCal import GenCalendar
+from AIPlanner.classes.WeeklyCal import GenWeeklyCal
+from AIPlanner.classes.cal_comps import cal_comps
 # to run test environment
 # >cd AIPlanner
 # >py -3 -m venv .venv
@@ -265,8 +264,8 @@ def index() -> rx.Component:
             rx.button("Show Weekly View", on_click=State.toggle_weekly),
             #temporary both calendars, cond has a bug does not produce switchable button
             ),
-            calendar_component(),
-            weekly_component(),
+            cal_comps.calendar_component(),
+            cal_comps.weekly_component(),
         ),  
             margin_bottom="20px",
         ),
