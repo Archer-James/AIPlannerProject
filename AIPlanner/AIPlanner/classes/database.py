@@ -41,6 +41,7 @@ class UserManagementState(rx.State):
     users: list[User] = []  # To hold the list of users
     message: str = ""        # To display success or error messages
     tasks: list[Task]
+    user_id: int = 1
 
     def get_user_tasks(self, user_id: int):
         """Method to retrieve all tasks for a given user"""
@@ -48,6 +49,7 @@ class UserManagementState(rx.State):
             self.tasks = session.exec(
                 Task.select().where(Task.user_id == user_id)
             ).all()
+        print(self.tasks)
 
     def fetch_all_users(self):
         """Method to retrieve all usernames in the database"""
@@ -61,6 +63,25 @@ class UserManagementState(rx.State):
         """Method to insert test users into the database"""
         create_user("Test", random.randint(850000000,850999999), "test11")
 
+    def add_test_task(self, user_id):
+        """Method to add test tasks into the database"""
+        
+        new_task = Task(
+            recur_frequency=7,  # For example, a weekly recurring task
+            due_date=date(2024, 12, 25),
+            is_deleted=False,
+            task_name="Complete project",
+            description="Finish the project for final submission.",
+            task_id=1,
+            priority_level=2,
+            assigned_block_date=date(2024, 12, 24),
+            assigned_block_start_time=time(14, 0),  # Start at 2 PM
+            assigned_block_duration=timedelta(hours=2),
+            user_id = self.user_id
+        )
+        with rx.session() as session:
+            session.add(new_task)
+            session.commit()
 
 class AddUser(rx.State):
     """Class that enables adding users to the database"""
@@ -109,10 +130,3 @@ def add_user(new_user:User):
         session.add(new_user)
         session.commit()
 
-def get_user_tasks(session: rx.session, user_id: int) -> List[Task]:
-    """
-    Retrieve all tasks associated with a specific user ID.
-    """
-    statement = User.select(Task).where(Task.user_id == user_id)
-    tasks = session.exec(statement).all()
-    return tasks

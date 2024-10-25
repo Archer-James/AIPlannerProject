@@ -155,7 +155,7 @@ def index() -> rx.Component:
             ),
 
             rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
-            show_login_signup(), # rx condition that decides which buttons to show (login, signup, log out)
+            #show_login_signup(), # rx condition that decides which buttons to show (login, signup, log out)
             rx.link( # Button that takes user to Canvas Connect page
                 rx.button("Connect to Canvas"),
                 href="/canvas_connect",
@@ -188,7 +188,7 @@ def index() -> rx.Component:
                 rx.code(f"{config.app_name}/{config.app_name}.py"),
                 size="5",
             ), 
-            
+        )
       
 
         
@@ -250,8 +250,7 @@ def calendar_component():
         
         padding="50px",
        
-        ),
-),
+        )
 
 app = rx.App(
     theme=rx.theme(
