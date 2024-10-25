@@ -2,103 +2,94 @@
     Upon successful log in, data is checked in database for account.
     If account found, user redirected to home screen.
     If account not found, show generic error message that does not compromise user privacy.
+
+    Also includes log out interactions when user clicks "log out" in home page.
 """
 
-# import time
 import reflex as rx
-from rxconfig import config
-from AIPlanner.classes.database import AddUser
-# import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
 import AIPlanner.classes.database as database
-# import AIPlanner.pages.processing as processing **Discuss in meeting**
-
-
-def check_passwords(password, password_check):
-    """
-    Checks if password is the same as the password check.
-
-    param password: rx password         the password the user enters
-    param password_check: rx password   the password the user enters into the check
-    returns True if passwords match, False otherwise
-    """
-    if password == password_check:
-        return True
-    else:
-        return False
 
 
 class LoginState(rx.State):
     """
     Login state.
     """
+
+    # Should try __init__ function
     email: str = ""
-    password: str = "" # Passwords are usually strings in web development, apparently
-    password_check: str = "" # We make the user enter their password twice so they can make sure it's correct
-    processing_msg: str = "idle"
-    is_processing: bool = False
+    password: str = ""
+    username: str
+    # processing_msg: str = "idle"
+    # is_processing: bool = False
 
 
-    def submit(self, signup_data):
+    def direct_to_login(self):
         """
-        Function that handles user's data when user signs up. Saves username and password into database.
-
-        param signup_data: data the user enters into the signup form (i.e. username and password)
+        Uses LoginState to redirect user to the login page.
         """
-        self.email = signup_data.get('email')
-        self.password = signup_data.get('password')
-        self.password_check = signup_data.get('password_check')
+        return rx.redirect("/login")
+
+
+    def logout(self):
+        """
+        Uses the LoginState to log out the user.
+        """
+        self.reset() #Does same as self.username = None
+        print(f"Username: {self.username} (should be "")")
+        return rx.redirect("/")
+
+
+    @rx.var
+    def display_username(self) -> str:
+        """
+        Determines what to send to home screen depending on if user is logged in.
+        If user is logged in, send "Hello {username}!" to the home screen.
+        Else, send an empty string.
+        """
+        return f"Hello {self.username}!" if self.username else ""
+
+
+    def search_for_user(self, login_data):
+        """
+        Searches for user in database.
+        If no user found, returns error statement.
+        If user found, user redirected to home page.
+        """
+        # Getting data from log in form
+        self.email = login_data.get('email')
+        self.password = login_data.get('password')
         
-        # Checking if password matches password check
-        if check_passwords(self.password, self.password_check) == True:
+        # Starting rx database session
+        with rx.session() as session:
+            user_found = session.exec(
+                database.User.select().where(
+                    database.User.username == self.email,
+                    database.User.password == self.password,
+                ),
+            ).first()
+
+        # If user found, allow log in
+        if user_found:
+
+            try:
+                print(f"User found: {user_found.username}, {user_found.password}, {user_found.canvas_hash_id}")
+
+                self.username = user_found.username.split("@")[0]
+                print(f"Username: {self.username}")
+                # Sending username to set_username to use in home screen
+                #LoginState.set_username(user_found.username)
+
+                # Doesn't like tasks...
+                return rx.redirect('/')
             
-            # Checking that email is only 25 chars long max
-            if len(self.email) <= 25:
-                # Passwords match, so process account
-                print("Processing new account.")
-                #self.is_processing = True
-                #self.change_processing_msg()
-                # time.sleep(4)
-                # Need processing message!!!
+            # Error handling 
+            except TypeError as e:
+                print(f"Error: {e}")
+                return rx.toast("Error logging in, please retry.")
 
-                # Adding account to database
-                try:
-                    # Create a new user with Reflex database
-                    database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
-                
-                    #self.is_processing = False # Changing back just in case
-                    #self.change_processing_msg()
-
-                    print("Account created in rx database")
-                    return rx.redirect('/success')
-
-                # If error, tell user to try again
-                except ModuleNotFoundError as e:
-                    print(e)
-                    return rx.toast("Error occurred while saving data. Please try again.")
-
-            # Email is too long; tell user
-            else:
-                return rx.toast("Email is too long. Please enter appropriate email.")
-        
-        # If passwords don't match, ask user to re-enter data
+        # User not found
         else:
-            return rx.toast("Passwords do not match. Please enter information again.")
-    
-#         # Create a new user with csv testing database
-#         new_user, success_code = user.create_user(username=self.email, 
-#                                                   canvas_hash_id=None, 
-#                                                   password=self.password
-#                                                   )
-            
-
-    # @rx.var(cache=True) # Cached variable
-    # def set_processing_msg(self) -> str:
-    #     return f"{self.processing_msg}"
-
-
-    # @rx.var(cache=True)
-    # def change_processing_msg(self) ->str:
-    #     return str(self.processing_msg)
+            return rx.toast("User not found with this email and password combination.")
 
 
 def login_form() -> rx.Component:
@@ -139,8 +130,8 @@ def login_form() -> rx.Component:
                 ),
             ),
             rx.button("Enter", type="submit"),
-            on_submit=LoginState.submit,
-            reset_on_submit=True,
+            on_submit=LoginState.search_for_user,
+            #reset_on_submit=True,
         ),
         #rx.text(f"{SignupState.set_processing_msg}"),
         #rx.text(f"Status: {SignupState.change_processing_msg}"),
@@ -148,9 +139,10 @@ def login_form() -> rx.Component:
         justify="center",
     )
 
+
 def login() -> rx.Component:
     """Base page for log in component"""
-    return rx.container(
+    return rx.card(
         #render_signup_form(),
         login_form(),
         rx.link(
