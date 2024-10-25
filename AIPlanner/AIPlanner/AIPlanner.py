@@ -85,7 +85,7 @@ def index() -> rx.Component:
                 rx.code(f"{config.app_name}/{config.app_name}.py"),
                 size="5",
             ), 
-            
+        ),
       
 
         
@@ -148,7 +148,6 @@ def calendar_component():
         padding="50px",
        
         ),
-),
 
 app = rx.App(
     theme=rx.theme(
