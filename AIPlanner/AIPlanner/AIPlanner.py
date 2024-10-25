@@ -111,7 +111,6 @@ def index() -> rx.Component:
             padding="50px",
         )
     )
-    ),
 
 def show_login_signup():
     """
