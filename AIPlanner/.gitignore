@@ -7,7 +7,6 @@
 .idea
 .pyi_generator_diff
 .pyi_generator_last_run
-.venv
 .vscode
 .web
 __pycache__/
@@ -18,3 +17,4 @@ examples/
 reflex.db
 requirements.txt
 venv
+.venv
