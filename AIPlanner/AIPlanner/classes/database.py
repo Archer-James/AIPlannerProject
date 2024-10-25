@@ -1,6 +1,7 @@
 """Module containing classes and methods pertaining to the SQLite database built into Reflex"""
 from datetime import date, time, timedelta
 from typing import List, Optional
+import random
 
 import reflex as rx
 import sqlmodel
@@ -32,13 +33,21 @@ class Task(rx.Model, table=True):
     assigned_block_date: date
     assigned_block_start_time: time
     assigned_block_duration: timedelta
-    user_id: int = sqlmodel.Field(foreign_key="user.id")
+    user_id: int = sqlmodel.Field(foreign_key="user.canvas_hash_id")
     user: Optional[User] = sqlmodel.Relationship(back_populates="tasks")
 
 class UserManagementState(rx.State):
     """Class that defines the state in which variables are held relating to user management"""
     users: list[User] = []  # To hold the list of users
     message: str = ""        # To display success or error messages
+    tasks: list[Task]
+
+    def get_user_tasks(self, user_id: int):
+        """Method to retrieve all tasks for a given user"""
+        with rx.session() as session:
+            self.tasks = session.exec(
+                Task.select().where(Task.user_id == user_id)
+            ).all()
 
     def fetch_all_users(self):
         """Method to retrieve all usernames in the database"""
@@ -47,6 +56,11 @@ class UserManagementState(rx.State):
             self.users = session.exec(User.select()).all()
             self.message = f"Retrieved {len(self.users)} users."
             print(self.users)
+
+    def add_test_user(self):
+        """Method to insert test users into the database"""
+        create_user("Test", random.randint(850000000,850999999), "test11")
+
 
 class AddUser(rx.State):
     """Class that enables adding users to the database"""
@@ -66,16 +80,17 @@ class AddUser(rx.State):
         """Initializing user's password"""
         self.password = value
 
-    def add_user(self, new_user):
-        """Function to add users"""
-        with rx.session() as session:
-            session.add(
-                User(
-                    username=self.username, canvas_hash_id=self.canvas_hash_id, password=self.password
-                )
-                
-            )
-            session.commit()
+    # def add_user(self, new_user:User):
+    #     """Function to add users"""
+    #     with rx.session() as session:
+    #         session.add(
+    #             User(
+    #                 username=self.username,
+    #                 canvas_hash_id=self.canvas_hash_id,
+    #                 password=self.password
+    #             )
+    #         )
+    #         session.commit()
 
 
 def create_user(username:str, canvas_hash_id:int, password:str):
@@ -93,3 +108,11 @@ def add_user(new_user:User):
     with rx.session() as session:
         session.add(new_user)
         session.commit()
+
+def get_user_tasks(session: rx.session, user_id: int) -> List[Task]:
+    """
+    Retrieve all tasks associated with a specific user ID.
+    """
+    statement = User.select(Task).where(Task.user_id == user_id)
+    tasks = session.exec(statement).all()
+    return tasks
