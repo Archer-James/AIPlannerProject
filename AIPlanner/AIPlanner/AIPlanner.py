@@ -16,6 +16,7 @@ from AIPlanner.pages.userlist import userlist # Userlist debugging page
 from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
 from AIPlanner.classes.cal_comps import cal_comps
+from AIPlanner.pages.weekly import weekly
 # to run test environment
 # >cd AIPlanner
 # >py -3 -m venv .venv
@@ -30,7 +31,6 @@ class State(rx.State):
     priority: str = "Medium"
     date_time: str = ""
     show_error: bool = False
-    show_weekly: bool = True
 
     # Need to connect this with database
     def apply_task(self):
@@ -74,14 +74,6 @@ class State(rx.State):
         """
         self.date_time = date_time
 
-    def show(self) -> bool:
-        self.show_weekly = not (self.show_weekly)
-    
-    def toggle_weekly(self):
-        self.show_weekly = True
-
-    def toggle_monthly(self):
-        self.show_weekly = False
 
 def task_input_form():
     """
@@ -173,21 +165,16 @@ def index() -> rx.Component:
                 size="5",
             ), 
             
-        rx.vstack(
+      
         rx.hstack(
-            rx.button("Show Monthly View", on_click=State.toggle_monthly),
-            rx.button("Show Weekly View", on_click=State.toggle_weekly),
-            #temporary both calendars, cond has a bug does not produce switchable button
-            ),
-            cal_comps.calendar_component(),
-            cal_comps.weekly_component(),
-        ),  
+            cal_comps.calendar_component(),          
+         
             margin_bottom="20px",
         ),
         
         padding="50px",
        
-    
+        ),
 ),
 
 app = rx.App(
@@ -200,6 +187,7 @@ app = rx.App(
     )
 )
 app.add_page(index)
+app.add_page(weekly)
 
 
 

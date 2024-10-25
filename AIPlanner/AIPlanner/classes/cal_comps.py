@@ -12,6 +12,11 @@ class cal_comps():
             # Navigation buttons for previous and next months
 
             rx.hstack(
+                rx.link(
+                    rx.button("Weekly"),
+                    href="/weekly",
+                    is_external=False,
+                ), 
                 rx.heading(GenCalendar.label, size = "lg"), 
                 rx.button("Previous", on_click=GenCalendar.prev_month),
                 rx.button("Next", on_click=GenCalendar.next_month),
@@ -54,6 +59,11 @@ class cal_comps():
             # Navigation buttons for previous and next months
 
             rx.hstack(
+                rx.link(
+                    rx.button("Monthly"),
+                    href="/",
+                    is_external=False,
+                ), 
                 rx.heading(GenWeeklyCal.label, size = "lg"), 
                 rx.button("Previous", on_click=GenWeeklyCal.prev_week),
                 rx.button("Next", on_click=GenWeeklyCal.next_week),
