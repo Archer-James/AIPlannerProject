@@ -202,12 +202,7 @@ def index() -> rx.Component:
         ), rx.container(
             rx.color_mode.button(position="top-right"),
             rx.vstack(
-                rx.heading("AIPlanner Home Page", size="9"),
-                rx.text(
-                    "More coming soon! Currently coding ",
-                    rx.code(f"{config.app_name}/{config.app_name}.py"),
-                    size="5",
-                ),
+               
                 rx.center(
                 calendar_component(),
 
@@ -219,7 +214,7 @@ def index() -> rx.Component:
             padding="50px",
         )
     )
-
+    ),
 
 def show_login_signup():
     """
@@ -259,7 +254,7 @@ def calendar_component():
         padding="50px",
        
         ),
-),
+
 
 app = rx.App(
     theme=rx.theme(
