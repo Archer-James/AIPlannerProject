@@ -45,6 +45,13 @@ class SignupState(rx.State):
     is_processing: bool = False
 
 
+    def direct_to_signup(self):
+        """
+        Uses the Signup State to redirect users to the signup page.
+        """
+        return rx.redirect("/signup")
+    
+
     def submit(self, signup_data):
         """
         Function that handles user's data when user signs up. 
