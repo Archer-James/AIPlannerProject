@@ -14,6 +14,7 @@ from AIPlanner.pages.userlist import userlist # Userlist debugging page
 from AIPlanner.pages.login import login # Log in page for existing users
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
+from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
 
 
 # from pages.signup import signup  # Sign up page
@@ -182,6 +183,22 @@ def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
+
+        # User stack
+        rx.hstack(
+            rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
+            show_login_signup(), # rx condition that decides which buttons to show (login, signup, log out)
+            rx.link( # Button that takes user to Canvas Connect page
+                rx.button("Connect to Canvas"),
+                href="/canvas_connect",
+                is_external=False,
+            ),
+            spacing="5",
+            justify="left",
+            min_height="10vh",
+        ),
+
+        # Developer & Task stack
         rx.hstack(
             rx.link(
                 rx.button("Show All Users"),
@@ -189,21 +206,11 @@ def index() -> rx.Component:
                 is_external=False,
             ),
             task_input_form(),
-            #show_account(),
-            #rx.text(LoginState.display_username),
-            rx.cond(
-                LoginState.username, # checking if exists
-                rx.hstack( # If the user is logged in
-                    rx.button("Log out", on_click=LoginState.logout),
-                    rx.text(f"Hello {LoginState.username}!"),),
-                rx.hstack( # If user is not logged in
-                    rx.button("Log in!", on_click=LoginState.direct_to_login),
-                    rx.button("Sign up!", on_click=SignupState.direct_to_signup),),
-            ),
             spacing="5",
             justify="center",
             min_height="15vh", # Squishing it up a tad so we can see the giant text
         ),
+        
         ), rx.container(
             rx.color_mode.button(position="top-right"),
             rx.vstack(
@@ -224,6 +231,22 @@ def index() -> rx.Component:
             padding="50px",
         )
     )
+
+
+def show_login_signup():
+    """
+    Condition statement that decides whether the home page should display login and signup buttons
+    or "Hello <username>!" and log out button.
+    """
+    return rx.cond(
+                LoginState.username, # checking if exists
+                rx.hstack( # If the user is logged in
+                    rx.button("Log out", on_click=LoginState.logout),
+                    rx.text(f"Hello {LoginState.username}!"),),
+                rx.hstack( # If user is not logged in
+                    rx.button("Log in!", on_click=LoginState.direct_to_login),
+                    rx.button("Sign up!", on_click=SignupState.direct_to_signup),),
+            )
 
 
 month_year = GenCalendar.get_month_year_label
@@ -290,7 +313,8 @@ app.add_page(success) # Adding success page (used in sign up page)
 app.add_page(userlist) # Adding debugging user list page
 # Adding a signup page, alternative, **Discuss in meeting**
 #app.add_page(signup, on_load=UserManagementState.fetch_all_users)
-app.add_page(login)
+app.add_page(login) # Login page 
+app.add_page(canvas_connect) # Page user can connect Canvas tasks in
 
 
 if __name__ == "__main__":

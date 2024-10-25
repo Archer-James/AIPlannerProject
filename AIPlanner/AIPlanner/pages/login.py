@@ -6,13 +6,8 @@
     Also includes log out interactions when user clicks "log out" in home page.
 """
 
-# import time
 import reflex as rx
-from rxconfig import config
-from AIPlanner.classes.database import AddUser
-# import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
 import AIPlanner.classes.database as database
-# import AIPlanner.pages.processing as processing **Discuss in meeting**
 
 
 class LoginState(rx.State):
