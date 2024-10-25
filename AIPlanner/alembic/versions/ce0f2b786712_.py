@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<<< HEAD:AIPlanner/alembic/versions/e010082fa8f7_.py
-Revision ID: e010082fa8f7
+Revision ID: ce0f2b786712
 Revises: 
-Create Date: 2024-10-23 22:05:44.403772
-========
-Revision ID: 0424910d851d
-Revises: 
-Create Date: 2024-10-25 15:28:31.481260
->>>>>>>> beta:AIPlanner/alembic/versions/0424910d851d_.py
+Create Date: 2024-10-25 16:17:24.171612
 
 """
 from typing import Sequence, Union
@@ -18,11 +12,7 @@ import sqlalchemy as sa
 import sqlmodel
 
 # revision identifiers, used by Alembic.
-<<<<<<<< HEAD:AIPlanner/alembic/versions/e010082fa8f7_.py
-revision: str = 'e010082fa8f7'
-========
-revision: str = '0424910d851d'
->>>>>>>> beta:AIPlanner/alembic/versions/0424910d851d_.py
+revision: str = 'ce0f2b786712'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -50,11 +40,7 @@ def upgrade() -> None:
     sa.Column('assigned_block_start_time', sa.Time(), nullable=False),
     sa.Column('assigned_block_duration', sa.Interval(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-<<<<<<<< HEAD:AIPlanner/alembic/versions/e010082fa8f7_.py
     sa.ForeignKeyConstraint(['user_id'], ['user.canvas_hash_id'], ),
-========
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
->>>>>>>> beta:AIPlanner/alembic/versions/0424910d851d_.py
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
