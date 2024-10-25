@@ -14,7 +14,7 @@ def display_usernames(state=UserManagementState):
     rx.foreach(  # Use rx.foreach for list rendering
         state.users,
         # Create a text component for each username
-            lambda user: rx.text(user.username, " ", user.canvas_hash_id)
+            lambda user: rx.text(user.username, " ", user.canvas_hash_id, " ", user.id)
         )
     )
 
