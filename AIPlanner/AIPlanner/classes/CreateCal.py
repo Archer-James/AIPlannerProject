@@ -2,13 +2,17 @@ import calendar
 from datetime import datetime
 import reflex as rx
 
+import calendar
+from datetime import datetime
+import reflex as rx
+
 
 class GenCalendar(rx.State):
     """
     Generate Calendar class
 
-    now : datetime 
-        current date 
+    now : datetime
+        current date
     current_month :
         current month to start at
     current_year:
@@ -24,7 +28,6 @@ class GenCalendar(rx.State):
     dates: list[list[str]] = []
     label = ""
 
-
     def days_in_month(self):
         """
          Return first weekday of the month, and number of days in the month
@@ -35,8 +38,8 @@ class GenCalendar(rx.State):
     def get_month_year_label(self):
         """Set the label variable to a string of the month and year for Title of calendar"""
         month_name = calendar.month_name[self.current_month]
-        month_year_string = str(month_name + " "+str(self.current_year))
-        self.label =  month_year_string
+        month_year_string = str(month_name + " " + str(self.current_year))
+        self.label = month_year_string
 
     def next_month(self):
         """increment month and reinitialize calendar"""
@@ -55,15 +58,15 @@ class GenCalendar(rx.State):
         else:
             self.current_month -= 1
         self.init_calendar()
-   
+
     def make_dates(self):
         """
         Set dates list as list of numbers of days to iterate through
         """
         self.dates = []
         first_day, days = self.days_in_month()
-        days_in_month = [datetime(self.current_year, self.current_month, day) 
-                             for day in range(1, days + 1)]
+        days_in_month = [datetime(self.current_year, self.current_month, day)
+                         for day in range(1, days + 1)]
         week = [0] * first_day
         for day in days_in_month:
             week.append(day.day)
@@ -71,7 +74,7 @@ class GenCalendar(rx.State):
                 self.dates.append(week)
                 week = []
         if week:
-            week.extend([0]*(7-len(week)))
+            week.extend([0] * (7 - len(week)))
             self.dates.append(week)
 
     def init_calendar(self):
