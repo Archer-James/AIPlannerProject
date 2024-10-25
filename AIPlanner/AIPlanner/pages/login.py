@@ -2,25 +2,51 @@
     Upon successful log in, data is checked in database for account.
     If account found, user redirected to home screen.
     If account not found, show generic error message that does not compromise user privacy.
+
+    Also includes log out interactions when user clicks "log out" in home page.
 """
 
-# import time
 import reflex as rx
-from rxconfig import config
-from AIPlanner.classes.database import AddUser
-# import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
 import AIPlanner.classes.database as database
-# import AIPlanner.pages.processing as processing **Discuss in meeting**
 
 
 class LoginState(rx.State):
     """
     Login state.
     """
+
+    # Should try __init__ function
     email: str = ""
     password: str = ""
+    username: str
     # processing_msg: str = "idle"
     # is_processing: bool = False
+
+
+    def direct_to_login(self):
+        """
+        Uses LoginState to redirect user to the login page.
+        """
+        return rx.redirect("/login")
+
+
+    def logout(self):
+        """
+        Uses the LoginState to log out the user.
+        """
+        self.reset() #Does same as self.username = None
+        print(f"Username: {self.username} (should be "")")
+        return rx.redirect("/")
+
+
+    @rx.var
+    def display_username(self) -> str:
+        """
+        Determines what to send to home screen depending on if user is logged in.
+        If user is logged in, send "Hello {username}!" to the home screen.
+        Else, send an empty string.
+        """
+        return f"Hello {self.username}!" if self.username else ""
 
 
     def search_for_user(self, login_data):
@@ -44,9 +70,22 @@ class LoginState(rx.State):
 
         # If user found, allow log in
         if user_found:
-            print(f"User found: {user_found.username}, {user_found.password}, {user_found.canvas_hash_id}")
-            # Doesn't like tasks...
-            return rx.redirect('/')
+
+            try:
+                print(f"User found: {user_found.username}, {user_found.password}, {user_found.canvas_hash_id}")
+
+                self.username = user_found.username.split("@")[0]
+                print(f"Username: {self.username}")
+                # Sending username to set_username to use in home screen
+                #LoginState.set_username(user_found.username)
+
+                # Doesn't like tasks...
+                return rx.redirect('/')
+            
+            # Error handling 
+            except TypeError as e:
+                print(f"Error: {e}")
+                return rx.toast("Error logging in, please retry.")
 
         # User not found
         else:
@@ -103,7 +142,7 @@ def login_form() -> rx.Component:
 
 def login() -> rx.Component:
     """Base page for log in component"""
-    return rx.container(
+    return rx.card(
         #render_signup_form(),
         login_form(),
         rx.link(
