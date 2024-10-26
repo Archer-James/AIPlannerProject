@@ -40,7 +40,7 @@ class UserManagementState(rx.State):
     """Class that defines the state in which variables are held relating to user management"""
     users: list[User] = []  # To hold the list of users
     message: str = ""        # To display success or error messages
-    tasks: list[Task]
+    tasks: list[Task] = []
     user_id: int = 1
 
     def get_user_tasks(self, user_id: int):
