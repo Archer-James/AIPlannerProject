@@ -146,11 +146,27 @@ def task_input_form():
     )
 
 def get_item(item):
+    """
+    Creates a list item with the given text.
+
+    Args:
+        item (str): Text to display in the list item.
+
+    Returns:
+        Component: A Reflex list item with the specified text.
+    """
     return rx.list.item(
         rx.text(item, font_size="1.25em"),
     )
 
 def todo_component() -> rx.Component:
+    '''
+      Creates a "Todos" component displaying an ordered list of tasks.
+
+    Returns:
+        Component: A Reflex vertical stack with a heading, divider, 
+                   and an ordered list of user tasks.
+    '''
     return rx.vstack(
         rx.heading("Todos"),
         rx.divider(),
