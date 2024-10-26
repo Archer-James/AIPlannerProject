@@ -25,6 +25,7 @@ from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
 from AIPlanner.classes.cal_comps import cal_comps
 from AIPlanner.pages.weekly import weekly
+from AIPlanner.classes.database import get_user_tasks
 # to run test environment
 # >cd AIPlanner
 # >py -3 -m venv .venv
@@ -39,6 +40,7 @@ class State(rx.State):
     priority: str = "Medium"
     date_time: str = ""
     show_error: bool = False
+    user_tasks: List[str] = ["1", "3"] #List[Task] = []
 
     # Need to connect this with database
     def apply_task(self):
@@ -81,6 +83,11 @@ class State(rx.State):
         Setter for date time
         """
         self.date_time = date_time
+
+    def set_user_task_list(self):
+        pass
+        #self.user_tasks = get_user_tasks()
+        #Have to get the session and user id 
 
 
 def task_input_form():
@@ -138,24 +145,27 @@ def task_input_form():
         width="100%",
     )
 
-def todo_component() -> rx.Component:
-    return rx.vstack(
-        rx.heading("To-do"),
-        rx.divider(),
-        rx.list.ordered(
-            #rx.foreach(
-              
-            #),
-        ),
-        bg="white",#place holder to see size of box
-        padding="1em",
-        border_radius="0.5em",
-        shadow="lg",
-        width="100%",     
-        height="440px"   
+def get_item(item):
+    return rx.list.item(
+        rx.text(item, font_size="1.25em"),
     )
 
-@rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
+def todo_component() -> rx.Component:
+    return rx.vstack(
+        rx.heading("Todos"),
+        rx.divider(),
+        rx.list.ordered(
+            rx.foreach(
+                State.user_tasks,
+                get_item,
+            ),
+        ),
+        padding="1em",
+        border_radius="0.5em",
+        shadow="lg", 
+    )
+
+@rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week,State.set_user_task_list])
 def index() -> rx.Component:
     # Welcome Page (Index)
     
