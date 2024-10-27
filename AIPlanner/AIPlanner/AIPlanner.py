@@ -236,10 +236,6 @@ def index() -> rx.Component:
                 size="5",
             ), 
             
-      
-
-
-
         
         ), rx.container(
             rx.color_mode.button(position="top-right"),
