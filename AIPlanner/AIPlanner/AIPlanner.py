@@ -35,6 +35,50 @@ from AIPlanner.pages.weekly import weekly
 
 class State(rx.State):
     """The app state."""
+    user_tasks: List[str] = ["1", "3"] #List[Task] = []
+
+    def set_user_task_list(self):
+        pass
+        #self.user_tasks = get_user_tasks()
+        #Have to get the session and user id 
+
+def get_item(item):
+    """
+    Creates a list item with the given text.
+=======
+>>>>>>> d6c9158a5dfd5002bbee257ad12c03d6c18c0d6c
+
+    Args:
+        item (str): Text to display in the list item.
+
+    Returns:
+        Component: A Reflex list item with the specified text.
+    """
+    return rx.list.item(
+        rx.text(item, font_size="1.25em"),
+    )
+
+def todo_component() -> rx.Component:
+    '''
+      Creates a "Todos" component displaying an ordered list of tasks.
+
+    Returns:
+        Component: A Reflex vertical stack with a heading, divider, 
+                   and an ordered list of user tasks.
+    '''
+    return rx.vstack(
+        rx.heading("Todos"),
+        rx.divider(),
+        rx.list.ordered(
+            rx.foreach(
+                State.user_tasks,
+                get_item,
+            ),
+        ),
+        padding="1em",
+        border_radius="0.5em",
+        shadow="lg", 
+    )
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def index() -> rx.Component:
@@ -92,7 +136,7 @@ def index() -> rx.Component:
                
                 rx.center(
                 calendar_component(),
-
+                todo_component(),
                 spacing="5",
                 justify="center",
                 min_height="50vh", # Changing to 50 to squish it up more
@@ -101,6 +145,7 @@ def index() -> rx.Component:
             padding="50px",
         )
     )
+
 
 
 def show_login_signup():
@@ -117,21 +162,12 @@ def show_login_signup():
                     rx.button("Log in!", on_click=LoginState.direct_to_login),
                     rx.button("Sign up!", on_click=SignupState.direct_to_signup),),
             )
-
-
-month_year = GenCalendar.get_month_year_label
-
 def calendar_component():
     """
     Calendar initializer and caller
     """
     return rx.vstack(
-        # Display current month and year
-        rx.button("Load Calendar", on_click=GenCalendar.init_calendar),
         # Navigation buttons for previous and next months
-
-
-
         rx.hstack(
             cal_comps.calendar_component(),          
          
@@ -141,6 +177,7 @@ def calendar_component():
         padding="50px",
        
         )
+
 
 app = rx.App(
     theme=rx.theme(
