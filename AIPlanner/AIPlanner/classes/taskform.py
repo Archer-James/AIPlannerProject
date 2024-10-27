@@ -1,6 +1,6 @@
-from AIPlanner.classes.database import *
 import random
 from datetime import date, time, timedelta
+from AIPlanner.classes.database import *
 import reflex as rx
 from rxconfig import config
 
@@ -21,10 +21,10 @@ class TaskState(rx.State):
             self.show_error = True
         else:
             self.show_error = False
-            
+
             # Set a fixed due date (e.g., December 31, 2024)
             fixed_due_date = date(2024, 12, 31)
-            
+
             new_task = Task(
                 recur_frequency=7,  # Example for recurring frequency
                 due_date=fixed_due_date,

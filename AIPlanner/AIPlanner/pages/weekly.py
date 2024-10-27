@@ -130,9 +130,8 @@ def task_input_form():
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def weekly() -> rx.Component:
+    """Reflex component for weekly calendar"""
     # Welcome Page (Index)
-    
-    
     return rx.container(
         rx.color_mode.button(position="top-right"),
         rx.hstack(
@@ -160,17 +159,16 @@ def weekly() -> rx.Component:
                 "More coming soon! Currently coding ",
                 rx.code(f"{config.app_name}/{config.app_name}.py"),
                 size="5",
-            ), 
-            
-        
+            ),
+
+
         rx.hstack(
             cal_comps.weekly_component(),
          ),
-          
+
             margin_bottom="20px",
         ),
-        
+
         padding="50px",
-       
-    
+
 ),

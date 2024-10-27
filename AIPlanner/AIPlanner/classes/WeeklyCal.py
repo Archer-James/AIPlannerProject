@@ -43,7 +43,6 @@ class GenWeeklyCal(rx.State):
             self.current_year += 1
         else:
             self.current_month += 1
-        
 
     def prev_month(self):
         """Decrement month and reinitialize calendar"""
@@ -52,7 +51,7 @@ class GenWeeklyCal(rx.State):
             self.current_year -= 1
         else:
             self.current_month -= 1
-        
+
     def next_week(self):
         """Increment week and reinitialize calendar"""
         self.current_week_start += timedelta(weeks=1)
@@ -72,7 +71,6 @@ class GenWeeklyCal(rx.State):
         else:
             self.week_number -= 1
         self.init_week()
-        
 
     def make_dates(self):
         """
@@ -81,4 +79,3 @@ class GenWeeklyCal(rx.State):
         self.days = [self.current_week_start + timedelta(days=i) for i in range(7)]
         self.dates = [[day.strftime(" %d") for day in self.days]]  # Format dates for display
         self.get_week_label()
-

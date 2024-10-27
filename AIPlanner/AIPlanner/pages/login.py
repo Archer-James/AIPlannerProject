@@ -58,7 +58,7 @@ class LoginState(rx.State):
         # Getting data from log in form
         self.email = login_data.get('email')
         self.password = login_data.get('password')
-        
+
         # Starting rx database session
         with rx.session() as session:
             user_found = session.exec(
@@ -81,8 +81,8 @@ class LoginState(rx.State):
 
                 # Doesn't like tasks...
                 return rx.redirect('/')
-            
-            # Error handling 
+
+            # Error handling
             except TypeError as e:
                 print(f"Error: {e}")
                 return rx.toast("Error logging in, please retry.")

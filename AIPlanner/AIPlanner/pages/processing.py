@@ -28,7 +28,7 @@ def processing() -> rx.Component:
     Base function for processing page.
     Calls render_processing_msg() for text
     """
-    # Signup page 
+    # Signup page
     return rx.center(
         render_processing_msg(),
         width="100%",

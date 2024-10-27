@@ -40,7 +40,8 @@ class SignupState(rx.State):
     """
     email: str = ""
     password: str = "" # Passwords are usually strings in web development, apparently
-    password_check: str = "" # We make the user enter their password twice so they can make sure it's correct
+    password_check: str = "" # We make the user enter their
+                             # password twice so they can make sure it's correct
     processing_msg: str = "idle"
     is_processing: bool = False
 
@@ -50,7 +51,6 @@ class SignupState(rx.State):
         Uses the Signup State to redirect users to the signup page.
         """
         return rx.redirect("/signup")
-    
 
     def submit(self, signup_data):
         """
@@ -62,10 +62,10 @@ class SignupState(rx.State):
         self.email = signup_data.get('email')
         self.password = signup_data.get('password')
         self.password_check = signup_data.get('password_check')
-        
+
         # Checking if password matches password check
-        if check_passwords(self.password, self.password_check) == True:
-            
+        if check_passwords(self.password, self.password_check) is True:
+
             # Checking that email is only 25 chars long max
             if len(self.email) <= 25:
                 # Passwords match, so process account
@@ -78,8 +78,9 @@ class SignupState(rx.State):
                 # Adding account to database
                 try:
                     # Create a new user with Reflex database
-                    database.create_user(username=self.email, canvas_hash_id=1, password=self.password)
-                
+                    database.create_user(username=self.email,
+                                         canvas_hash_id=1, password=self.password)
+
                     #self.is_processing = False # Changing back just in case
                     #self.change_processing_msg()
 
@@ -94,17 +95,17 @@ class SignupState(rx.State):
             # Email is too long; tell user
             else:
                 return rx.toast("Email is too long. Please enter appropriate email.")
-        
+
         # If passwords don't match, ask user to re-enter data
         else:
             return rx.toast("Passwords do not match. Please enter information again.")
-    
+
 #         # Create a new user with csv testing database
-#         new_user, success_code = user.create_user(username=self.email, 
-#                                                   canvas_hash_id=None, 
+#         new_user, success_code = user.create_user(username=self.email,
+#                                                   canvas_hash_id=None,
 #                                                   password=self.password
 #                                                   )
-            
+
 
     # @rx.var(cache=True) # Cached variable
     # def set_processing_msg(self) -> str:

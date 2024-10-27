@@ -69,7 +69,6 @@ class UserManagementState(rx.State):
 
     def add_test_task(self, user_id):
         """Method to add test tasks into the database"""
-        
         new_task = Task(
             recur_frequency=7,  # For example, a weekly recurring task
             due_date=date(2024, 12, 25),
@@ -124,7 +123,6 @@ def create_user(username:str, canvas_hash_id:int, password:str):
     """
     new_user = User(username=username, canvas_hash_id=canvas_hash_id, password=password)
     add_user(new_user=new_user)
-    
 
 def add_user(new_user:User):
     """
@@ -133,4 +131,3 @@ def add_user(new_user:User):
     with rx.session() as session:
         session.add(new_user)
         session.commit()
-

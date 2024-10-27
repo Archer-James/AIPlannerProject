@@ -37,16 +37,15 @@ class State(rx.State):
     """The app state."""
     user_tasks: List[str] = ["1", "3"] #List[Task] = []
 
-    def set_user_task_list(self):
-        pass
+    #def set_user_task_list(self):
+        #"""Initializing user task list"""
+        #pass
         #self.user_tasks = get_user_tasks()
-        #Have to get the session and user id 
+        #Have to get the session and user id
 
 def get_item(item):
     """
     Creates a list item with the given text.
-=======
->>>>>>> d6c9158a5dfd5002bbee257ad12c03d6c18c0d6c
 
     Args:
         item (str): Text to display in the list item.
@@ -82,15 +81,15 @@ def todo_component() -> rx.Component:
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def index() -> rx.Component:
+    """Reflex component for base index page"""
     # Welcome Page (Index)
-    
-    
     return rx.container(
         rx.color_mode.button(position="top-right"),
         rx.hstack(
 
             rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
-            #show_login_signup(), # rx condition that decides which buttons to show (login, signup, log out)
+            #show_login_signup(), # rx condition that decides which 
+            #buttons to show (login, signup, log out)
             rx.link( # Button that takes user to Canvas Connect page
                 rx.button("Connect to Canvas"),
                 href="/canvas_connect",
@@ -125,15 +124,12 @@ def index() -> rx.Component:
                 "More coming soon! Currently coding ",
                 rx.code(f"{config.app_name}/{config.app_name}.py"),
                 size="5",
-            ), 
+            ),
         )
-      
 
-        
         ), rx.container(
             rx.color_mode.button(position="top-right"),
             rx.vstack(
-               
                 rx.center(
                 calendar_component(),
                 todo_component(),
@@ -169,13 +165,10 @@ def calendar_component():
     return rx.vstack(
         # Navigation buttons for previous and next months
         rx.hstack(
-            cal_comps.calendar_component(),          
-         
+            cal_comps.calendar_component(),
             margin_bottom="20px",
         ),
-        
         padding="50px",
-       
         )
 
 
@@ -206,7 +199,7 @@ app.add_page(userlist)
 #app.add_page(signup, on_load=UserManagementState.fetch_all_users)
 
 
-app.add_page(login) # Login page 
+app.add_page(login) # Login page
 app.add_page(canvas_connect) # Page user can connect Canvas tasks in
 
 
