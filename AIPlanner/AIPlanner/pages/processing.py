@@ -1,7 +1,16 @@
+"""Processing page.
+
+User is taken to this page, which has no buttons or interactive objects, 
+    when processing sign up data.
+Once processing is complete, user is taken to new page.
+
+"""
+
 import reflex as rx
 
 
 def render_processing_msg():
+    """Page with "processing" text."""
     return rx.card(
         rx.form(
             rx.hstack(
@@ -14,9 +23,12 @@ def render_processing_msg():
     )
 
 
-
 def processing() -> rx.Component:
-    # Signup page 
+    """
+    Base function for processing page.
+    Calls render_processing_msg() for text
+    """
+    # Signup page
     return rx.center(
         render_processing_msg(),
         width="100%",
@@ -24,3 +36,5 @@ def processing() -> rx.Component:
         padding="2em",
         bg="blue", # Background
     )
+
+#Eof

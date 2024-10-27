@@ -1,14 +1,15 @@
 from datetime import date, timedelta
 
 class RecurFrequency:
+    """Class containing functions and variables for recurring tasks"""
     # Recurring options
     DAILY = "DAILY"
     WEEKLY = "WEEKLY"
     MONTHLY = "MONTHLY"
-    
+
     # List of days of the week
     DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-    
+
     def __init__(self, frequency, end_date=None, days_of_week=None):
         if frequency not in [self.DAILY, self.WEEKLY, self.MONTHLY]:
             raise ValueError("Invalid frequency")
@@ -17,6 +18,7 @@ class RecurFrequency:
         self.days_of_week = days_of_week
 
     def get_next_occurrence(self, start_date):
+        """Gets the next occurence of a recurring task"""
         if self.end_date and start_date > self.end_date:
             return None
 
@@ -31,7 +33,7 @@ class RecurFrequency:
             for d in self.days_of_week:
                 if d > current_day:
                     days.append(d)  # Add days greater than the current day
-            
+
             # Append the entire self.days_of_week list to days
             days.extend(self.days_of_week)
 
@@ -39,7 +41,7 @@ class RecurFrequency:
             days_ahead = days[0] - current_day
             if days_ahead <= 0:
                 days_ahead += 7
-            
+
             return start_date + timedelta(days=days_ahead)
 
         elif self.frequency == self.MONTHLY:
@@ -51,7 +53,8 @@ class RecurFrequency:
                 next_year += 1    # Increment the year
 
             # Determine the valid day for the next month
-            next_day = min(start_date.day, (date(next_year, next_month + 1, 1) - timedelta(days=1)).day)
+            next_day = min(start_date.day,
+                           (date(next_year, next_month + 1, 1) - timedelta(days=1)).day)
             return date(next_year, next_month, next_day)
 
     def __str__(self):
