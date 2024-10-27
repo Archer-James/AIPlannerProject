@@ -36,7 +36,7 @@ class TaskState(rx.State):
                 assigned_block_date=date.today(),  # Set to today or another relevant date
                 assigned_block_start_time=time(14, 0),  # Set a fixed start time (e.g., 2 PM)
                 assigned_block_duration=timedelta(hours=1),  # Set your desired duration
-                user_id=2  # Set this appropriately
+                user_id=1  # Set this appropriately
             )
             with rx.session() as session:
                 session.add(new_task)
@@ -53,10 +53,14 @@ class TaskState(rx.State):
     def toggle_full_task_input(self):
         """Toggles visibility of full task name input."""
         self.show_full_task_input = not self.show_full_task_input
+        if self.show_full_task_input:
+            self.show_full_description_input = False
 
     def toggle_full_description_input(self):
         """Toggles visibility of full description input."""
         self.show_full_description_input = not self.show_full_description_input
+        if self.show_full_description_input:
+            self.show_full_task_input = False
 
     def set_task_name(self, task_name: str):
         """Setter for task name."""
@@ -98,13 +102,28 @@ def task_input_form():
                         "▼",
                         on_click=TaskState.toggle_full_task_input,
                         position="absolute",
-                        right="10px",
+                        right="0px",
                         top="50%",
                         transform="translateY(-50%)",
                         border="none",
-                        background="transparent",
+                        background="dark pink",
                         cursor="pointer",
-                        padding="0",
+                        padding="0 8px",
+                    ),
+                    # Added conditional text area centered with Task Name box
+                    rx.cond(
+                        TaskState.show_full_task_input,
+                        rx.text_area(
+                            placeholder="Full Task Name",
+                            on_change=TaskState.set_task_name,
+                            value=TaskState.task_name,
+                            height="50px",
+                            width="200px",  # Set width to match Task Name input
+                            position="absolute",  # Position relative to rx.box container
+                            top="100%",           # Place directly below Task Name input
+                            left="50%",             # Align horizontally with Task Name input
+                            transform="translateX(-50%)",  # Center alignment
+                        ),
                     ),
                     position="relative",
                     width="100%",
@@ -123,13 +142,28 @@ def task_input_form():
                         "▼",
                         on_click=TaskState.toggle_full_description_input,
                         position="absolute",
-                        right="10px",
+                        right="0px",
                         top="50%",
                         transform="translateY(-50%)",
                         border="none",
-                        background="transparent",
+                        background="dark pink",
                         cursor="pointer",
-                        padding="0",
+                        padding="0 8px",
+                    ),
+                    # Added conditional text area centered with Task Description box
+                    rx.cond(
+                        TaskState.show_full_description_input,
+                        rx.text_area(
+                            placeholder="Full Task Description",
+                            on_change=TaskState.set_task_description,
+                            value=TaskState.task_description,
+                            height="100px",
+                            width="300px",  # Set width to match Task Description input
+                            position="absolute",  # Position relative to rx.box container
+                            top="100%",           # Place directly below Task Description input
+                            left="50%",             # Align horizontally with Task Description input
+                            transform="translateX(-50%)",  # Center alignment
+                        ),
                     ),
                     position="relative",
                     width="100%",
@@ -156,27 +190,27 @@ def task_input_form():
                 rx.button("Apply Task", on_click=TaskState.apply_task, flex=1),
                 spacing="0px",
             ),
-            # Expanded inputs and error message
-            rx.cond(
-                TaskState.show_full_task_input,
-                rx.text_area(
-                    placeholder="Full Task Name",
-                    on_change=TaskState.set_task_name,
-                    value=TaskState.task_name,
-                    height="50px",
-                    width="50%",
-                )
-            ),
-            rx.cond(
-                TaskState.show_full_description_input,
-                rx.text_area(
-                    placeholder="Full Description",
-                    on_change=TaskState.set_task_description,
-                    value=TaskState.task_description,
-                    height="50px",
-                    width="50%",
-                )
-            ),
+            # # Expanded inputs and error message
+            # rx.cond(
+            #     TaskState.show_full_task_input,
+            #     rx.text_area(
+            #         placeholder="Full Task Name",
+            #         on_change=TaskState.set_task_name,
+            #         value=TaskState.task_name,
+            #         height="50px",
+            #         width="50%",
+            #     )
+            # ),
+            # rx.cond(
+            #     TaskState.show_full_description_input,
+            #     rx.text_area(
+            #         placeholder="Full Task Description",
+            #         on_change=TaskState.set_task_description,
+            #         value=TaskState.task_description,
+            #         height="150px",
+            #         width="50%",
+            #     )
+            # ),
             rx.cond(
                 TaskState.show_error,
                 rx.text("Task name is required", color="red", font_size="sm"),
