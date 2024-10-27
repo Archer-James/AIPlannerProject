@@ -45,15 +45,6 @@ def index() -> rx.Component:
         rx.color_mode.button(position="top-right"),
         rx.hstack(
 
- 
-            rx.link(
-                rx.button("Sign Up!"),
-                href="/signup",
-                is_external=False,
-            ),
-
-
-
             rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
             #show_login_signup(), # rx condition that decides which buttons to show (login, signup, log out)
             rx.link( # Button that takes user to Canvas Connect page
@@ -61,6 +52,7 @@ def index() -> rx.Component:
                 href="/canvas_connect",
                 is_external=False,
             ),
+            show_login_signup(),
             spacing="5",
             justify="left",
             min_height="10vh",

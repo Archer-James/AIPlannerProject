@@ -18,6 +18,18 @@ def display_usernames(state=UserManagementState):
         )
     )
 
+def display_user_tasks(state=UserManagementState):
+    """Function to display tasks for the specified user"""
+    return rx.vstack(
+        rx.foreach(
+            state.tasks,
+            lambda task: rx.text(
+                f"Task Name: {task.task_name}, Due Date: {task.due_date}, "
+                f"Description: {task.description}, Priority: {task.priority_level}"
+            )
+        )
+    )
+
 def userlist(state=UserManagementState) -> rx.Component:
     """
     Calls display_usernames to display all users in database, 
@@ -31,10 +43,12 @@ def userlist(state=UserManagementState) -> rx.Component:
         rx.button("Add Test User",
                      # Button to add test user
                      on_click=lambda: state.add_test_user()),
-        rx.button("Add task to test user with ID 1", on_click=lambda: state.add_test_task(2)),
-        rx.button("Show tasks assigned to user with ID 1", 
+        rx.button("Add task to test user with ID 1", on_click=lambda: state.add_test_task(1)),
+        rx.button("Show tasks assigned to user with ID 1", on_click=lambda: state.get_user_tasks(1)),
+        rx.button("Show tasks assigned to user with ID 2", 
                   on_click=lambda: state.get_user_tasks(2)),
         display_usernames(),
+        display_user_tasks(),
         rx.logo(),
     )
 
