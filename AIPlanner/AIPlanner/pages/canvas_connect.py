@@ -81,7 +81,7 @@ def manualtokens_connect_page():
 
         # Have input & check input for errors
         manual_token_input(),
-        
+
         rx.vstack(
             rx.hstack(
                 rx.heading("Don't know how?"),
