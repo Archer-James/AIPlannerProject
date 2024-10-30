@@ -47,6 +47,10 @@ class UserManagementState(rx.State):
         """Setter method for user ID"""
         self.user_id = user_id
 
+    def get_user_id(self):
+        """Getter for user id"""
+        return self.user_id
+
     def get_user_tasks(self, user_id: int):
         """Method to retrieve all tasks for a given user"""
         with rx.session() as session:

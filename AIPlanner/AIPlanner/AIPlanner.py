@@ -158,6 +158,7 @@ def show_login_signup():
                     rx.button("Log in!", on_click=LoginState.direct_to_login),
                     rx.button("Sign up!", on_click=SignupState.direct_to_signup),),
             )
+
 def calendar_component():
     """
     Calendar initializer and caller

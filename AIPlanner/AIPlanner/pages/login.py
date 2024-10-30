@@ -10,7 +10,7 @@ import reflex as rx
 import AIPlanner.classes.database as database
 
 
-class LoginState(rx.State):
+class LoginState(rx.State): 
     """
     Login state.
     """
@@ -19,6 +19,7 @@ class LoginState(rx.State):
     email: str = ""
     password: str = ""
     username: str
+    
     # processing_msg: str = "idle"
     # is_processing: bool = False
 
@@ -75,11 +76,12 @@ class LoginState(rx.State):
                 print(f"User found: {user_found.username}, {user_found.password}, {user_found.canvas_hash_id}")
 
                 self.username = user_found.username.split("@")[0]
-                print(f"Username: {self.username}")
-                # Sending username to set_username to use in home screen
-                #LoginState.set_username(user_found.username)
 
-                # Doesn't like tasks...
+                # Adding User ID as a variable so we can get tasks assigned to user
+                #database.UserManagementState.set_user_id(user_found.user_id)
+
+                print(f"Username: {self.username}") # user_id: {database.UserManagementState.get_user_id()}
+
                 return rx.redirect('/')
 
             # Error handling
@@ -150,7 +152,7 @@ def login() -> rx.Component:
             href="/",
             is_external=False,
             position="top-right",
-            ),
+        ),
         rx.heading("Don't have an account?"),
         rx.link(
             rx.button("Make an account instead"),
