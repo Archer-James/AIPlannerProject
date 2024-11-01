@@ -10,19 +10,68 @@ import reflex as rx
 import AIPlanner.classes.database as database
 
 
-class LoginState(rx.State): 
+class LoginState(rx.State):
     """
     Login state.
     """
 
-    # Should try __init__ function
+    # Init isn't really great for using the variables across states...
+    # def __init__(self, email=str, password=str, username=str, user_id=int):
+    #     """
+    #     Initialization function for LoginState.
+    #     Includes email, password, username (shortened email), and user_id as created in database.
+    #     """
+    #     self.email = email
+    #     self.password = password
+    #     self.username = username
+    #     self.user_id = user_id
+
     email: str = ""
     password: str = ""
     username: str
-    
+    user_id: int = 0
+
+    def get_email(self):
+        """Getter for email."""
+        return self.email
+
+
+    def get_password(self):
+        """Getter for password."""
+        return self.password
+
+
+    def get_username(self):
+        """Getter for username."""
+        return self.username
+
+
+    def get_user_id(self):
+        """Getter for user id."""
+        return self.user_id
+
+
+    def set_email(self, new_email=str):
+        """Setter for email."""
+        self.email = new_email
+
+
+    def set_password(self, new_password=str):
+        """Setter for password."""
+        self.password = new_password
+
+
+    def set_username(self, new_username=str):
+        """Setter for username."""
+        self.username = new_username
+
+
+    def set_user_id(self, new_id=int):
+        """Setter for user id."""
+        self.user_id = new_id
+
     # processing_msg: str = "idle"
     # is_processing: bool = False
-
 
     def direct_to_login(self):
         """
@@ -36,7 +85,7 @@ class LoginState(rx.State):
         Uses the LoginState to log out the user.
         """
         self.reset() #Does same as self.username = None
-        print(f"Username: {self.username} (should be "")")
+        print(f"Username: {self.username} (should be empty string), User id: {self.user_id}")
         return rx.redirect("/")
 
 
@@ -78,9 +127,12 @@ class LoginState(rx.State):
                 self.username = user_found.username.split("@")[0]
 
                 # Adding User ID as a variable so we can get tasks assigned to user
-                #database.UserManagementState.set_user_id(user_found.user_id)
+                #database.UserManagementState.set_user_id(user_found.id) # I don't think I need to add this, because I'm
+                # Getting the user id from the UserManagementState, which means it's already set to whatever the id is.
+                self.user_id = user_found.id
 
-                print(f"Username: {self.username}") # user_id: {database.UserManagementState.get_user_id()}
+                print(f"Username: {self.username}, user id: {self.user_id}")
+                # database.UserManagementState.get_user_id
 
                 return rx.redirect('/')
 
