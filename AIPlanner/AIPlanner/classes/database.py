@@ -2,6 +2,7 @@
 from datetime import date, time, timedelta
 from typing import List, Optional
 import random
+from AIPlanner.pages.login import LoginState
 
 import reflex as rx
 import sqlmodel
@@ -77,7 +78,7 @@ class UserManagementState(rx.State):
         """Method to insert test users into the database"""
         create_user("Test", random.randint(850000000,850999999), "test11")
 
-    def add_test_task(self, user_id):
+    def add_test_task(self):# user_id
         """Method to add test tasks into the database"""
         new_task = Task(
             recur_frequency=7,  # For example, a weekly recurring task
@@ -90,7 +91,7 @@ class UserManagementState(rx.State):
             assigned_block_date=date(2024, 12, 24),
             assigned_block_start_time=time(14, 0),  # Start at 2 PM
             assigned_block_duration=timedelta(hours=2),
-            user_id = self.user_id
+            user_id = LoginState.user_id #self.user_id
         )
         with rx.session() as session:
             session.add(new_task)

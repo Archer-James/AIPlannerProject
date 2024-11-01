@@ -5,6 +5,7 @@ Displays users in the database.
 import reflex as rx
 from AIPlanner.classes.database import *
 import AIPlanner.classes.database as database
+from AIPlanner.pages.login import LoginState
 
 def display_usernames(state=UserManagementState):
     """Function to display usernames"""
@@ -43,8 +44,8 @@ def userlist(state=UserManagementState) -> rx.Component:
                      # Button to add test user
                      on_click=lambda: state.add_test_user()),
         rx.button("Add task to test user with ID 1", on_click=lambda: state.add_test_task(1)),
-        rx.button("Show tasks assigned to user with ID 1",
-                  on_click=lambda: state.get_user_tasks(1)),
+        rx.button("Show tasks assigned to currently logged in user",
+                  on_click=lambda: state.get_user_tasks(LoginState.user_id)),
         rx.button("Show tasks assigned to user with ID 2",
                   on_click=lambda: state.get_user_tasks(2)),
         display_usernames(),

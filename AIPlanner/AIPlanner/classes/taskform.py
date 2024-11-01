@@ -3,14 +3,15 @@ from datetime import date, time, timedelta
 from AIPlanner.classes.database import *
 import reflex as rx
 from rxconfig import config
+from AIPlanner.pages.login import LoginState
 
-class TaskState(rx.State):
+class TaskState(LoginState):
     """The state related to the task input form."""
     task_name: str = ""
     task_description: str = ""
     priority: str = "Medium"
     date_time: str = ""
-    user_id = int
+    user_id = int # No idea if this does something
     show_error: bool = False
     show_full_task_input: bool = False
     show_full_description_input: bool = False
@@ -36,7 +37,7 @@ class TaskState(rx.State):
                 assigned_block_date=date.today(),  # Set to today or another relevant date
                 assigned_block_start_time=time(14, 0),  # Set a fixed start time (e.g., 2 PM)
                 assigned_block_duration=timedelta(hours=1),  # Set your desired duration
-                user_id=1  # Set this appropriately
+                user_id=self.user_id  # Referencing LoginState user_id attribute (to connect user to tasks)
             )
             with rx.session() as session:
                 session.add(new_task)
