@@ -16,7 +16,7 @@ from AIPlanner.classes.taskform import task_input_form
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
 from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
-
+from AIPlanner.classes.todo_list import todo_component
 
 
 
@@ -35,38 +35,9 @@ from AIPlanner.pages.weekly import weekly
 
 class State(rx.State):
     """The app state."""
-def get_item(item):
-    """
-    Creates a list item with the given text.
 
-    Args:
-        item (str): Text to display in the list item.
 
-    Returns:
-        Component: A Reflex list item with the specified text.
-    """
-    return rx.list.item(
-        rx.text(item, font_size="1.25em"),
-    )
 
-def todo_component(state = UserManagementState):
-    '''
-      Creates a "Todos" component displaying an ordered list of tasks.
-
-    Returns:
-        Component: A Reflex vertical stack with a heading, divider, 
-                   and an ordered list of user tasks.
-    '''
-    return rx.vstack(
-            rx.heading("Todos"),
-            rx.divider(),
-            rx.foreach(
-                state.tasks,
-                lambda task: rx.vstack(
-                    f"{task.task_name}, Due: {task.due_date}"
-                )
-            )
-        )
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def index() -> rx.Component:
