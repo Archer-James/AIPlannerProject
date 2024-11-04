@@ -28,6 +28,13 @@ class State(rx.State):
     priority: str = "Medium"
     date_time: str = ""
     show_error: bool = False
+    user_tasks: List[str] = ["1", "3"] #List[Task] = []
+
+    #def set_user_task_list(self):
+        #"""Initializing user task list"""
+        #pass
+        #self.user_tasks = get_user_tasks()
+        #Have to get the session and user id
 
     # Need to connect this with database
     def apply_task(self):
@@ -71,6 +78,41 @@ class State(rx.State):
         """
         self.date_time = date_time
 
+def get_item(item):
+    """
+    Creates a list item with the given text.
+
+    Args:
+        item (str): Text to display in the list item.
+
+    Returns:
+        Component: A Reflex list item with the specified text.
+    """
+    return rx.list.item(
+        rx.text(item, font_size="1.25em"),
+    )
+
+def todo_component() -> rx.Component:
+    '''
+      Creates a "Todos" component displaying an ordered list of tasks.
+
+    Returns:
+        Component: A Reflex vertical stack with a heading, divider, 
+                   and an ordered list of user tasks.
+    '''
+    return rx.vstack(
+        rx.heading("Todos"),
+        rx.divider(),
+        rx.list.ordered(
+            rx.foreach(
+                State.user_tasks,
+                get_item,
+            ),
+        ),
+        padding="1em",
+        border_radius="0.5em",
+        shadow="lg", 
+    )
 
 def task_input_form():
     """
@@ -164,6 +206,7 @@ def weekly() -> rx.Component:
 
         rx.hstack(
             cal_comps.weekly_component(),
+            todo_component(),
          ),
 
             margin_bottom="20px",
