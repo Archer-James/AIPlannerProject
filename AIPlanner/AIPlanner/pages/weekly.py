@@ -1,3 +1,5 @@
+"""Welcome to Reflex! This file outlines the steps to create a basic app."""
+
 import reflex as rx
 from rxconfig import config
 
@@ -7,6 +9,15 @@ from AIPlanner.pages.processing import processing # Processing page used in sign
 from AIPlanner.pages.success import success # Success page shown after successful sign up
 from AIPlanner.classes.database import * # Database
 from AIPlanner.pages.userlist import userlist # Userlist debugging page
+
+
+from AIPlanner.pages.login import login # Log in page for existing users
+from AIPlanner.classes.taskform import task_input_form
+from AIPlanner.pages.login import LoginState # Login State used to get the user's username
+from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
+from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
+from AIPlanner.classes.todo_list import todo_component
+
 
 
 # from pages.signup import signup  # Sign up page
@@ -23,161 +34,36 @@ from AIPlanner.classes.cal_comps import cal_comps
 
 class State(rx.State):
     """The app state."""
-    task_name: str = ""
-    task_description: str = ""
-    priority: str = "Medium"
-    date_time: str = ""
-    show_error: bool = False
-    user_tasks: List[Task] = []
 
-    #def set_user_task_list(self):
-        #"""Initializing user task list"""
-       # self.user_id = LoginState.user_id()
-        #self.user_tasks = UserManagementState.get_user_tasks(self.user_id)
 
-    # Need to connect this with database
-    def apply_task(self):
-        """
-        Apply task button that will give errors if there are missing required fields
-        Will also reset after successful apply
-        """
-        if not self.task_name.strip():
-            self.show_error = True
-        else:
-            self.show_error = False
-            print(f"Task applied: {self.task_name, self.task_description, self.priority, self.date_time}")
-            self.task_name = ""
-            self.task_description = ""
-            self.priority = "Medium"
-            self.date_time = ""
-
-    def set_task_name(self, task_name: str):
-        """
-        Setter for the task name
-        """
-        self.task_name = task_name
-        if self.task_name.strip():
-            self.show_error = False
-
-    def set_task_description(self, task_description: str):
-        """
-        Setter for task description
-        """
-        self.task_description = task_description
-
-    def set_priority(self, priority: str):
-        """
-        Setter for priority
-        """
-        self.priority = priority
-
-    def set_date_time(self, date_time: str):
-        """
-        Setter for date time
-        """
-        self.date_time = date_time
-
-def get_item(item):
-    """
-    Creates a list item with the given text.
-
-    Args:
-        item (str): Text to display in the list item.
-
-    Returns:
-        Component: A Reflex list item with the specified text.
-    """
-    return rx.list.item(
-        rx.text(item, font_size="1.25em"),
-    )
-
-def todo_component() -> rx.Component:
-    '''
-      Creates a "Todos" component displaying an ordered list of tasks.
-
-    Returns:
-        Component: A Reflex vertical stack with a heading, divider, 
-                   and an ordered list of user tasks.
-    '''
-    return rx.vstack(
-        rx.heading("Todos"),
-        rx.divider(),
-        rx.list.ordered(
-                State.set_user_task_list,
-        ),
-        padding="1em",
-        border_radius="0.5em",
-        shadow="lg", 
-    )
-
-def task_input_form():
-    """
-    Task bar initializer that has task name, task description, priority, set date/time, and apply
-    """
-    return rx.box(
-        rx.vstack(
-            rx.hstack(
-                rx.input(
-                    placeholder="Task Name",
-                    on_change=State.set_task_name,
-                    value=State.task_name,
-                    flex=1,
-                    #border_right="2px solid #E2E8F0",
-                    #border_left="2px solid #E2E8F0",
-                ),
-                rx.input(
-                    placeholder="Task Description",
-                    on_change=State.set_task_description,
-                    value=State.task_description,
-                    flex=1,
-                    #border_right="2px solid #E2E8F0",
-                    #border_left="2px solid #E2E8F0",
-                ),
-                rx.select(
-                    ["Low", "Medium", "High"],
-                    placeholder="Priority: Medium",
-                    on_change=State.set_priority,
-                    value=State.priority,
-                    flex=1,
-                    #border_right="2px solid #E2E8F0",
-                    #border_left="2px solid #E2E8F0",
-                ),
-                rx.input(
-                    placeholder="Set Date/Time",
-                    type_="datetime-local",
-                    on_change=State.set_date_time,
-                    value=State.date_time,
-                    flex=1,
-                    #border_left="2px solid #E2E8F0",
-                    #border_right="2px solid #E2E8F0",
-                ),
-                rx.button("Apply Task", on_click=State.apply_task, flex=1),
-                spacing="0",
-                #border="2px solid #E2E8F0",
-                border_radius="md",
-            ),
-            rx.cond(
-                    State.show_error,
-                    rx.text("Task name is required", color="red", font_size="sm"),
-            ),
-            align_items = "stretch",
-        ),
-        width="100%",
-    )
 
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def weekly() -> rx.Component:
-    """Reflex component for weekly calendar"""
+    """Reflex component for base index page"""
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
         rx.hstack(
-            rx.link(
-                rx.button("Sign Up!"),
-                href="/signup",
+
+            rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
+            #show_login_signup(), # rx condition that decides which 
+            #buttons to show (login, signup, log out)
+            rx.link( # Button that takes user to Canvas Connect page
+                rx.button("Connect to Canvas"),
+                href="/canvas_connect",
                 is_external=False,
             ),
+            show_login_signup(),
+            spacing="5",
+            justify="left",
+            min_height="10vh",
+        ),
+
+        # Developer & Task stack
+        rx.hstack(
+
+
             rx.link(
                 rx.button("Show All Users"),
                 href="/userlist",
@@ -198,16 +84,36 @@ def weekly() -> rx.Component:
                 rx.code(f"{config.app_name}/{config.app_name}.py"),
                 size="5",
             ),
+        )
+
+        ), rx.container(
+            rx.color_mode.button(position="top-right"),
+            rx.vstack(
+                rx.center(
+                cal_comps.weekly_component(),
+                todo_component(),
+                spacing="5",
+                justify="center",
+                min_height="50vh", # Changing to 50 to squish it up more
+            ),
+
+            padding="50px",
+        )
+    )
 
 
-        rx.hstack(
-            cal_comps.weekly_component(),
-            #todo_component(),
-         ),
 
-            margin_bottom="20px",
-        ),
-
-        padding="50px",
-
-),
+def show_login_signup():
+    """
+    Condition statement that decides whether the home page should display login and signup buttons
+    or "Hello <username>!" and log out button.
+    """
+    return rx.cond(
+                LoginState.username, # checking if exists
+                rx.hstack( # If the user is logged in
+                    rx.button("Log out", on_click=LoginState.logout),
+                    rx.text(f"Hello {LoginState.username}!"),),
+                rx.hstack( # If user is not logged in
+                    rx.button("Log in!", on_click=LoginState.direct_to_login),
+                    rx.button("Sign up!", on_click=SignupState.direct_to_signup),),
+            )

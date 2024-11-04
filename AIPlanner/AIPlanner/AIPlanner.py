@@ -91,7 +91,7 @@ def index() -> rx.Component:
             rx.color_mode.button(position="top-right"),
             rx.vstack(
                 rx.center(
-                calendar_component(),
+                cal_comps.calendar_component(),
                 todo_component(),
                 spacing="5",
                 justify="center",
@@ -118,19 +118,6 @@ def show_login_signup():
                     rx.button("Log in!", on_click=LoginState.direct_to_login),
                     rx.button("Sign up!", on_click=SignupState.direct_to_signup),),
             )
-
-def calendar_component():
-    """
-    Calendar initializer and caller
-    """
-    return rx.vstack(
-        # Navigation buttons for previous and next months
-        rx.hstack(
-            cal_comps.calendar_component(),
-            margin_bottom="20px",
-        ),
-        padding="50px",
-        )
 
 
 app = rx.App(
