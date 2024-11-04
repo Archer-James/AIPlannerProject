@@ -28,13 +28,12 @@ class State(rx.State):
     priority: str = "Medium"
     date_time: str = ""
     show_error: bool = False
-    user_tasks: List[str] = ["1", "3"] #List[Task] = []
+    user_tasks: List[Task] = []
 
     #def set_user_task_list(self):
         #"""Initializing user task list"""
-        #pass
-        #self.user_tasks = get_user_tasks()
-        #Have to get the session and user id
+       # self.user_id = LoginState.user_id()
+        #self.user_tasks = UserManagementState.get_user_tasks(self.user_id)
 
     # Need to connect this with database
     def apply_task(self):
@@ -104,10 +103,7 @@ def todo_component() -> rx.Component:
         rx.heading("Todos"),
         rx.divider(),
         rx.list.ordered(
-            rx.foreach(
-                State.user_tasks,
-                get_item,
-            ),
+                State.set_user_task_list,
         ),
         padding="1em",
         border_radius="0.5em",
@@ -206,7 +202,7 @@ def weekly() -> rx.Component:
 
         rx.hstack(
             cal_comps.weekly_component(),
-            todo_component(),
+            #todo_component(),
          ),
 
             margin_bottom="20px",

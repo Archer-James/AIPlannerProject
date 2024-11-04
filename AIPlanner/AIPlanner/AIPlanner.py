@@ -35,14 +35,6 @@ from AIPlanner.pages.weekly import weekly
 
 class State(rx.State):
     """The app state."""
-    user_tasks: List[str] = ["1", "3"] #List[Task] = []
-
-    #def set_user_task_list(self):
-        #"""Initializing user task list"""
-        #pass
-        #self.user_tasks = get_user_tasks()
-        #Have to get the session and user id
-
 def get_item(item):
     """
     Creates a list item with the given text.
@@ -57,7 +49,7 @@ def get_item(item):
         rx.text(item, font_size="1.25em"),
     )
 
-def todo_component() -> rx.Component:
+def todo_component(state = UserManagementState):
     '''
       Creates a "Todos" component displaying an ordered list of tasks.
 
@@ -66,18 +58,15 @@ def todo_component() -> rx.Component:
                    and an ordered list of user tasks.
     '''
     return rx.vstack(
-        rx.heading("Todos"),
-        rx.divider(),
-        rx.list.ordered(
+            rx.heading("Todos"),
+            rx.divider(),
             rx.foreach(
-                State.user_tasks,
-                get_item,
-            ),
-        ),
-        padding="1em",
-        border_radius="0.5em",
-        shadow="lg", 
-    )
+                state.tasks,
+                lambda task: rx.vstack(
+                    f"{task.task_name}, Due: {task.due_date}"
+                )
+            )
+        )
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def index() -> rx.Component:
