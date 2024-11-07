@@ -12,7 +12,7 @@ from datetime import datetime # Used to grab assignment due date specifics
 import requests
 
 # Replace with your Canvas API token and Canvas URL
-API_TOKEN = '8346~eC24PY3r7KDPeL2RFzYHPTrcf6ayFkaDWtzKX4fxnTuwAwRL8wc7ezxRw8EfuhzB' # 'YOUR_CANVAS_API_TOKEN'
+API_TOKEN = 'YOUR_CANVAS_API_TOKEN'
 CANVAS_URL = 'https://uncw.instructure.com' # 'https://YOUR_CANVAS_INSTANCE_URL'
 
 # Set up the headers with your token
