@@ -145,11 +145,15 @@ class CanvasConnectState(rx.State):
 
         # Stripping manual token of leading or trailing whitespace
         self._api_token = self._api_token.strip()
-        print("Valid token entered", self._api_token)
+        print("Cleaned token entered", self._api_token)
 
         # Grab all favorited courses and upcoming assignments
-        result = self.grab_tasks()
-        print(result)
+        try:
+            result = self.grab_tasks()
+            print(result)
+
+        except requests.exceptions.HTTPError:
+            return rx.toast("Invalid API token. Please try again.")
 
         # Send user back to home page upon successful connection
         print("Successful Canvas connection")
