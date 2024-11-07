@@ -139,7 +139,7 @@ class CanvasConnectState(rx.State):
         # Looping through invalid char's; if valid, strip whitespace and continue
         for char in invalid_chars:
             if char in self._api_token:
-                
+
                 # Invalid input: tell user to try again
                 return rx.toast("Invalid manual token. Please try again.")
 
