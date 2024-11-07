@@ -38,9 +38,10 @@
      deactivate # How you can deactivate virtual environment (after you're done with the application)
      ```
      
-3. Install Reflex
+3. Install Reflex & Other Packages
    ```
    pip install reflex # May have to use pip3
+   pip install requests # For Canvas API requests, OR python3 -m pip install types-requests
    ```
    
 4. Run Reflex
