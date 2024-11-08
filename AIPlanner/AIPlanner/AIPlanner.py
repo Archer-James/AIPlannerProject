@@ -18,6 +18,7 @@ from AIPlanner.pages.signup import SignupState # Sign up state used to redirect 
 from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
 from AIPlanner.classes. todo_list import todo_component
 
+
 # from pages.signup import signup  # Sign up page
 
 from AIPlanner.classes.CreateCal import GenCalendar
