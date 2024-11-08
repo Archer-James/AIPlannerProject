@@ -4,8 +4,7 @@
 from datetime import datetime # Used to grab assignment due date specifics
 import requests
 import reflex as rx
-from AIPlanner.pages.login import *
-from AIPlanner.classes.canvas_grab_tasks import ProcessCanvasToken
+from AIPlanner.pages.login import LoginState
 
 
 class CanvasConnectState(rx.State):
@@ -118,8 +117,7 @@ class CanvasConnectState(rx.State):
                         print(f"- {assignment['name']} (Due: {assignment['due_at']})")
 
             print("\n")
-
-        return("Success")
+        return "Success"
 
 
     def process_token(self, input_data):

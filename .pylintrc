@@ -1,0 +1,7 @@
+[MESSAGES CONTROL]
+disable=all
+    ; inherit-non-class,
+    ; import-error,
+    ; no-name-in-module,
+    ; not-callable,
+    ; consider-using-from-import,
