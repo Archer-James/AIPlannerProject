@@ -13,12 +13,25 @@ def todo_component( state = UserManagementState) -> rx.Component:
                 and list of user tasks.
     '''
     return rx.vstack(
-            rx.heading("To Do"),
-            rx.divider(),
-            rx.foreach(
-                state.tasks,
-                lambda task: rx.vstack(
+        rx.heading("To Do"),
+        rx.divider(),
+        rx.foreach(
+            state.tasks,
+            lambda task: rx.hstack(
+                rx.vstack(
                     f"{task.task_name}, Due: {task.due_date}"
+                ),
+                rx.menu.root(
+                    rx.menu.trigger(
+                        rx.button("⋮", variant="soft")  # Three vertical dots button
+                    ),
+                    rx.menu.content(
+                        rx.menu.item("Edit Name"),
+                        rx.menu.item("Edit Description"),
+                        rx.menu.separator(),
+                        rx.menu.item("Delete Task", color="red"),
+                    )
                 )
             )
         )
+    )

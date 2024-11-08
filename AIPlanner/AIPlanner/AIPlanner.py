@@ -138,6 +138,7 @@ def index() -> rx.Component:
                 rx.center(
                 cal_comps.calendar_component(),
                 todo_component(),
+                rx.button("Edit Tasks", on_click=TestAI.show_test_ai_data),
                 spacing="5",
                 justify="center",
                 min_height="50vh", # Changing to 50 to squish it up more
