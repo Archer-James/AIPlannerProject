@@ -16,9 +16,7 @@ from AIPlanner.classes.taskform import task_input_form
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
 from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
-from AIPlanner.classes.todo_list import todo_component
-
-
+from AIPlanner.classes. todo_list import todo_component
 
 # from pages.signup import signup  # Sign up page
 
