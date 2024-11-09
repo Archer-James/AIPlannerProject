@@ -108,9 +108,22 @@ class UserManagementState(rx.State):
         # Additional logic for editing task description goes here
 
     def delete_task(self, task_id: int):
-        """Method to delete the task by ID."""
-        print(f"Deleting task with ID: {task_id}")
-        # Logic for deleting the task from the database goes here
+        """Marks the task as deleted by setting is_deleted to True if it's not already True."""
+        with rx.session() as session:
+            # Try to get the task with the specified ID
+            task = session.exec(
+                Task.select().where(Task.task_id == task_id)
+            ).first()
+            if task:
+                if not task.is_deleted:
+                    # Set is_deleted to True and commit
+                    task.is_deleted = True
+                    session.commit()
+                    print(f"Task {task_id} marked as deleted.")
+                else:
+                    print(f"Task {task_id} is already marked as deleted.")
+            else:
+                print(f"No task found with ID: {task_id}")
 
 class AddUser(rx.State):
     """Class that enables adding users to the database"""
