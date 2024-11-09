@@ -25,7 +25,8 @@ def display_user_tasks(state=UserManagementState):
             state.tasks,
             lambda task: rx.text(
                 f"Task Name: {task.task_name}, Due Date: {task.due_date}, "
-                f"Description: {task.description}, Priority: {task.priority_level}"
+                f"Description: {task.description}, Priority: {task.priority_level}, "
+                f"Task ID: {task.task_id}"
             )
         )
     )

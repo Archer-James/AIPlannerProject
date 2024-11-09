@@ -26,10 +26,20 @@ def todo_component( state = UserManagementState) -> rx.Component:
                         rx.button("⋮", variant="soft")  # Three vertical dots button
                     ),
                     rx.menu.content(
-                        rx.menu.item("Edit Name"),
-                        rx.menu.item("Edit Description"),
+                        rx.menu.item(
+                            "Edit Name", 
+                            on_click=lambda: state.edit_task_name(task.task_id)
+                        ),
+                        rx.menu.item(
+                            "Edit Description", 
+                            on_click=lambda: state.edit_task_description(task.task_id)
+                        ),
                         rx.menu.separator(),
-                        rx.menu.item("Delete Task", color="red"),
+                        rx.menu.item(
+                            "Delete Task", 
+                            color="red",
+                            on_click=lambda: state.delete_task(task.task_id)
+                        ),
                     )
                 )
             )

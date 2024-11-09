@@ -97,6 +97,21 @@ class UserManagementState(rx.State):
             session.add(new_task)
             session.commit()
 
+    def edit_task_name(self, task_id: int):
+        """Method to edit the task name by ID."""
+        print(f"Editing task name for task ID: {task_id}")
+        # Additional logic for editing task name goes here
+
+    def edit_task_description(self, task_id: int):
+        """Method to edit the task description by ID."""
+        print(f"Editing task description for task ID: {task_id}")
+        # Additional logic for editing task description goes here
+
+    def delete_task(self, task_id: int):
+        """Method to delete the task by ID."""
+        print(f"Deleting task with ID: {task_id}")
+        # Logic for deleting the task from the database goes here
+
 class AddUser(rx.State):
     """Class that enables adding users to the database"""
     username: str

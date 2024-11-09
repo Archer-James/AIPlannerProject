@@ -32,7 +32,7 @@ class TaskState(LoginState):
                 is_deleted=False,
                 task_name=self.task_name,
                 description=self.task_description,
-                task_id=random.randint(1, 1000),  # Example for unique task_id
+                task_id=random.randint(1, 1000000),  # Example for unique task_id
                 priority_level={"Low": 1, "Medium": 2, "High": 3}[self.priority],
                 assigned_block_date=date.today(),  # Set to today or another relevant date
                 assigned_block_start_time=time(14, 0),  # Set a fixed start time (e.g., 2 PM)
