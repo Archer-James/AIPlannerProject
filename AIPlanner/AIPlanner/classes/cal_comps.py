@@ -1,9 +1,9 @@
 import reflex as rx
 from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
-
+from AIPlanner.classes.daily_cal import daily_cal
 class cal_comps():
-    """Class containing calendar Reflex components"""
+    """Class containing calendar Reflex components"""   
     def calendar_component():
         """
         Calendar initializer and caller
@@ -42,8 +42,14 @@ class cal_comps():
                 rx.table.body(
                     rx.foreach(GenCalendar.dates, lambda week: rx.table.row(
                         rx.foreach(week, lambda day:
-                                   rx.table.cell(day, text_align="center", padding="10px"))
-        ))),
+                                   rx.table.cell(
+                                       rx.link(
+                                                day, 
+                                                href = "/daily",
+                                                on_click=lambda: daily_cal.set_date(GenCalendar.current_month,GenCalendar.current_year,day),
+                                                text_align="center", 
+                                                padding="10px"))
+        )))),
             ),
             width="100%",
 
@@ -91,8 +97,13 @@ class cal_comps():
                 rx.table.body(
                     rx.foreach(GenWeeklyCal.dates, lambda week: rx.table.row(
                        rx.foreach(week, lambda day: 
-                                  rx.table.cell(day, text_align="center", padding="10px"))
-        ))),
+                                  rx.table.cell(
+                                      rx.link(day, 
+                                                href = "/daily",
+                                                on_click=lambda: daily_cal.set_date(GenWeeklyCal.current_month,GenWeeklyCal.current_year,day),
+                                                text_align="center", 
+                                                padding="10px"))
+        )))),
             ),
             width="100%",
 

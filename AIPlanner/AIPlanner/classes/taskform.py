@@ -1,16 +1,18 @@
 import random
-from datetime import date, time, timedelta
+from datetime import date, time, timedelta, datetime
 from AIPlanner.classes.database import *
 import reflex as rx
 from rxconfig import config
+from AIPlanner.pages.login import LoginState
 
-class TaskState(rx.State):
+class TaskState(LoginState):
     """The state related to the task input form."""
     task_name: str = ""
     task_description: str = ""
     priority: str = "Medium"
-    date_time: str = ""
-    user_id = int
+    # Set date_time to today's date in MM/DD/YY format
+    date_time: str = datetime.now().strftime("%m/%d/%y")
+    user_id = int # No idea if this does something
     show_error: bool = False
     show_full_task_input: bool = False
     show_full_description_input: bool = False
@@ -22,33 +24,36 @@ class TaskState(rx.State):
         else:
             self.show_error = False
 
-            # Set a fixed due date (e.g., December 31, 2024)
-            fixed_due_date = date(2024, 12, 31)
+            try:
+                due_date = datetime.strptime(self.date_time, "%m/%d/%y").date()
+            except ValueError:
+                print("Invalid date format. Defaulting to today's date.")
+                due_date = datetime.now().date()  # fallback to current date
 
             new_task = Task(
                 recur_frequency=7,  # Example for recurring frequency
-                due_date=fixed_due_date,
+                due_date=due_date,
                 is_deleted=False,
                 task_name=self.task_name,
                 description=self.task_description,
-                task_id=random.randint(1, 1000),  # Example for unique task_id
+                task_id=random.randint(1, 1000000),  # Example for unique task_id
                 priority_level={"Low": 1, "Medium": 2, "High": 3}[self.priority],
                 assigned_block_date=date.today(),  # Set to today or another relevant date
                 assigned_block_start_time=time(14, 0),  # Set a fixed start time (e.g., 2 PM)
                 assigned_block_duration=timedelta(hours=1),  # Set your desired duration
-                user_id=1  # Set this appropriately
+                user_id=self.user_id  # Referencing LoginState user_id attribute (to connect user to tasks)
             )
             with rx.session() as session:
                 session.add(new_task)
                 session.commit()  # Save to the database
 
-            print(f"Task applied: {self.task_name, self.task_description, self.priority, fixed_due_date}")
+            print(f"Task applied: {self.task_name, self.task_description, self.priority, due_date}")
 
             # Reset fields after adding the task
             self.task_name = ""
             self.task_description = ""
             self.priority = "Medium"
-            self.date_time = ""
+            self.date_time = datetime.now().strftime("%m/%d/%y")
 
     def toggle_full_task_input(self):
         """Toggles visibility of full task name input."""

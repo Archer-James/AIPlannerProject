@@ -2,6 +2,7 @@
 from datetime import date, time, timedelta
 from typing import List, Optional
 import random
+from AIPlanner.pages.login import LoginState
 
 import reflex as rx
 import sqlmodel
@@ -47,6 +48,16 @@ class UserManagementState(rx.State):
         """Setter method for user ID"""
         self.user_id = user_id
 
+    def get_user_id(self):
+        """Getter for user id"""
+        return self.user_id
+
+    def __str__(self):
+        """
+        Returns string version of self.user_id.
+        """
+        return f"{self.user_id}"
+
     def get_user_tasks(self, user_id: int):
         """Method to retrieve all tasks for a given user"""
         with rx.session() as session:
@@ -67,7 +78,7 @@ class UserManagementState(rx.State):
         """Method to insert test users into the database"""
         create_user("Test", random.randint(850000000,850999999), "test11")
 
-    def add_test_task(self, user_id):
+    def add_test_task(self):# user_id
         """Method to add test tasks into the database"""
         new_task = Task(
             recur_frequency=7,  # For example, a weekly recurring task
@@ -80,11 +91,39 @@ class UserManagementState(rx.State):
             assigned_block_date=date(2024, 12, 24),
             assigned_block_start_time=time(14, 0),  # Start at 2 PM
             assigned_block_duration=timedelta(hours=2),
-            user_id = self.user_id
+            user_id = LoginState.user_id #self.user_id
         )
         with rx.session() as session:
             session.add(new_task)
             session.commit()
+
+    def edit_task_name(self, task_id: int):
+        """Method to edit the task name by ID."""
+        print(f"Editing task name for task ID: {task_id}")
+        # Additional logic for editing task name goes here
+
+    def edit_task_description(self, task_id: int):
+        """Method to edit the task description by ID."""
+        print(f"Editing task description for task ID: {task_id}")
+        # Additional logic for editing task description goes here
+
+    def delete_task(self, task_id: int):
+        """Marks the task as deleted by setting is_deleted to True if it's not already True."""
+        with rx.session() as session:
+            # Try to get the task with the specified ID
+            task = session.exec(
+                Task.select().where(Task.task_id == task_id)
+            ).first()
+            if task:
+                if not task.is_deleted:
+                    # Set is_deleted to True and commit
+                    task.is_deleted = True
+                    session.commit()
+                    print(f"Task {task_id} marked as deleted.")
+                else:
+                    print(f"Task {task_id} is already marked as deleted.")
+            else:
+                print(f"No task found with ID: {task_id}")
 
 class AddUser(rx.State):
     """Class that enables adding users to the database"""
