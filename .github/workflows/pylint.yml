@@ -3,11 +3,13 @@ name: Pylint Testing
 on:
   push:
     branches:
-      - canvas_connect
-      # - '**'
-  # pull_request:
-    # branches:
-      # - main
+      # - canvas_connect
+      - '**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'AIPlanner/AIPlanner/**/*.py'
 
 jobs:
   build:
@@ -27,7 +29,9 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint --rcfile=pylintrc $(git ls-files '*.py')
+        pylint --rcfile=pylintrc AIPlanner/AIPlanner/**/*.py
+        
+        #$(git ls-files '*.py')
 
 
 # name: Python Linting with Pylint
