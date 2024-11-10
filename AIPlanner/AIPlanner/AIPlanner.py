@@ -26,6 +26,7 @@ from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
 from AIPlanner.classes.cal_comps import cal_comps
 from AIPlanner.pages.weekly import weekly
+from AIPlanner.classes.daily_cal import daily
 # to run test environment
 # >cd AIPlanner
 # >py -3 -m venv .venv
@@ -175,6 +176,7 @@ app = rx.App(
 )
 app.add_page(index)
 app.add_page(weekly)
+app.add_page(daily)
 
 
 
