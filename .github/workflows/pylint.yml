@@ -3,10 +3,11 @@ name: Pylint
 on:
   push:
     branches:
-      - '**'
-  pull_request:
-    branches:
-      - main
+      - canvas_connect
+      # - '**'
+  # pull_request:
+    # branches:
+      # - main
 
 jobs:
   build:
