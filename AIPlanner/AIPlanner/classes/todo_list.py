@@ -1,4 +1,10 @@
+'''
+Creates a "Todos" component displaying an ordered list of tasks.
 
+    Returns:
+        Component: A Reflex vertical stack with a heading, divider, 
+                and list of user tasks.
+'''
 import reflex as rx
 from AIPlanner.classes.database import UserManagementState
 
