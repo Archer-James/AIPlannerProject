@@ -29,7 +29,7 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint --rcfile=pylintrc AIPlanner/AIPlanner/**/*.py
+        pylint --rcfile=.pylintrc AIPlanner/AIPlanner/**/*.py
         
         #$(git ls-files '*.py')
 
