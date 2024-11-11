@@ -19,7 +19,6 @@ from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page 
 from AIPlanner.classes. todo_list import todo_component
 
 
-
 # from pages.signup import signup  # Sign up page
 
 from AIPlanner.classes.CreateCal import GenCalendar
