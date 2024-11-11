@@ -29,4 +29,5 @@ disable=
     trailing-comma-tuple,
     missing-class-docstring,
     missing-function-docstring,
+    too-many-locals,
     
