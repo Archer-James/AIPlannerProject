@@ -1,9 +1,6 @@
 import calendar
 from datetime import datetime
-import reflex as rx
 
-import calendar
-from datetime import datetime
 import reflex as rx
 
 
@@ -36,13 +33,17 @@ class GenCalendar(rx.State):
         return calendar.monthrange(self.current_year, self.current_month)
 
     def get_month_year_label(self):
-        """Set the label variable to a string of the month and year for Title of calendar"""
+        """
+        Set the label variable to a string of the month and year for Title of calendar
+        """
         month_name = calendar.month_name[self.current_month]
         month_year_string = str(month_name + " " + str(self.current_year))
         self.label = month_year_string
 
     def next_month(self):
-        """increment month and reinitialize calendar"""
+        """
+        increment month and reinitialize calendar
+        """
         if self.current_month == 12:
             self.current_month = 1
             self.current_year += 1
@@ -51,7 +52,9 @@ class GenCalendar(rx.State):
         self.init_calendar()
 
     def prev_month(self):
-        """Decrement month and reinitialize calendar"""
+        """
+        Decrement month and reinitialize calendar
+        """
         if self.current_month == 1:
             self.current_month = 12
             self.current_year -= 1
@@ -78,6 +81,8 @@ class GenCalendar(rx.State):
             self.dates.append(week)
 
     def init_calendar(self):
-        """Runs the initialization of variables"""
+        """
+        Runs the initialization of variables
+        """
         self.make_dates()
         self.get_month_year_label()
