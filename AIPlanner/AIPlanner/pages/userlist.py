@@ -6,6 +6,7 @@ import reflex as rx
 from AIPlanner.classes.database import *
 import AIPlanner.classes.database as database
 from AIPlanner.pages.login import LoginState
+from AIPlanner.classes.ai import AIState
 
 def display_usernames(state=UserManagementState):
     """Function to display usernames"""
@@ -31,6 +32,10 @@ def display_user_tasks(state=UserManagementState):
         )
     )
 
+def call_api():
+    """Function to call AI API function"""
+    return AIState.send_request()
+
 def userlist(state=UserManagementState) -> rx.Component:
     """
     Calls display_usernames to display all users in database, 
@@ -49,9 +54,12 @@ def userlist(state=UserManagementState) -> rx.Component:
                   on_click=lambda: state.get_user_tasks(LoginState.user_id)),
         rx.button("Show tasks assigned to user with ID 2",
                   on_click=lambda: state.get_user_tasks(2)),
+        rx.button("Generate example AI schedule", on_click=lambda: AIState.send_request()),
+        rx.text(AIState.processed_output),
         display_usernames(),
         display_user_tasks(),
         rx.logo(),
     )
+
 
 #Eof
