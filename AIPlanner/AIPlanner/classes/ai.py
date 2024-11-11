@@ -50,7 +50,7 @@ class AIState(UserManagementState):
         )
 
         print(completion.choices[0].message)
-        self.processed_output = completion.choices[0].message
+        self.processed_output = self.process_output(completion)
 
     def process_output(self, completion):
         '''Processes the output of an OpenAI API call using regular expressions 
@@ -116,10 +116,11 @@ class AIState(UserManagementState):
             tasks.append(task_dict)
 
         # Output the list of task dictionaries
+        task_string = ""
         for task in tasks:
-            #print("Task:")
             for key, value in task.items():
-                print(f'{key}: {value}')
-            print()  # Add a blank line between tasks for clarity
-        return tasks
+                task_string = task_string + f'{key}: {value}\n'
+            task_string = task_string + "\n"
+        print(task_string)
+        return task_string
     
