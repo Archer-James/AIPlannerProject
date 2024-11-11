@@ -2,9 +2,11 @@ name: Pylint Testing
 
 on:
   push:
-    branches:
+    # branches:
       # - canvas_connect
-      - '**'
+      # - '**'
+    paths:
+      - 'AIPlanner/AIPlanner/**/*.py'
   pull_request:
     branches:
       - main
@@ -30,43 +32,3 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint --rcfile=.pylintrc AIPlanner/AIPlanner/**/*.py
-        
-        #$(git ls-files '*.py')
-
-
-# name: Python Linting with Pylint
-
-# on:
-#   pull_request:
-#     paths:
-#       - '**/*.py'
-#   push:
-#     branches:
-#       - main
-#       # - 'feature/*'
-
-# jobs:
-#   lint:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       # Check out the code
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-
-#       # Set up Python
-#       - name: Set up Python
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: '3.x'  # Specify the version you want to use
-
-#       # Install dependencies
-#       - name: Install dependencies
-#         run: |
-#           python -m pip install --upgrade pip
-#           pip install pylint
-
-#       # Run pylint with the custom pylintrc
-#       - name: Run Pylint with custom pylintrc
-#         run: |
-#           pylint --rcfile=pylintrc **/*.py
