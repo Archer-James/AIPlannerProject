@@ -6,7 +6,7 @@ disable=
     not-callable,
     consider-using-from-import,
     invalid-name,
-    unused-variable,
+    unused_variable,
     wrong-import-order,
     ungrouped-imports,
     line-too-long,
@@ -23,11 +23,5 @@ disable=
     simplifiable-if-statement,
     unnecessary-lambda,
     duplicate-code,
-    unused-import,
-    undefined-variable,
-    unknown-option-value,
-    trailing-comma-tuple,
-    missing-class-docstring,
-    missing-function-docstring,
-    too-many-locals,
-    
+
+
