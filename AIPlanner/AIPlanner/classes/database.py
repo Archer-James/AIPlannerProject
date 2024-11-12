@@ -165,7 +165,7 @@ def create_user(username:str, canvas_hash_id:int, password:str):
 
 def add_user(new_user:User):
     """
-    Starts a database session and adds the new_user User object into the database.
+    Starts a database session and adds the new_user User object into the database
     """
     with rx.session() as session:
         session.add(new_user)
