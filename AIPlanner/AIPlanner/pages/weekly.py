@@ -40,7 +40,10 @@ class State(rx.State):
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def weekly() -> rx.Component:
-    """Reflex component for base index page"""
+    """Reflex component for base index page
+    Returns:
+    Prints weekly page of website
+    """
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
