@@ -4,7 +4,6 @@ Displays users in the database.
 """
 import reflex as rx
 from AIPlanner.classes.database import *
-import AIPlanner.classes.database as database
 from AIPlanner.pages.login import LoginState
 from AIPlanner.classes.ai import AIState
 

@@ -4,7 +4,6 @@ import os
 import re
 import datetime
 from openai import OpenAI
-import reflex
 from AIPlanner.classes.database import UserManagementState
 
 class AIState(UserManagementState):
@@ -13,7 +12,7 @@ class AIState(UserManagementState):
     Attributes:
     processed_output: String state variable to hold final output of processing
     """
-    
+
     processed_output = ""
 
     def send_request(self):

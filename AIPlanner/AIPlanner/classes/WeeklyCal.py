@@ -1,3 +1,4 @@
+"""Weekly Calendar file."""
 import calendar
 from datetime import datetime, timedelta
 import reflex as rx
