@@ -6,8 +6,6 @@ There's a back button that takes the user back to the home screen.
 """
 
 import reflex as rx
-from AIPlanner.pages.userlist import userlist
-# import AIPlanner.classes.database as database
 
 
 def render_success_page():

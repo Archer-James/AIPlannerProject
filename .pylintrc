@@ -9,7 +9,7 @@ disable=
     ; unused-variable,
     ; wrong-import-order,
     ; ungrouped-imports,
-    ; line-too-long,
+    line-too-long,
     ; missing-module-docstring,
     ; redefined-outer-name,
     ; no-else-return,

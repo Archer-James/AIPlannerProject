@@ -97,6 +97,27 @@ class UserManagementState(rx.State):
             session.add(new_task)
             session.commit()
 
+
+    def manual_add_task(self):
+        """Method to add test tasks into the database"""
+        new_task = Task(
+            recur_frequency=7,  # For example, a weekly recurring task
+            due_date=date(2024, 12, 25),
+            is_deleted=False,
+            task_name="Complete project",
+            description="Finish the project for final submission.",
+            task_id=1,
+            priority_level=2,
+            assigned_block_date=date(2024, 12, 24),
+            assigned_block_start_time=time(14, 0),  # Start at 2 PM
+            assigned_block_duration=timedelta(hours=2),
+            user_id = LoginState.user_id 
+        )
+        with rx.session() as session:
+            session.add(new_task)
+            session.commit()
+
+
     def edit_task_name(self, task_id: int):
         """Method to edit the task name by ID."""
         print(f"Editing task name for task ID: {task_id}")

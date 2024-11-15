@@ -125,7 +125,7 @@ class CanvasConnectState(rx.State):
             print("\n")
         #return "Success"
         return assignment_list
-    
+
 
     def convert_to_tasks(self, assign_list:list):
         """
@@ -135,8 +135,9 @@ class CanvasConnectState(rx.State):
 
         """
         for assignment in assign_list:
-            print(assignment)
-
+            print(assignment['due_date'])
+            # Iterate through list (check on how to iterate thru dict.)
+            # make each task a task with database
             # Assign each assignment to a task and specify the task id, name, due date, class, ect.
             # Might have to change time format: 
             # due_date = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
