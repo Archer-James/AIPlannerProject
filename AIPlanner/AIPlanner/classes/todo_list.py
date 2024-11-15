@@ -30,7 +30,7 @@ def todo_component(state=UserManagementState) -> rx.Component:
                 ),
                 # Task Name Editing
                 rx.cond(
-                    state.editing_task_id_name == task.task_id,
+                    state.editing_task_id_name == task.id,
                     rx.hstack(
                         rx.input(
                             value=state.new_task_name,  # Shows the current task name
@@ -40,7 +40,7 @@ def todo_component(state=UserManagementState) -> rx.Component:
                         rx.button(
                             "Apply",
                             on_click=lambda: [
-                                state.edit_task_name(task.task_id, state.new_task_name),
+                                state.edit_task_name(task.id, state.new_task_name),
                                 state.set_editing_task_id_name(None),  # Close the input box
                             ],
                         ),
@@ -52,7 +52,7 @@ def todo_component(state=UserManagementState) -> rx.Component:
                     ),
                     # Task Description Editing
                     rx.cond(
-                        state.editing_task_id_description == task.task_id,
+                        state.editing_task_id_description == task.id,
                         rx.hstack(
                             rx.input(
                                 value=state.new_task_description,  # Shows the current description
@@ -62,7 +62,7 @@ def todo_component(state=UserManagementState) -> rx.Component:
                             rx.button(
                                 "Apply",
                                 on_click=lambda: [
-                                    state.edit_task_description(task.task_id, state.new_task_description),
+                                    state.edit_task_description(task.id, state.new_task_description),
                                     state.set_editing_task_id_description(None),  # Close the input box
                                 ],
                             ),
@@ -80,14 +80,14 @@ def todo_component(state=UserManagementState) -> rx.Component:
                                 rx.menu.item(
                                     "Edit Name",
                                     on_click=lambda: [
-                                        state.set_editing_task_id_name(task.task_id),
+                                        state.set_editing_task_id_name(task.id),
                                         state.set_new_task_name(task.task_name),  # Pre-fill with current name
                                     ],
                                 ),
                                 rx.menu.item(
                                     "Edit Description",
                                     on_click=lambda: [
-                                        state.set_editing_task_id_description(task.task_id),
+                                        state.set_editing_task_id_description(task.id),
                                         state.set_new_task_description(task.description),  # Pre-fill with current description
                                     ],
                                 ),
@@ -95,7 +95,7 @@ def todo_component(state=UserManagementState) -> rx.Component:
                                 rx.menu.item(
                                     "Delete Task",
                                     color="red",
-                                    on_click=lambda: state.delete_task(task.task_id),
+                                    on_click=lambda: state.delete_task(task.id),
                                 ),
                             ),
                         ),

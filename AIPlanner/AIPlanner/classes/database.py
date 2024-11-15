@@ -121,7 +121,7 @@ class UserManagementState(rx.State):
         """Update the task name for the given task ID."""
         with rx.session() as session:
             task = session.exec(
-                Task.select().where(Task.task_id == task_id)
+                Task.select().where(Task.id == task_id)
             ).first()
             if task:
                 task.task_name = new_name
@@ -134,7 +134,7 @@ class UserManagementState(rx.State):
         """Update the task description for the given task ID."""
         with rx.session() as session:
             task = session.exec(
-                Task.select().where(Task.task_id == task_id)
+                Task.select().where(Task.id == task_id)
             ).first()
             if task:
                 task.description = new_description
@@ -148,7 +148,7 @@ class UserManagementState(rx.State):
         with rx.session() as session:
             # Try to get the task with the specified ID
             task = session.exec(
-                Task.select().where(Task.task_id == task_id)
+                Task.select().where(Task.id == task_id)
             ).first()
             if task:
                 if not task.is_deleted:
