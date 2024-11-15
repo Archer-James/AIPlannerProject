@@ -7,7 +7,7 @@
 .idea
 .pyi_generator_diff
 .pyi_generator_last_run
-# .venv
+.venv
 .vscode
 .web
 __pycache__/
