@@ -28,8 +28,8 @@ class CanvasConnectState(rx.State):
 
         # url = f'{CANVAS_URL}/api/v1/courses' # Grabbing all current and past courses
         # Grabbing only favorited courses
-        # url = f'{self.canvas_url}/api/v1/users/self/favorites/courses'
-        url = f'{self.canvas_url}/api/v1/courses'
+        url = f'{self.canvas_url}/api/v1/users/self/favorites/courses'
+        # url = f'{self.canvas_url}/api/v1/courses'
         while url:
             response = requests.get(url, headers=self.get_headers(), timeout=20)
             response.raise_for_status()
@@ -125,6 +125,23 @@ class CanvasConnectState(rx.State):
             print("\n")
         #return "Success"
         return assignment_list
+    
+
+    def convert_to_tasks(self, assign_list:list):
+        """
+        Converts a list of Canvas assignments to system Task objects.
+
+        param assign_list: list     List of Canvas assignments and info for each assignment
+
+        """
+        for assignment in assign_list:
+            print(assignment)
+
+            # Assign each assignment to a task and specify the task id, name, due date, class, ect.
+            # Might have to change time format: 
+            # due_date = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
+            # How to assign it to a user? Automatic?
+
 
 
     def process_token(self, input_data):
@@ -157,6 +174,9 @@ class CanvasConnectState(rx.State):
             result = self.grab_tasks()
             print(result)
             print(type(result))
+
+            # Send assignments to task objects
+            self.convert_to_tasks(result)
 
         except requests.exceptions.HTTPError as e:
             print(f"Error with API Key: {e}")
