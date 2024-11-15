@@ -140,7 +140,7 @@ class CanvasConnectState(rx.State): # Like extending a class
         Parameters:
         input_data (TYPE?): input data (API key) from webpage UI.
         """
-        print(f"Type of input data: "type(input_data)")
+        print(f"Type of input data: {type(input_data)}")
         # Getting the manual token from the data package from the input form
         self._api_token = input_data.get("manual_token")
 

@@ -20,9 +20,6 @@ class RecurFrequency:
     DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
     def __init__(self, frequency, end_date=None, days_of_week=None):
-<<<<<<< HEAD
-        """Initialization function."""
-=======
         """
         Initializes a new instance of the RecurFrequency class.
 
@@ -34,7 +31,6 @@ class RecurFrequency:
         Raises:
         ValueError: If the frequency is invalid.
         """
->>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         if frequency not in [self.DAILY, self.WEEKLY, self.MONTHLY]:
             raise ValueError("Invalid frequency")
         self.frequency = frequency
@@ -90,16 +86,12 @@ class RecurFrequency:
             return date(next_year, next_month, next_day)
 
     def __str__(self):
-<<<<<<< HEAD
-        """str function"""
-=======
         """
         Returns a string representation of the recurrence pattern.
 
         Returns:
         str: A string describing the recurrence pattern.
         """
->>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         if self.frequency == self.DAILY:
             return "Every day"
         elif self.frequency == self.WEEKLY:

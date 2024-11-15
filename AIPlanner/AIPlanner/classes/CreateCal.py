@@ -39,25 +39,13 @@ class GenCalendar(rx.State):
         return calendar.monthrange(self.current_year, self.current_month)
 
     def get_month_year_label(self):
-<<<<<<< HEAD
-        """
-        Set the label variable to a string of the month and year for Title of calendar
-        """
-=======
         """Function to set the label variable to a string of the month and year for Title of calendar"""
->>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         month_name = calendar.month_name[self.current_month]
         month_year_string = str(month_name + " " + str(self.current_year))
         self.label = month_year_string
 
     def next_month(self):
-<<<<<<< HEAD
-        """
-        increment month and reinitialize calendar
-        """
-=======
         """Function to increment month and reinitialize calendar"""
->>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         if self.current_month == 12:
             self.current_month = 1
             self.current_year += 1
@@ -66,13 +54,7 @@ class GenCalendar(rx.State):
         self.init_calendar()
 
     def prev_month(self):
-<<<<<<< HEAD
-        """
-        Decrement month and reinitialize calendar
-        """
-=======
         """Function to decrement month and reinitialize calendar"""
->>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         if self.current_month == 1:
             self.current_month = 12
             self.current_year -= 1
@@ -97,12 +79,6 @@ class GenCalendar(rx.State):
             self.dates.append(week)
 
     def init_calendar(self):
-<<<<<<< HEAD
-        """
-        Runs the initialization of variables
-        """
-=======
         """Function that runs the initialization of variables"""
->>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         self.make_dates()
         self.get_month_year_label()

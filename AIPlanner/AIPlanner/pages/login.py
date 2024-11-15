@@ -108,7 +108,7 @@ class LoginState(rx.State):
 
 
     def set_user_id(self, new_id=int):
-         """
+        """
         Sets the user's id.
 
         Parameters:
