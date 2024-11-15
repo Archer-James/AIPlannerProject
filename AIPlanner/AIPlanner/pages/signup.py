@@ -11,13 +11,8 @@ User can also go back to the home page.
 # Importing necessary modules
 
 from datetime import time
-import time
 import reflex as rx
-from rxconfig import config
-from AIPlanner.classes.database import AddUser
-# #import AIPlanner.classes.user as user **Discuss in meeting, fix SignupState and other problems in this file**
 import AIPlanner.classes.database as database
-# import AIPlanner.pages.processing as processing **Discuss in meeting**
 
 
 def check_passwords(password, password_check):
