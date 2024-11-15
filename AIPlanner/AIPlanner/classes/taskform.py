@@ -275,7 +275,7 @@ def task_input_form():
                 ),
                 # Apply task button
                 rx.button("Apply Task", on_click=TaskState.apply_task, flex=1),
-                spacing="0px",
+                spacing="0",
             ),
             # # Expanded inputs and error message
             # rx.cond(
