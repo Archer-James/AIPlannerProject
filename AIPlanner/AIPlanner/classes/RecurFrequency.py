@@ -11,6 +11,7 @@ class RecurFrequency:
     DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
     def __init__(self, frequency, end_date=None, days_of_week=None):
+        """Initialization function."""
         if frequency not in [self.DAILY, self.WEEKLY, self.MONTHLY]:
             raise ValueError("Invalid frequency")
         self.frequency = frequency
@@ -58,6 +59,7 @@ class RecurFrequency:
             return date(next_year, next_month, next_day)
 
     def __str__(self):
+        """str function"""
         if self.frequency == self.DAILY:
             return "Every day"
         elif self.frequency == self.WEEKLY:
