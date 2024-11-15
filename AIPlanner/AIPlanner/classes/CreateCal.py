@@ -27,23 +27,37 @@ class GenCalendar(rx.State):
 
     def days_in_month(self):
         """
-         Return first weekday of the month, and number of days in the month
+        Function to get the number of days in a month and when the month starts
+
+         Returns: 
+         int: first weekday of the month
+         int: number of days in the month
+         
+         
         """
         cal = calendar.Calendar(firstweekday=6)  # Start the week on Sunday
         return calendar.monthrange(self.current_year, self.current_month)
 
     def get_month_year_label(self):
+<<<<<<< HEAD
         """
         Set the label variable to a string of the month and year for Title of calendar
         """
+=======
+        """Function to set the label variable to a string of the month and year for Title of calendar"""
+>>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         month_name = calendar.month_name[self.current_month]
         month_year_string = str(month_name + " " + str(self.current_year))
         self.label = month_year_string
 
     def next_month(self):
+<<<<<<< HEAD
         """
         increment month and reinitialize calendar
         """
+=======
+        """Function to increment month and reinitialize calendar"""
+>>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         if self.current_month == 12:
             self.current_month = 1
             self.current_year += 1
@@ -52,9 +66,13 @@ class GenCalendar(rx.State):
         self.init_calendar()
 
     def prev_month(self):
+<<<<<<< HEAD
         """
         Decrement month and reinitialize calendar
         """
+=======
+        """Function to decrement month and reinitialize calendar"""
+>>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         if self.current_month == 1:
             self.current_month = 12
             self.current_year -= 1
@@ -63,9 +81,7 @@ class GenCalendar(rx.State):
         self.init_calendar()
 
     def make_dates(self):
-        """
-        Set dates list as list of numbers of days to iterate through
-        """
+        """Function to set dates list as list of numbers of days to iterate through"""
         self.dates = []
         first_day, days = self.days_in_month()
         days_in_month = [datetime(self.current_year, self.current_month, day)
@@ -81,8 +97,12 @@ class GenCalendar(rx.State):
             self.dates.append(week)
 
     def init_calendar(self):
+<<<<<<< HEAD
         """
         Runs the initialization of variables
         """
+=======
+        """Function that runs the initialization of variables"""
+>>>>>>> 21a72f62f97f3a87945109bc740b077be221c049
         self.make_dates()
         self.get_month_year_label()

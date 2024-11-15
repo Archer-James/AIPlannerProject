@@ -30,4 +30,4 @@ disable=
     missing-class-docstring,
     missing-function-docstring,
     too-many-locals,
-    
+    to-many-instance-attributes,
