@@ -25,7 +25,7 @@ disable=
     ; duplicate-code,
     ; unused-import,
     ; undefined-variable,
-    ; unknown-option-value,
+    unknown-option-value,
     ; trailing-comma-tuple,
     ; missing-class-docstring,
     ; missing-function-docstring,
