@@ -269,7 +269,7 @@ def show_log_in_first():
             href="/manualtokens_connect_page",
             is_external=False,
         ),
-        spacing="50px",
+        spacing="5",
         justify="center",
     )
 
