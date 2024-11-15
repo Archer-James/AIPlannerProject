@@ -43,6 +43,10 @@ class UserManagementState(rx.State):
     message: str = ""        # To display success or error messages
     tasks: list[Task] = []
     user_id: int = 1
+    editing_task_id_name: Optional[int] = None  # ID of the task currently being edited
+    editing_task_id_description: Optional[int] = None
+    new_task_name: str = ""  # Temporary storage for the new task name
+    new_task_description: str = ""
 
     def set_user_id(self, user_id: int):
         """Setter method for user ID"""
@@ -97,15 +101,47 @@ class UserManagementState(rx.State):
             session.add(new_task)
             session.commit()
 
-    def edit_task_name(self, task_id: int):
-        """Method to edit the task name by ID."""
-        print(f"Editing task name for task ID: {task_id}")
-        # Additional logic for editing task name goes here
+    def set_editing_task_id_name(self, task_id: Optional[int]):
+        """Set the ID of the task being edited."""
+        self.editing_task_id_name = task_id
 
-    def edit_task_description(self, task_id: int):
-        """Method to edit the task description by ID."""
-        print(f"Editing task description for task ID: {task_id}")
-        # Additional logic for editing task description goes here
+    def set_editing_task_id_description(self, task_id: Optional[int]):
+        """Set the ID of the task being edited for its description."""
+        self.editing_task_id_description = task_id
+
+    def set_new_task_name(self, value: str):
+        """Set the new task name."""
+        self.new_task_name = value
+    
+    def set_new_task_description(self, value: str):
+        """Set the new task description."""
+        self.new_task_description = value
+
+    def edit_task_name(self, task_id: int, new_name: str):
+        """Update the task name for the given task ID."""
+        with rx.session() as session:
+            task = session.exec(
+                Task.select().where(Task.task_id == task_id)
+            ).first()
+            if task:
+                task.task_name = new_name
+                session.commit()
+                print(f"Task name updated to '{new_name}' for task ID: {task_id}.")
+            else:
+                print(f"No task found with ID: {task_id}.")
+                
+    def edit_task_description(self, task_id: int, new_description: str):
+        """Update the task description for the given task ID."""
+        with rx.session() as session:
+            task = session.exec(
+                Task.select().where(Task.task_id == task_id)
+            ).first()
+            if task:
+                task.description = new_description
+                session.commit()
+                print(f"Task description updated to '{new_description}' for task ID: {task_id}.")
+            else:
+                print(f"No task found with ID: {task_id}.")
 
     def delete_task(self, task_id: int):
         """Marks the task as deleted by setting is_deleted to True if it's not already True."""
