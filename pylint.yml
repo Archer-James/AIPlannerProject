@@ -1,24 +1,17 @@
-name: Pylint Testing
+name: Pylint
 
 on:
   push:
-    # branches:
-      # - canvas_connect
-      # - '**'
-    paths:
-      - 'AIPlanner/AIPlanner/**/*.py'
   pull_request:
     branches:
       - main
-    paths:
-      - 'AIPlanner/AIPlanner/**/*.py'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -31,4 +24,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint --rcfile=.pylintrc AIPlanner/AIPlanner/**/*.py
+        pylint $(git ls-files '*.py')
