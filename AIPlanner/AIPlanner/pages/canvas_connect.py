@@ -26,8 +26,10 @@ class CanvasConnectState(rx.State):
         """
         courses = []
 
+        # url = f'{CANVAS_URL}/api/v1/courses' # Grabbing all current and past courses
         # Grabbing only favorited courses
-        url = f'{self.canvas_url}/api/v1/users/self/favorites/courses'
+        # url = f'{self.canvas_url}/api/v1/users/self/favorites/courses'
+        url = f'{self.canvas_url}/api/v1/courses'
         while url:
             response = requests.get(url, headers=self.get_headers(), timeout=20)
             response.raise_for_status()
@@ -93,6 +95,9 @@ class CanvasConnectState(rx.State):
         # Setting what the date is now, to use to determine which assignments are current
         curr_date = datetime.now()
 
+        # Making an empty array so we can transport the assignments into task objects later
+        assignment_list = []
+
         courses = self.get_favorite_courses() # Grabbing all favorited canvas courses
         for course in courses:
             course_id = course['id']
@@ -115,9 +120,11 @@ class CanvasConnectState(rx.State):
                     # If assignment is upcoming, print it
                     if due_date >= curr_date:
                         print(f"- {assignment['name']} (Due: {assignment['due_at']})")
+                        assignment_list.append(assignment)
 
             print("\n")
-        return "Success"
+        #return "Success"
+        return assignment_list
 
 
     def process_token(self, input_data):
@@ -149,8 +156,10 @@ class CanvasConnectState(rx.State):
         try:
             result = self.grab_tasks()
             print(result)
+            print(type(result))
 
-        except requests.exceptions.HTTPError:
+        except requests.exceptions.HTTPError as e:
+            print(f"Error with API Key: {e}")
             return rx.toast("Invalid API token. Please try again.")
 
         # Send user back to home page upon successful connection
