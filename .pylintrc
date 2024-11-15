@@ -5,3 +5,4 @@ disable=
     no-name-in-module,
     not-callable,
     consider-using-from-import,
+    to-many-instance-attributes,
