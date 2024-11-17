@@ -87,6 +87,7 @@ class UserManagementState(rx.State):
             self.tasks = session.exec(
                 Task.select().where(Task.user_id == user_id)
             ).all()
+        print("calling")
         print(self.tasks)
 
     def fetch_all_users(self):
