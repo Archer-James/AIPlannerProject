@@ -10,7 +10,10 @@ import reflex as rx
 
 
 def render_processing_msg():
-    """Page with "processing" text."""
+    """
+    Returns:
+    Reflex card with "processing" text.
+    """
     return rx.card(
         rx.form(
             rx.hstack(
@@ -25,8 +28,9 @@ def render_processing_msg():
 
 def processing() -> rx.Component:
     """
+    Returns:
     Base function for processing page.
-    Calls render_processing_msg() for text
+    Calls render_processing_msg() for text.
     """
     # Signup page
     return rx.center(

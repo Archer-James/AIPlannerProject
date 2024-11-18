@@ -5,16 +5,23 @@ import re
 import datetime
 import time
 from openai import OpenAI
-import reflex
 from AIPlanner.classes.database import UserManagementState
 
 class AIState(UserManagementState):
-    """State that holds variables related to AI generation and functions that use those variables"""
+    """State that holds variables related to AI generation and functions that use those variables
     
+    Attributes:
+    processed_output: String state variable to hold final output of processing
+    """
+
     processed_output = ""
 
     def send_request(self, tasks):
-        '''Function to send an OpenAI API request to generate task date/time/duration assignments, currently prints to console'''
+        '''Function to send an OpenAI API request to generate task date/time/duration assignments, currently prints to console
+        
+        Returns:
+        task_string: String that contains the result of processing the completion of the API request
+        '''
 
         inputMessage = ""
         for task in tasks:
@@ -55,7 +62,14 @@ class AIState(UserManagementState):
 
     def process_output(self, content):
         '''Processes the output of an OpenAI API call using regular expressions 
-        and prints the string result to the console'''
+        and prints the string result to the console
+        
+        Parameters:
+        completion: String that contains the raw completion returned by the OpenAI API
+
+        Returns:
+        task_string: String that contains the processed completion resuts
+        '''
         # Regular expression to extract task details
         regex = re.compile(
             r"task_id\s*=\s*(\d+)\s*"
