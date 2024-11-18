@@ -1,5 +1,5 @@
 """Module containing classes and methods pertaining to the SQLite database built into Reflex"""
-from datetime import date, time, timedelta
+from datetime import date, time, timedelta, datetime
 from typing import List, Optional
 import random
 from AIPlanner.pages.login import LoginState
@@ -120,22 +120,40 @@ class UserManagementState(rx.State):
             session.add(new_task)
             session.commit()
 
+    def manual_add_task(self, recur_freq:int, due_date:datetime, task_name:str, description:str, priority_lvl:int,
+                        block_date:date, block_start_time:time, block_duration:timedelta, user_id):
+        """
+        Method to add manual tasks into the database. Creates a new task object with inputted parameters
+        and adds new task to the database. Creates a task id once added to the database.
+        Used by canvas_connect.py to turn Canvas tasks into system task objects 
+        and show them on the calendar.
 
-    def manual_add_task(self):
-        """Method to add test tasks into the database"""
+        Parameters:
+        recur_freq (int): the recur frequency of the event, i.e. 7 is weekly.
+        due_date (date): the due date for the task in date form.
+        task_name (str): the name of the task.
+        description (str): the description of the task.
+        priority_lvl (int): the priority level of the task, from 1-3, 3 being the highest.
+        block_date (date): the time on the calendar the task will be assigned.
+        block_start_time (time): the start time of the event on the calendar.
+        block_duration (timedelta): the duration of the event on the calendar.
+        """
         new_task = Task(
-            recur_frequency=7,  # For example, a weekly recurring task
-            due_date=date(2024, 12, 25),
+            recur_frequency=recur_freq,  # For example, a weekly recurring task
+            due_date=due_date, # date(2024, 12, 25),
             is_deleted=False,
-            task_name="Complete project",
-            description="Finish the project for final submission.",
+            task_name=task_name,
+            description=description,
             task_id=1,
-            priority_level=2,
-            assigned_block_date=date(2024, 12, 24),
-            assigned_block_start_time=time(14, 0),  # Start at 2 PM
-            assigned_block_duration=timedelta(hours=2),
-            user_id = LoginState.user_id 
+            priority_level=priority_lvl,
+            assigned_block_date=block_date, # date(2024, 12, 24),
+            assigned_block_start_time=block_start_time, # time(14, 0),  # Start at 2 PM
+            assigned_block_duration=block_duration, # timedelta(hours=2),
+            #user_id = self.user_id 
+            user_id=user_id
         )
+        print("New task in manual_add_task:")
+        print(new_task)
         with rx.session() as session:
             session.add(new_task)
             session.commit()
@@ -214,3 +232,15 @@ def add_user(new_user:User):
     with rx.session() as session:
         session.add(new_user)
         session.commit()
+
+
+# # Testing manual add user func.
+# UserManagementState.manual_add_task(recur_freq=1, 
+#                                                 due_date=date(2024, 12, 25),
+#                                                 task_name="name",
+#                                                 description="descript",
+#                                                 priority_lvl=1,
+#                                                 block_date=date(2024, 12, 25),
+#                                                 block_start_time=time(14, 0),
+#                                                 block_duration=timedelta(hours=1)
+#                                                 )

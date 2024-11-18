@@ -1,10 +1,12 @@
 """Page to connect user's Canvas account to system.
 """
 
-from datetime import datetime # Used to grab assignment due date specifics
+from datetime import datetime, date, time, timedelta # Used to grab assignment due date specifics
 import requests
 import reflex as rx
-from AIPlanner.pages.login import LoginState
+from AIPlanner.pages.login import LoginState # Grabbing login credentials
+# Importing UserManagementState so we can create tasks in the system
+import AIPlanner.classes.database as database 
 
 
 class CanvasConnectState(rx.State): # Like extending a class
@@ -137,22 +139,36 @@ class CanvasConnectState(rx.State): # Like extending a class
         return assignment_list
 
 
-    def convert_to_tasks(self, assign_list:list):
-        """
-        Converts a list of Canvas assignments to system Task objects.
+    # def convert_to_tasks(self, assign_list:list):
+    #     """
+    #     Converts a list of Canvas assignments to system Task objects.
 
-        param assign_list: list     List of Canvas assignments and info for each assignment
+    #     Parameters:
+    #     assign_list (list): List of Canvas Assignments in dictionary form.
 
-        """
-        for assignment in assign_list:
-            print(assignment['due_date'])
-            # Iterate through list (check on how to iterate thru dict.)
-            # make each task a task with database
-            # Assign each assignment to a task and specify the task id, name, due date, class, ect.
-            # Might have to change time format: 
-            # due_date = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
-            # How to assign it to a user? Automatic?
+    #     """
 
+    #     for assignment in assign_list:
+    #         # print(f"Assignment: {assignment}")
+    #         # print(f"Type of assignment: {type(assignment)}")
+    #         # print(f"Due at: {assignment['due_at']}, type of due date: {type(assignment['due_at'])}")
+
+    #         # Check for duplicates here
+
+    #         # Converting Canvas due date to datetime and date so we can turn it into a Task object
+    #         due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
+
+    #         # Sending Canvas task to database.py to become a system task object and added to database
+    #         # Making the start date to one hour before it's due, duration 1 hour
+    #         database.UserManagementState.manual_add_task(recur_freq=1, 
+    #                                             due_date=date(due_at.year, due_at.month, due_at.day), 
+    #                                             task_name=assignment['name'],
+    #                                             description=assignment['description'],
+    #                                             priority_lvl=3,
+    #                                             block_date=date(due_at.year, due_at.month, due_at.day),
+    #                                             block_start_time=time(due_at.hour - 1, due_at.minute),
+    #                                             block_duration=timedelta(hours=1)
+    #                                             )
 
 
     def process_token(self, input_data):
@@ -184,21 +200,92 @@ class CanvasConnectState(rx.State): # Like extending a class
         print("Cleaned token entered", self._api_token)
 
         # Grab all favorited courses and upcoming assignments
-        try:
-            result = self.grab_tasks()
-            print(result)
-            print(type(result))
+        #try:
+        result = self.grab_tasks()
+            #print(result)
+            #print(type(result))
 
-            # Send assignments to task objects
-            self.convert_to_tasks(result)
+            #try:
+                # Send assignments to task objects
+                #self.convert_to_tasks(result)
+        print("In try")
+        print(LoginState.user_id)
+        # print(result)
+        ConvertToTasks.convert_to_tasks(result)
+        print("After convert class")
 
-        except requests.exceptions.HTTPError as e:
-            print(f"Error with API Key: {e}")
-            return rx.toast("Invalid API token. Please try again.")
+            # except TypeError as e:
+            #     print(f"Error with converting Canvas tasks to task objects: {e}")
+            #     return rx.toast("Error converting Canvas assignments to system tasks. Please try again.")
+
+        # except requests.exceptions.HTTPError as e:
+        #     print(f"Error with API Key: {e}")
+        #     return rx.toast("Invalid API token. Please regenerate an unexpired API token and try again.")
 
         # Send user back to home page upon successful connection
         print("Successful Canvas connection")
         return rx.redirect("/")
+
+class ConvertToTasks(database.UserManagementState):
+    def convert_to_tasks(self, assign_list):
+        """
+        Converts a list of Canvas assignments to system Task objects.
+
+        Parameters:
+        assign_list (list): List of Canvas Assignments in dictionary form.
+        """
+        print("Before for loop")
+        for assignment in assign_list:
+            # print(f"Assignment: {assignment}")
+            # print(f"Type of assignment: {type(assignment)}")
+            # print(f"Due at: {assignment['due_at']}, type of due date: {type(assignment['due_at'])}")
+
+            # Check for duplicates before adding as new task
+            # Run get user tasks, then reference state.tasks
+            # with rx.session() as session:
+            #     task_already_in = session.exec(
+            #         state.tasks.select().where(
+            #             state.tasks.name == assignment['name'],
+            #         ),
+            #     ).first()
+
+            # # If user found, allow log in
+            # if task_already_in:
+            #     print(f"Skipping task: {assignment['name']} because already in database...")
+            #     continue # Skip this task
+
+            # with rx.session() as session:
+            #     if session.exec(
+            #         select(Customer).where(Customer.email == self.current_user["email"])
+            #     ).first():
+            #         return rx.window_alert("User with this email already exists")
+
+            # rx.foreach(
+            #     state.tasks,
+            #     lambda task: rx.text(
+            #         f"Task Name: {task.task_name}, Due Date: {task.due_date}, "
+            #         f"Description: {task.description}, Priority: {task.priority_level}, "
+            #         f"Task ID: {task.task_id}, is_deleted: {task.is_deleted}"
+            #     )
+
+            # Converting Canvas due date to datetime and date so we can turn it into a Task object
+            due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
+
+            # Sending Canvas task to database.py to become a system task object and added to database
+            # Making the start date to one hour before it's due, duration 1 hour
+            database.UserManagementState.manual_add_task(recur_freq=1, 
+                                    due_date=date(due_at.year, due_at.month, due_at.day), 
+                                    task_name=assignment['name'],
+                                    description=assignment['description'],
+                                    priority_lvl=1,
+                                    block_date=date(due_at.year, due_at.month, due_at.day),
+                                    block_start_time=time(due_at.hour - 1, due_at.minute),
+                                    block_duration=timedelta(hours=1),
+                                    user_id=LoginState.user_id
+                                )
+            print("good")
+        database.UserManagementState.get_user_tasks(user_id=LoginState.user_id)
+        print( database.UserManagementState.tasks)
 
 
 def manual_token_input() -> rx.Component:
@@ -260,7 +347,7 @@ def manualtokens_connect_page():
 def check_if_logged_in():
     """
     Checks if user is logged in.
-    Technecly, checks if the username exists as a state (global) variable.
+    Technechally, checks if the username exists as a state (global) variable.
 
     Returns:
     True if username exists (user logged in), false otherwise.
