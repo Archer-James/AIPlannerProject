@@ -6,7 +6,19 @@ from rxconfig import config
 from AIPlanner.pages.login import LoginState
 
 class TaskState(LoginState):
-    """The state related to the task input form."""
+    """
+    Represents the state related to the task input form.
+
+    Attributes:
+    task_name (str): The name of the task.
+    task_description (str): A brief description of the task.
+    priority (str): The priority of the task (default is "Medium").
+    date_time (str): The date and time in MM/DD/YY format (default is today's date).
+    user_id (int): The ID of the user associated with the task.
+    show_error (bool): Whether to display an error message (default is False).
+    show_full_task_input (bool): Whether to display the full task input form (default is False).
+    show_full_description_input (bool): Whether to display the full description input form (default is False).
+    """
     task_name: str = ""
     task_description: str = ""
     priority: str = "Medium"
@@ -18,7 +30,15 @@ class TaskState(LoginState):
     show_full_description_input: bool = False
 
     def apply_task(self):
-        """Apply task logic, showing error if fields are missing."""
+        """
+        Checks if the required fields are filled and applies the task to the database.
+
+        Parameters:
+        None
+
+        Returns:
+        None: A new task is added to the database, and the fields are reset upon successful completion.
+        """
         if not self.task_name.strip():
             self.show_error = True
         else:
@@ -56,39 +76,101 @@ class TaskState(LoginState):
             self.date_time = datetime.now().strftime("%m/%d/%y")
 
     def toggle_full_task_input(self):
-        """Toggles visibility of full task name input."""
+        """
+        Toggles the visibility of the full task name input field.
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
         self.show_full_task_input = not self.show_full_task_input
         if self.show_full_task_input:
             self.show_full_description_input = False
 
     def toggle_full_description_input(self):
-        """Toggles visibility of full description input."""
+        """
+        Toggles the visibility of the full description input field.
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
         self.show_full_description_input = not self.show_full_description_input
         if self.show_full_description_input:
             self.show_full_task_input = False
 
     def set_task_name(self, task_name: str):
-        """Setter for task name."""
+        """
+        Sets the task name and updates the error visibility based on the input.
+
+        Parameters:
+        task_name (str): The name of the task to be set.
+
+        Returns:
+        None
+        """
         self.task_name = task_name
         if self.task_name.strip():
             self.show_error = False
 
     def set_task_description(self, task_description: str):
-        """Setter for task description."""
+        """
+        Sets the task description.
+
+        Parameters:
+        task_description (str): The description of the task to be set.
+
+        Returns:
+        None
+        """
         self.task_description = task_description
 
     def set_priority(self, priority: str):
-        """Setter for priority."""
+        """
+        Sets the priority level of the task.
+
+        Parameters:
+        priority (str): The priority level to be set (e.g., "Low", "Medium", "High").
+
+        Returns:
+        None
+        """
         self.priority = priority
 
     def set_date_time(self, date_time: str):
-        """Setter for date and time."""
+        """
+        Sets the date and time for the task.
+
+        Parameters:
+        date_time (str): The date and time to be set in MM/DD/YY format.
+
+        Returns:
+        None
+        """
         self.date_time = date_time
 
 
 def task_input_form():
     """
-    Task input form layout.
+    Creates the layout for the task input form.
+
+    The form includes:
+    - Task name input with an optional dropdown for expanded text input.
+    - Task description input with an optional dropdown for expanded text input.
+    - A priority dropdown to select the task priority ("Low", "Medium", "High").
+    - A date and time input for setting the task's due date and time.
+    - An "Apply Task" button to submit the task.
+    - Conditional error messages and expanded input areas based on user interactions.
+
+    Parameters:
+    None
+
+    Returns:
+    rx.box: A container with the task input form layout, including all components.
     """
     return rx.box(
         rx.vstack(
@@ -193,7 +275,7 @@ def task_input_form():
                 ),
                 # Apply task button
                 rx.button("Apply Task", on_click=TaskState.apply_task, flex=1),
-                spacing="0px",
+                spacing="0",
             ),
             # # Expanded inputs and error message
             # rx.cond(

@@ -17,9 +17,12 @@ def check_passwords(password, password_check):
     """
     Checks if password is the same as the password check.
 
-    param password: rx password         the password the user enters
-    param password_check: rx password   the password the user enters into the check
-    returns True if passwords match, False otherwise
+    Parameters:
+    password (rx password): the password the user enters
+    password_check (rx password): the password the user enters into the check
+
+    Returns:
+    True if passwords match, False otherwise
     """
     if password == password_check:
         return True
@@ -30,6 +33,13 @@ def check_passwords(password, password_check):
 class SignupState(rx.State):
     """
     Signup page.
+    
+    Attributes:
+    email (str): user's email.
+    password (str): user's password.
+    password_check (str): user's password entered twice to make sure it's correct.
+    processing_msg (str): message that shows user if their entry is processing.
+    is_processing (bool): flag that triggers the processing message to the user.
     """
     email: str = ""
     password: str = "" # Passwords are usually strings in web development, apparently
@@ -41,6 +51,7 @@ class SignupState(rx.State):
 
     def direct_to_signup(self):
         """
+        Returns:
         Uses the Signup State to redirect users to the signup page.
         """
         return rx.redirect("/signup")
@@ -50,7 +61,14 @@ class SignupState(rx.State):
         Function that handles user's data when user signs up. 
         Saves username and password into database.
 
-        param signup_data: data the user enters into the signup form (i.e. username and password)
+        Parameters:
+        signup_data (Reflex input data): data the user enters into the signup form (i.e. username and password)
+
+        Returns:
+        Reflex redirect to home page if account made successfully.
+        Reflex error to user if issue with database.
+        Reflex error to user if email is too long.
+        Reflex error to user if passwords don't match.
         """
         self.email = signup_data.get('email')
         self.password = signup_data.get('password')
@@ -115,6 +133,7 @@ class SignupState(rx.State):
 
 def signup_form() -> rx.Component:
     """
+    Returns:
     Signup form page that allows the user to enter their email and password, click submit.
     Clicking submit will send the entered data to the database.
     """
@@ -172,6 +191,7 @@ def signup_form() -> rx.Component:
 
 def signup() -> rx.Component:
     """
+    Returns:
     The base page for the signup page.
     Includes the signup form component, and the link to go back to the home page.
     """

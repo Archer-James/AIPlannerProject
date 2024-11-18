@@ -6,7 +6,10 @@ class cal_comps():
     """Class containing calendar Reflex components"""   
     def calendar_component():
         """
-        Calendar initializer and caller
+        Monthly calendar initializer and caller
+
+        Returns:
+        prints monthly calendar component
         """
         return rx.vstack(
             # Navigation buttons for previous and next months
@@ -58,7 +61,10 @@ class cal_comps():
 
     def weekly_component():
         """
-        Calendar initializer and caller
+        Weekly calendar initializer and caller
+
+        Returns:
+        prints weekly calendar component
         """
         return rx.vstack(
             # Navigation buttons for previous and next months

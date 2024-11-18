@@ -12,10 +12,11 @@ class User(rx.Model, table=True):
     """Class that defines the User table in the SQLite database
     
     Attributes:
-        username: A unique string identifier, allows users 
-                  to sign in without a canvas_hash_id specified
-        canvas_hash_id: A unique integer identifier, allows tasks to be imported from Canvas
-        password: A string used to authenticate user login
+    username: A unique string identifier
+    canvas_hash_id: Deprecated, no use
+    password: A string used to authenticate user login
+    id: Automatically generated unique identifier for each user
+    tasks: List of tasks for the user, taken from Task table
     """
     username: str
     canvas_hash_id: int
@@ -23,7 +24,22 @@ class User(rx.Model, table=True):
     tasks: List["Task"] = sqlmodel.Relationship(back_populates="user")
 
 class Task(rx.Model, table=True):
-    """Class that defines the Task table in the SQLite database"""
+    """Class that defines the Task table in the SQLite database
+    
+    Attributes:
+    recur_frequency: Integer that determines how frequently a task recurs
+    due_date: Date that the task must be completed by
+    is_deleted: Boolean that determines whether the task is deleted or not
+    task_name: String name of the task
+    description: String description of the task
+    task_id: Deprecated, no use
+    priority_level: Integer between 1 and 3 that determines the level of priority for a task, lower value is higher priority level
+    assigned_block_date: Date that the task is assigned to
+    assigned_block_start_time: Time that the task should be started on the assigned date
+    assigned_block_duration: Timedelta for how long after start time the task should be worked on
+    user_id: Integer foreign key reference to the user whose task this is
+    user: Populates the tasks field of the User table
+    """
     recur_frequency: int
     due_date: date
     is_deleted: bool
@@ -38,7 +54,14 @@ class Task(rx.Model, table=True):
     user: Optional[User] = sqlmodel.Relationship(back_populates="tasks")
 
 class UserManagementState(rx.State):
-    """Class that defines the state in which variables are held relating to user management"""
+    """Class that defines the state in which variables and functions are held relating to user management
+    
+    Attributes:
+    users: List of users to hold the result of retrieving all users from the database
+    message: String to hold success and error messages for functions in the state
+    tasks: List of tasks to hold the result of retrieving tasks from users
+    user_id: Integer holding the user.id of the currently logged-in user
+    """
     users: list[User] = []  # To hold the list of users
     message: str = ""        # To display success or error messages
     tasks: list[Task] = []

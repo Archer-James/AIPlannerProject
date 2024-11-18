@@ -1,7 +1,16 @@
 from datetime import date, timedelta
 
 class RecurFrequency:
-    """Class containing functions and variables for recurring tasks"""
+    """
+    Class for managing recurring task frequencies.
+
+    Attributes:
+    DAILY (str): Constant representing daily recurrence.
+    WEEKLY (str): Constant representing weekly recurrence.
+    MONTHLY (str): Constant representing monthly recurrence.
+    DAY_NAMES (list): List of abbreviated day names for weekly tasks.
+    """
+
     # Recurring options
     DAILY = "DAILY"
     WEEKLY = "WEEKLY"
@@ -11,7 +20,17 @@ class RecurFrequency:
     DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
     def __init__(self, frequency, end_date=None, days_of_week=None):
-        """Initialization function."""
+        """
+        Initializes a new instance of the RecurFrequency class.
+
+        Parameters:
+        frequency (str): The recurrence frequency ('DAILY', 'WEEKLY', or 'MONTHLY').
+        end_date (date, optional): The end date of the recurrence. Defaults to None.
+        days_of_week (list, optional): List of days (0-6, where 0 is Sunday) for weekly recurrence. Defaults to None.
+
+        Raises:
+        ValueError: If the frequency is invalid.
+        """
         if frequency not in [self.DAILY, self.WEEKLY, self.MONTHLY]:
             raise ValueError("Invalid frequency")
         self.frequency = frequency
@@ -19,7 +38,15 @@ class RecurFrequency:
         self.days_of_week = days_of_week
 
     def get_next_occurrence(self, start_date):
-        """Gets the next occurence of a recurring task"""
+        """
+        Gets the next occurrence of a recurring task based on the frequency.
+
+        Parameters:
+        start_date (date): The starting date for calculating the next occurrence.
+
+        Returns:
+        date: The next occurrence date, or None if there are no further occurrences.
+        """
         if self.end_date and start_date > self.end_date:
             return None
 
@@ -28,17 +55,17 @@ class RecurFrequency:
 
         elif self.frequency == self.WEEKLY:
             current_day = start_date.weekday()
-            days = []  # Initialize an empty list to store the days
+            days = []
 
             # Collect days that are greater than the current day
             for d in self.days_of_week:
                 if d > current_day:
-                    days.append(d)  # Add days greater than the current day
+                    days.append(d)
 
-            # Append the entire self.days_of_week list to days
+            # Append all days of the week to complete the cycle
             days.extend(self.days_of_week)
 
-            # Calculate days ahead
+            # Calculate days ahead for the next occurrence
             days_ahead = days[0] - current_day
             if days_ahead <= 0:
                 days_ahead += 7
@@ -49,9 +76,9 @@ class RecurFrequency:
             next_month = start_date.month + 1
             next_year = start_date.year
 
-            if next_month > 12:  # If the next month exceeds December
-                next_month = 1    # Wrap around to January
-                next_year += 1    # Increment the year
+            if next_month > 12:
+                next_month = 1
+                next_year += 1
 
             # Determine the valid day for the next month
             next_day = min(start_date.day,
@@ -59,7 +86,12 @@ class RecurFrequency:
             return date(next_year, next_month, next_day)
 
     def __str__(self):
-        """str function"""
+        """
+        Returns a string representation of the recurrence pattern.
+
+        Returns:
+        str: A string describing the recurrence pattern.
+        """
         if self.frequency == self.DAILY:
             return "Every day"
         elif self.frequency == self.WEEKLY:
