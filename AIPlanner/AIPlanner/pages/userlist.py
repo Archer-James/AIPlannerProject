@@ -32,16 +32,15 @@ def display_user_tasks(state=UserManagementState):
         )
     )
 
-def call_api():
-    """Function to call AI API function"""
-    return AIState.send_request()
-
 def userlist(state=UserManagementState) -> rx.Component:
     """
     Calls display_usernames to display all users in database, 
     with buttons for quick addition of test users to the database
     and repeated retreival of users from the database
     """
+    state.fetch_all_users()
+    state.get_user_tasks()
+
     # User list debugging page
     return rx.container(
         rx.heading("User List", size="0"),
@@ -52,9 +51,9 @@ def userlist(state=UserManagementState) -> rx.Component:
         rx.button("Add task to test user with ID 1", on_click=lambda: state.add_test_task(1)),
         rx.button("Show tasks assigned to currently logged in user",
                   on_click=lambda: state.get_user_tasks(LoginState.user_id)),
-        rx.button("Show tasks assigned to user with ID 2",
-                  on_click=lambda: state.get_user_tasks(2)),
-        rx.button("Generate example AI schedule", on_click=lambda: AIState.send_request()),
+        # rx.button("Show tasks assigned to user with ID 2",
+        #           on_click=lambda: state.get_user_tasks(2)),
+        rx.button("Generate AI schedule for current user", on_click=lambda: AIState.send_request(state.tasks)),
         rx.text(AIState.processed_output),
         display_usernames(),
         display_user_tasks(),
