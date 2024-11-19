@@ -47,7 +47,7 @@ def todo_component(state=UserManagementState) -> rx.Component:
                         rx.button(
                             "X",
                             on_click=lambda: state.set_editing_task_id_name(None),  # Revert to menu
-                            color="black",
+                            color="white",
                         ),
                     ),
                     # Task Description Editing
@@ -69,7 +69,7 @@ def todo_component(state=UserManagementState) -> rx.Component:
                             rx.button(
                                 "X",
                                 on_click=lambda: state.set_editing_task_id_description(None),  # Revert to menu
-                                color="black",
+                                color="white",
                             ),
                         ),
                         rx.menu.root(

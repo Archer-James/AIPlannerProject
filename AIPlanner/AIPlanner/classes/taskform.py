@@ -195,27 +195,6 @@ def task_input_form():
                 rx.button("Apply Task", on_click=TaskState.apply_task, flex=1),
                 spacing="0px",
             ),
-            # # Expanded inputs and error message
-            # rx.cond(
-            #     TaskState.show_full_task_input,
-            #     rx.text_area(
-            #         placeholder="Full Task Name",
-            #         on_change=TaskState.set_task_name,
-            #         value=TaskState.task_name,
-            #         height="50px",
-            #         width="50%",
-            #     )
-            # ),
-            # rx.cond(
-            #     TaskState.show_full_description_input,
-            #     rx.text_area(
-            #         placeholder="Full Task Description",
-            #         on_change=TaskState.set_task_description,
-            #         value=TaskState.task_description,
-            #         height="150px",
-            #         width="50%",
-            #     )
-            # ),
             rx.cond(
                 TaskState.show_error,
                 rx.text("Task name is required", color="red", font_size="sm"),
