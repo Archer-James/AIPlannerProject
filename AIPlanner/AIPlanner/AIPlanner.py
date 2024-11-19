@@ -109,7 +109,7 @@ def index() -> rx.Component:
 
 
             rx.link(
-                rx.button("Show All Users"),
+                rx.button("Show Debug Options"),
                 href="/userlist",
                 is_external=False,
             ),
