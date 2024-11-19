@@ -15,4 +15,4 @@ disable=
     unnecessary-lambda,
     duplicate-code,
     too-many-locals,
-    to-many-instance-attributes,
+    too-many-instance-attributes,
