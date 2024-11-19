@@ -29,6 +29,9 @@ class AIState(UserManagementState):
             if task['is_deleted'] is False:
                 inputMessage = inputMessage + f"task_id = {task['id']}\ntask_name = '{task['task_name']}\npriority_level = {task['priority_level']}\ndue_date = {task['due_date']}\n\n"
                 print(task['id'])
+        
+        if not tasks:
+            return "No tasks available to generate a schedule. Please add some and try again."
         currentTime = time.ctime()
 
         OpenAI.api_key = os.environ["OPENAI_API_KEY"]
@@ -41,7 +44,7 @@ class AIState(UserManagementState):
                 {"role": "system", "content": f"""
                 You are a bot that takes user tasks and assigns them to slots on a calendar. Tasks can have a priority level with (1) being the highest and (3) being the lowest. 
                 Higher priority tasks should be assigned to blocks before lower priority tasks. Do not make any changes or return anything other than the following format for each task. 
-                Do not include anything like "Here's the output" or "Let me know if you'd like any adjustments". The current date is {currentTime}.
+                Do not include anything like "Here's the output" or "Let me know if you'd like any adjustments". The current date is {currentTime}, only schedule tasks after this time.
                 Do not include the word hours in the response. Give output in the format as follows:  
                 task_id = Integer from prompt
                 task_name = String from prompt
