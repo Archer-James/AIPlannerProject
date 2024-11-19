@@ -80,7 +80,11 @@ class State(rx.State):
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def index() -> rx.Component:
-    """Reflex component for base index page"""
+    """Reflex component for base index page
+    
+    Returns:
+    Prints the homepage
+    """
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
@@ -105,7 +109,7 @@ def index() -> rx.Component:
 
 
             rx.link(
-                rx.button("Show All Users"),
+                rx.button("Show Debug Options"),
                 href="/userlist",
                 is_external=False,
             ),

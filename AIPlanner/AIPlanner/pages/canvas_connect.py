@@ -7,10 +7,14 @@ import reflex as rx
 from AIPlanner.pages.login import LoginState
 
 
-class CanvasConnectState(rx.State):
+class CanvasConnectState(rx.State): # Like extending a class
     """
     Canvas connect state.
-    Error handles input for manual tokens and sends data to <class that grabs tasks from Canvas>
+    Error handles input for manual tokens and transforms Canvas tasks to system task objects.
+
+    Attributes:
+    _api_token (str): the user's API token for Canvas.
+    canvas_url (str): the Canvas Instance url used to grab assignments from Canvas account.
     """
     _api_token: str = ""
     canvas_url:str = 'https://uncw.instructure.com' # 'https://YOUR_CANVAS_INSTANCE_URL'
@@ -22,7 +26,8 @@ class CanvasConnectState(rx.State):
         Includes all course info. We'll use the course's id in main to grab the assignments.
         Checks for pagination with Canvas API (sometimes the API doesn't return all courses bc data is too big).
 
-        return courses: Python list of courses
+        Returns:
+        courses (list): Python list of courses.
         """
         courses = []
 
@@ -42,9 +47,11 @@ class CanvasConnectState(rx.State):
         Iterates through Canvas course and returns all assignments.
         Makes sure that Canvas API isn't paginating results.
 
-        param course_id: int, Canvas course id
+        Parameters:
+        course_id (int): Canvas course id used to identify course.
 
-        returns assignments: Python list of assignments
+        Returns:
+        assignments (list): Python list of assignment dictionaries (each assignment is a dictionary).
         """
 
         assignments = [] # We can filter for upcoming assignments in main for better run time
@@ -70,7 +77,11 @@ class CanvasConnectState(rx.State):
 
     def get_headers(self):
         """
-        Getter for headers. Initializes headers with api token.
+        Retreives the headers required for making an API request,
+        initializing the headers with stored API token.
+
+        Returns:
+        dict: A dictionary containing the 'Authorization' header with the Bearer token.
         """
         return {
             'Authorization': f'Bearer {self._api_token}'
@@ -79,11 +90,10 @@ class CanvasConnectState(rx.State):
 
     def grab_tasks(self):
         """
-        Main method for class.
-        Calls method that grab all favorite courses and
-        method that grabs all assignments for those courses.
+        Method that calls other methods that check API token and grabs tasks from Canvas.
 
-        Prints upcoming assignments in the terminal.
+        Returns:
+        assignment_list (list): list of each assignment from Canvas, which is a dictionary.
         """
 
         # Making sure api_token exists
@@ -126,8 +136,11 @@ class CanvasConnectState(rx.State):
         error handles input.
         If input is deemed valid, it's sent to <class that grabs tasks from Canvas>.
         Else, an erorr message is returned to the user so they can try again.
-        """
 
+        Parameters:
+        input_data (TYPE?): input data (API key) from webpage UI.
+        """
+        print(f"Type of input data: {type(input_data)}")
         # Getting the manual token from the data package from the input form
         self._api_token = input_data.get("manual_token")
 
@@ -161,6 +174,10 @@ class CanvasConnectState(rx.State):
 def manual_token_input() -> rx.Component:
     """
     Takes the manual token from user and assigns to variable for other classes to use.
+    When the user submits, the information from the form is processed through CanvasConnect state.
+
+    Returns:
+    Reflex card object that holds the input for the user's API and a 'go back' button.
     """
     return rx.card(
         rx.form(
@@ -180,6 +197,7 @@ def manual_token_input() -> rx.Component:
 @rx.page(route="/manualtokens_connect_page")
 def manualtokens_connect_page():
     """
+    Returns:
     Base page for where the user can enter their manual token to connect Canvas.
     Includes an input box for the manual token, error handling and input verification,
     a link to instructions on creating a manual token with Instructure, 
@@ -214,7 +232,8 @@ def check_if_logged_in():
     Checks if user is logged in.
     Technecly, checks if the username exists as a state (global) variable.
 
-    returns True if username exists (user logged in), false otherwise.
+    Returns:
+    True if username exists (user logged in), false otherwise.
     """
     return rx.cond(
         LoginState.username,
@@ -225,6 +244,7 @@ def check_if_logged_in():
 
 def show_log_in_first():
     """
+    Returns:
     Shows a log in button, a sign up button, or a continue button to the manual token enter page.
     User can choose which page they want to redirect to.
     """
@@ -249,7 +269,7 @@ def show_log_in_first():
             href="/manualtokens_connect_page",
             is_external=False,
         ),
-        spacing="50px",
+        spacing="5",
         justify="center",
     )
 
@@ -257,6 +277,7 @@ def show_log_in_first():
 @rx.page(route="/canvas_connect")
 def canvas_connect() -> rx.Component:
     """
+    Returns:
     Main function that returns the foundations for the Canvas_Connect page.
     Includes a button that takes user back to home page.
     """

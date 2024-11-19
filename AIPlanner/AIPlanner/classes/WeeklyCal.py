@@ -1,3 +1,4 @@
+"""Weekly Calendar file."""
 import calendar
 from datetime import datetime, timedelta
 import reflex as rx
@@ -7,14 +8,14 @@ class GenWeeklyCal(rx.State):
     """
     Generate Weekly Calendar class
 
-    now : datetime
-        current date
-    current_week_start:
-        start date of the current week
-    days: list
-        list of days in the current week
-    label: string
-        Title of the calendar
+    now(datetime): current date
+    current_year(int): current year
+    current_week_start(datetime): start date of the current week
+    days(list): list of days in the current week
+    dates(list[list[str]]): nested list of days in week
+    current_month(int): current month
+    week_number(int): number of week
+    label(string): Title of the calendar
     """
     now = datetime.now()
     current_year: int = now.year
@@ -73,9 +74,7 @@ class GenWeeklyCal(rx.State):
         self.init_week()
 
     def make_dates(self):
-        """
-        Set dates list as list of numbers of days to iterate through
-        """
+        """Set dates list as list of numbers of days to iterate through"""
         self.days = [self.current_week_start + timedelta(days=i) for i in range(7)]
         self.dates = [[day.strftime(" %d") for day in self.days]]  # Format dates for display
         self.get_week_label()
