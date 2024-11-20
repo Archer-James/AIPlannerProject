@@ -138,7 +138,9 @@ class LoginState(rx.State):
         Reflex redirect user to home page.
         """
         self.reset() #Does same as self.username = None
-        print(f"Username: {self.username} (should be empty string), User id: {self.user_id}")
+        database.UserManagementState.set_user_id(0)
+        #database.User.user_id = 0
+        print(f"Username: {self.username} (should be empty string), LoginState.user_id: {self.user_id}, UserManagementState.user_id: {database.UserManagementState.get_user_id()}")
         return rx.redirect("/")
 
 
@@ -188,12 +190,16 @@ class LoginState(rx.State):
 
                 self.username = user_found.username.split("@")[0]
 
+                #database.User.user_id = user_found.id
+
                 # Adding User ID as a variable so we can get tasks assigned to user
-                #database.UserManagementState.set_user_id(user_found.id) # I don't think I need to add this, because I'm
+                database.UserManagementState.set_user_id(user_found.id) # I don't think I need to add this, because I'm
                 # Getting the user id from the UserManagementState, which means it's already set to whatever the id is.
                 self.user_id = user_found.id
+                #database.UserManagementState.user_id = user_found.id
 
-                print(f"Username: {self.username}, user id: {self.user_id}")
+
+                print(f"Username: {self.username}, user id: {self.user_id}, UMS.user_id: {database.UserManagementState.get_user_id()}")
                 # database.UserManagementState.get_user_id
 
                 return rx.redirect('/')

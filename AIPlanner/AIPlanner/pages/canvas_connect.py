@@ -209,8 +209,9 @@ class CanvasConnectState(rx.State): # Like extending a class
                 # Send assignments to task objects
                 #self.convert_to_tasks(result)
         print("In try")
-        print(LoginState.user_id)
+        #print(LoginState.user_id)
         # print(result)
+        #converter = ConvertToTasks()
         ConvertToTasks.convert_to_tasks(result)
         print("After convert class")
 
@@ -226,8 +227,8 @@ class CanvasConnectState(rx.State): # Like extending a class
         print("Successful Canvas connection")
         return rx.redirect("/")
 
-class ConvertToTasks(database.UserManagementState):
-    def convert_to_tasks(self, assign_list):
+class ConvertToTasks():
+    def convert_to_tasks(assign_list):
         """
         Converts a list of Canvas assignments to system Task objects.
 
@@ -235,7 +236,30 @@ class ConvertToTasks(database.UserManagementState):
         assign_list (list): List of Canvas Assignments in dictionary form.
         """
         print("Before for loop")
+        
+        # Signed in as Mary - 6
+
         for assignment in assign_list:
+
+            due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
+
+            new_task = database.Task(
+                recur_frequency=7,  # Example for recurring frequency
+                due_date=date(due_at.year, due_at.month, due_at.day),
+                is_deleted=False,
+                task_name=assignment['name'],
+                description=assignment['description'],
+                task_id=100,  # Example for unique task_id
+                priority_level={"Low": 1, "Medium": 2, "High": 3}["Low"],
+                assigned_block_date=date(due_at.year, due_at.month, due_at.day),  # Set to today or another relevant date
+                assigned_block_start_time=time(due_at.hour - 1, due_at.minute),  # Set a fixed start time (e.g., 2 PM)
+                assigned_block_duration=timedelta(hours=1),  # Set your desired duration
+                user_id=LoginState.user_id # Referencing LoginState user_id attribute (to connect user to tasks)
+            )
+            with rx.session() as session:
+                session.add(new_task)
+                session.commit() 
+
             # print(f"Assignment: {assignment}")
             # print(f"Type of assignment: {type(assignment)}")
             # print(f"Due at: {assignment['due_at']}, type of due date: {type(assignment['due_at'])}")
@@ -269,23 +293,25 @@ class ConvertToTasks(database.UserManagementState):
             #     )
 
             # Converting Canvas due date to datetime and date so we can turn it into a Task object
-            due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
+            # due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
 
-            # Sending Canvas task to database.py to become a system task object and added to database
-            # Making the start date to one hour before it's due, duration 1 hour
-            database.UserManagementState.manual_add_task(recur_freq=1, 
-                                    due_date=date(due_at.year, due_at.month, due_at.day), 
-                                    task_name=assignment['name'],
-                                    description=assignment['description'],
-                                    priority_lvl=1,
-                                    block_date=date(due_at.year, due_at.month, due_at.day),
-                                    block_start_time=time(due_at.hour - 1, due_at.minute),
-                                    block_duration=timedelta(hours=1),
-                                    user_id=LoginState.user_id
-                                )
+            # # Sending Canvas task to database.py to become a system task object and added to database
+            # # Making the start date to one hour before it's due, duration 1 hour
+            # print(date(due_at.year, due_at.month, due_at.day))
+            # print(database.UserManagementState.user_id)
+            # database.manual_add_task(recur_freq=1, 
+            #                         due_date=date(due_at.year, due_at.month, due_at.day), 
+            #                         task_name=assignment['name'],
+            #                         description=assignment['description'],
+            #                         priority_lvl=1,
+            #                         block_date=date(due_at.year, due_at.month, due_at.day),
+            #                         block_start_time=time(due_at.hour - 1, due_at.minute),
+            #                         block_duration=timedelta(hours=1),
+            #                         user_id=database.UserManagementState.user_id
+            #                     )
             print("good")
-        database.UserManagementState.get_user_tasks(user_id=LoginState.user_id)
-        print( database.UserManagementState.tasks)
+        database.UserManagementState.get_user_tasks(user_id=database.UserManagementState.user_id)
+        print(database.UserManagementState.tasks)
 
 
 def manual_token_input() -> rx.Component:
@@ -338,8 +364,27 @@ def manualtokens_connect_page():
             rx.link(
                 rx.button("Go back"),
                 href="/",
-                is_external=False,
+                is_external=False),
+            rx.cond(LoginState.user_id,
+                rx.text(f"LoginState.user_id: {database.UserManagementState.user_id}"),
+                rx.text("LoginState.user_id doesn't exist"),
             ),
+            rx.cond(database.UserManagementState.user_id,
+                rx.text(f"database.UserManagementState.user_id: {database.UserManagementState.user_id}"),
+                rx.text("database.UserManagementState.user_id doesn't exist"),
+            ),
+            # rx.cond(database.Task.user_id,
+            #     rx.tIext(f"database.UserManagementState.user_id: {database.UserManagementState.user_id}"),
+            #     rx.text("database.UserManagementState.user_id doesn't exist"),
+            # ),
+            # rx.cond(database.Task.user_id,
+            #     rx.text(f"database.Task.user_id: {database.Task.user_id}"),
+            #     rx.text("database.Task.user_id doesn't exist"),
+            # ),
+            # rx.cond(database.Task.user,
+            #     rx.text(f"database.Task.user: {database.Task.user}"),
+            #     rx.text("database.Task.user doesn't exist"),
+            # ),
         ),
     )
 
@@ -406,11 +451,11 @@ def canvas_connect() -> rx.Component:
                 manualtokens_connect_page(), # Take user to connect canvas if logged in
                 show_log_in_first() # Show option to log in first if not logged in
             ),
-            rx.link(
-                rx.button("Go back"),
-                href="/",
-                is_external=False,
-            ),
+            # rx.link(
+            #     rx.button("Go back"),
+            #     href="/",
+            #     is_external=False,
+            # ),
         ),
         width="100%",
         height="100vh",
