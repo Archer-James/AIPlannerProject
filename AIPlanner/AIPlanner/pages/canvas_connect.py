@@ -15,9 +15,12 @@ class CanvasConnectState(rx.State): # Like extending a class
     Attributes:
     _api_token (str): the user's API token for Canvas.
     canvas_url (str): the Canvas Instance url used to grab assignments from Canvas account.
+    is_submitting (bool): flag that tracks if the user has clicked "Enter" for the login form.
+        Keeps the user from happy-clicking.
     """
     _api_token: str = ""
     canvas_url:str = 'https://uncw.instructure.com' # 'https://YOUR_CANVAS_INSTANCE_URL'
+    is_submitting: bool = False
 
 
     def get_favorite_courses(self):
@@ -130,7 +133,7 @@ class CanvasConnectState(rx.State): # Like extending a class
         return "Success"
 
 
-    def process_token(self, input_data):
+    def process_token(self, input_data:dict):
         """
         Takes manual token from input on Connect Canvas page,
         error handles input.
@@ -138,11 +141,18 @@ class CanvasConnectState(rx.State): # Like extending a class
         Else, an erorr message is returned to the user so they can try again.
 
         Parameters:
-        input_data (TYPE?): input data (API key) from webpage UI.
+        input_data (dict): input data (API key) from webpage UI.
         """
-        print(f"Type of input data: {type(input_data)}")
+        # print(f"Type of input data: {type(input_data)}")
         # Getting the manual token from the data package from the input form
         self._api_token = input_data.get("manual_token")
+
+        # Setting flag to true to take away submit button
+        self.is_submitting = True
+        yield
+
+        # Setting flag as True so we check both the char's and if it's a valid Canvas token
+        token_valid = True
 
         # Checking for invalid or potentially-sql-injection values
         invalid_chars = ["'", ";", "--", "<", ">", "%", "$", "^", "-", "[", "]", "=", "OR", "AND", "DROP TABLE", "@"]
@@ -152,23 +162,31 @@ class CanvasConnectState(rx.State): # Like extending a class
             if char in self._api_token:
 
                 # Invalid input: tell user to try again
-                return rx.toast("Invalid manual token. Please try again.")
+                token_valid = False
+                self.is_submitting = False
+                yield rx.toast("Invalid token. Please try again.")
 
         # Stripping manual token of leading or trailing whitespace
         self._api_token = self._api_token.strip()
         print("Cleaned token entered", self._api_token)
 
-        # Grab all favorited courses and upcoming assignments
-        try:
-            result = self.grab_tasks()
-            print(result)
+        # Only runs if token doesn't have any invalid char's
+        if token_valid:
+            # Redirect the user to a processing page so they can't happy-click
+            # Grab all favorited courses and upcoming assignments
+            try:
+                result = self.grab_tasks()
+                print(result)
 
-        except requests.exceptions.HTTPError:
-            return rx.toast("Invalid API token. Please try again.")
+                # Send user back to home page upon successful connection
+                print("Successful Canvas connection")
+                self.is_submitting = False
+                return rx.redirect("/")
 
-        # Send user back to home page upon successful connection
-        print("Successful Canvas connection")
-        return rx.redirect("/")
+            except requests.exceptions.HTTPError:
+                token_valid = False
+                self.is_submitting = False
+                yield rx.toast("Invalid API token. Please try again.")
 
 
 def manual_token_input() -> rx.Component:
@@ -188,7 +206,11 @@ def manual_token_input() -> rx.Component:
                     required=True,
                 ),
             ),
-            rx.button("Enter", type="submit"),
+            rx.button(
+                "Enter", 
+                type="submit",
+                disabled=CanvasConnectState.is_submitting,
+            ),
             on_submit=CanvasConnectState.process_token
         ),
     )

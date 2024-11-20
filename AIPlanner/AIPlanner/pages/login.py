@@ -19,23 +19,14 @@ class LoginState(rx.State):
     password (str): user's password.
     username (str): username of user, which is the user's email before the '@'.
     user_id (int): the user's id number used to identify the user's tasks.
+    is_submitting (bool): flag that tracks if the user has clicked "Enter" for the login form.
+        Makes sure the user doesn't happy click.
     """
-
-    # Init isn't really great for using the variables across states...
-    # def __init__(self, email=str, password=str, username=str, user_id=int):
-    #     """
-    #     Initialization function for LoginState.
-    #     Includes email, password, username (shortened email), and user_id as created in database.
-    #     """
-    #     self.email = email
-    #     self.password = password
-    #     self.username = username
-    #     self.user_id = user_id
-
     email: str = ""
     password: str = ""
     username: str
     user_id: int = 0
+    is_submitting: bool = False
 
     def get_email(self):
         """
@@ -153,20 +144,24 @@ class LoginState(rx.State):
         return f"Hello {self.username}!" if self.username else ""
 
 
-    def search_for_user(self, login_data):
+    def search_for_user(self, login_data:dict):
         """
         Searches for user in database.
         If no user found, returns error statement.
         If user found, user redirected to home page.
 
         Parameters:
-        login_data (Type?): the login data the user entered into the system's UI.
+        login_data (dict): the login data the user entered into the system's UI.
 
         Returns:
         Reflex redirect to home page if user found.
         Reflex gives user error if no user found.
         Reflex gives user error if other issues.
         """
+        # Setting flag to true to take away submit button
+        self.is_submitting = True
+        yield
+
         # Getting data from log in form
         self.email = login_data.get('email')
         self.password = login_data.get('password')
@@ -201,11 +196,12 @@ class LoginState(rx.State):
             # Error handling
             except TypeError as e:
                 print(f"Error: {e}")
-                return rx.toast("Error logging in, please retry.")
+                yield rx.toast("Error logging in, please retry.")
 
         # User not found
         else:
-            return rx.toast("User not found with this email and password combination.")
+            self.is_submitting = False
+            yield rx.toast("User not found with this email and password combination.")
 
 
 def login_form() -> rx.Component:
@@ -246,12 +242,14 @@ def login_form() -> rx.Component:
                     required=True,
                 ),
             ),
-            rx.button("Enter", type="submit"),
+            rx.button(
+                "Enter", 
+                type="submit",
+                disabled = LoginState.is_submitting,
+            ),
             on_submit=LoginState.search_for_user,
             #reset_on_submit=True,
         ),
-        #rx.text(f"{SignupState.set_processing_msg}"),
-        #rx.text(f"Status: {SignupState.change_processing_msg}"),
         spacing="50",
         justify="center",
     )
