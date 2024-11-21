@@ -97,4 +97,3 @@ class AIState(UserManagementState):
                 task_string = task_string + f'{key}: {value}\n'
         #print(task_string)
         return task_string
-    
