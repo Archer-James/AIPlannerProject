@@ -50,5 +50,5 @@ def daily() -> rx.Component:
     )
 
         )
-    
+
     )

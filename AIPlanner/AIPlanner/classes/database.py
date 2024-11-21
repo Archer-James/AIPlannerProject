@@ -6,7 +6,6 @@ from AIPlanner.pages.login import LoginState
 
 import reflex as rx
 import sqlmodel
-from rxconfig import config
 
 class User(rx.Model, table=True):
     """Class that defines the User table in the SQLite database
