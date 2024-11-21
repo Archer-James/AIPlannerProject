@@ -6,7 +6,7 @@ disable=
     not-callable,
     consider-using-from-import,
     invalid-name,
-    ; unused-variable,
+    unused-variable,
     wrong-import-order,
     ungrouped-imports,
     line-too-long,

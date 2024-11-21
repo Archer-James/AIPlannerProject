@@ -2,7 +2,6 @@
 
 import os
 import re
-import datetime
 import time
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
