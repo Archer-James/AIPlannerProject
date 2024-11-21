@@ -16,6 +16,8 @@ class TaskState(LoginState):
     show_error: bool = False
     show_full_task_input: bool = False
     show_full_description_input: bool = False
+    recurring_checked: bool = False
+    frequency: str = ""
 
     def apply_task(self):
         """Apply task logic, showing error if fields are missing."""
@@ -30,8 +32,18 @@ class TaskState(LoginState):
                 print("Invalid date format. Defaulting to today's date.")
                 due_date = datetime.now().date()  # fallback to current date
 
+            # Determine recur_frequency based on selected frequency
+            if self.frequency == "Daily":
+                recur_frequency = 1
+            elif self.frequency == "Weekly":
+                recur_frequency = 7
+            elif self.frequency == "Monthly":
+                recur_frequency = 30
+            else:
+                recur_frequency = 0
+
             new_task = Task(
-                recur_frequency=7,  # Example for recurring frequency
+                recur_frequency=recur_frequency,  # Example for recurring frequency
                 due_date=due_date,
                 is_deleted=False,
                 task_name=self.task_name,
@@ -54,6 +66,8 @@ class TaskState(LoginState):
             self.task_description = ""
             self.priority = "Medium"
             self.date_time = datetime.now().strftime("%m/%d/%y")
+            self.recurring_checked = False
+            self.frequency = "Weekly"
 
     def toggle_full_task_input(self):
         """Toggles visibility of full task name input."""
@@ -85,6 +99,16 @@ class TaskState(LoginState):
         """Setter for date and time."""
         self.date_time = date_time
 
+    def toggle_recurring(self, checked: bool):
+        """Set recurring_checked to true or false based on checkbox status."""
+        self.recurring_checked = checked
+        print(self.recurring_checked)
+        if not self.recurring_checked:
+            self.frequency = ""
+
+    def set_frequency(self, frequency: str):
+        """Set the selected frequency."""
+        self.frequency = frequency
 
 def task_input_form():
     """
@@ -190,6 +214,32 @@ def task_input_form():
                     value=TaskState.date_time,
                     flex=1,
                     width="200px",
+                ),
+                #Recurring checkbox
+                rx.hstack(
+                    rx.checkbox(
+                        checked=TaskState.recurring_checked,
+                        on_change=TaskState.toggle_recurring,
+                        padding_left="5px",
+                        padding_right="5px",
+                        align="center",
+                    ),
+                    rx.text("Recurring", font_size="sm", padding_right="5px"),
+                    spacing="3px",
+                    align_items="center",
+                ),
+                #Conditionally show the frequency dropdown if recurring is checked
+                rx.cond(
+                    TaskState.recurring_checked,
+                    rx.vstack(
+                        rx.text("Frequency:"),
+                        rx.select(
+                            ["Daily", "Weekly", "Monthly"],
+                            value=TaskState.frequency,  # Default to "Weekly"
+                            on_change=TaskState.set_frequency,
+                            flex=1,
+                        ),
+                    ),
                 ),
                 # Apply task button
                 rx.button("Apply Task", on_click=TaskState.apply_task, flex=1),

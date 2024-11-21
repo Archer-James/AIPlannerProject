@@ -28,6 +28,7 @@ def display_user_tasks(state=UserManagementState):
                 f"Task Name: {task.task_name}, Due Date: {task.due_date}, "
                 f"Description: {task.description}, Priority: {task.priority_level}, "
                 f"Task ID: {task.task_id}, is_deleted: {task.is_deleted}, id: {task.id}"
+                f"Recur_Frequency: {task.recur_frequency}"
             )
         )
     )
