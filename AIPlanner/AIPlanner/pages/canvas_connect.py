@@ -6,10 +6,15 @@ import requests
 import reflex as rx
 from AIPlanner.pages.login import LoginState # Grabbing login credentials
 # Importing UserManagementState so we can create tasks in the system
-import AIPlanner.classes.database as database 
+#import AIPlanner.classes.database as database
+from AIPlanner.classes.database import Task
 
+#@rx.event
+def get_user_id(self, state=LoginState):
+        print(self.user_id)
+        return self.user_id()
 
-class CanvasConnectState(rx.State): # Like extending a class
+class CanvasConnectState(LoginState): # Like extending a class
     """
     Canvas connect state.
     Error handles input for manual tokens and transforms Canvas tasks to system task objects.
@@ -20,6 +25,7 @@ class CanvasConnectState(rx.State): # Like extending a class
     """
     _api_token: str = ""
     canvas_url:str = 'https://uncw.instructure.com' # 'https://YOUR_CANVAS_INSTANCE_URL'
+    #canvas_user_id: int = LoginState.user_id
 
 
     def get_favorite_courses(self):
@@ -170,7 +176,7 @@ class CanvasConnectState(rx.State): # Like extending a class
     #                                             block_duration=timedelta(hours=1)
     #                                             )
 
-
+    # @rx.event
     def process_token(self, input_data):
         """
         Takes manual token from input on Connect Canvas page,
@@ -215,27 +221,25 @@ class CanvasConnectState(rx.State): # Like extending a class
         #ConvertToTasks.convert_to_tasks(result)
 
         print("Before for loop")
-        
-        # Signed in as Mary - 6
+        print(f"LoginState.user_id: {self.user_id}, type: {type(self.user_id)}")
 
         for assignment in assign_list:
 
             due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
-            # print(f"LoginState.user_id: {LoginState.user_id}")
-            print(f"")
+            # print(f"Assignment description: {assignment['description']}")
 
-            new_task = database.Task(
+            new_task = Task(
                 recur_frequency=7,  # Example for recurring frequency
                 due_date=date(due_at.year, due_at.month, due_at.day),
                 is_deleted=False,
                 task_name=assignment['name'],
-                description="hello", #assignment['description'],
+                description="Task imported from Canvas", #assignment['description'], # For now not doing it
                 task_id=100,  # Example for unique task_id
                 priority_level={"Low": 1, "Medium": 2, "High": 3}["Low"],
                 assigned_block_date=date(due_at.year, due_at.month, due_at.day),  # Set to today or another relevant date
                 assigned_block_start_time=time(due_at.hour - 1, due_at.minute),  # Set a fixed start time (e.g., 2 PM)
                 assigned_block_duration=timedelta(hours=1),  # Set your desired duration
-                user_id=2 #LoginState.user_id # Referencing LoginState user_id attribute (to connect user to tasks)
+                user_id=self.user_id # get_user_id(self),#2 #LoginState.user_id # Referencing LoginState user_id attribute (to connect user to tasks)
             )
             with rx.session() as session:
                 session.add(new_task)
@@ -272,7 +276,7 @@ class ConvertToTasks():
             due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
             print(f"LoginState.user_id: {LoginState.user_id}")
 
-            new_task = database.Task(
+            new_task = Task(
                 recur_frequency=7,  # Example for recurring frequency
                 due_date=date(due_at.year, due_at.month, due_at.day),
                 is_deleted=False,
@@ -339,8 +343,8 @@ class ConvertToTasks():
             #                         user_id=database.UserManagementState.user_id
             #                     )
             print("good")
-        database.UserManagementState.get_user_tasks(user_id=database.UserManagementState.user_id)
-        print(database.UserManagementState.tasks)
+        #database.UserManagementState.get_user_tasks(user_id=database.UserManagementState.user_id)
+        #print(database.UserManagementState.tasks)
 
 
 def manual_token_input() -> rx.Component:
@@ -398,10 +402,10 @@ def manualtokens_connect_page():
                 rx.text(f"LoginState.user_id: {LoginState.user_id}"),
                 rx.text("LoginState.user_id doesn't exist"),
             ),
-            rx.cond(database.UserManagementState.user_id,
-                rx.text(f"database.UserManagementState.user_id: {database.UserManagementState.user_id}"),
-                rx.text("database.UserManagementState.user_id doesn't exist"),
-            ),
+            # rx.cond(database.UserManagementState.user_id,
+            #     rx.text(f"database.UserManagementState.user_id: {database.UserManagementState.user_id}"),
+            #     rx.text("database.UserManagementState.user_id doesn't exist"),
+            # ),
             # rx.cond(database.Task.user_id,
             #     rx.tIext(f"database.UserManagementState.user_id: {database.UserManagementState.user_id}"),
             #     rx.text("database.UserManagementState.user_id doesn't exist"),
