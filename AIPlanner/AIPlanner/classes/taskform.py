@@ -6,7 +6,7 @@ from rxconfig import config
 from AIPlanner.pages.login import LoginState
 
 class TaskState(LoginState):
-    """The state related to the task input form."""
+    """The state related to the task input form. """
     task_name: str = ""
     task_description: str = ""
     priority: str = "Medium"
