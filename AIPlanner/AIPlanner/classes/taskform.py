@@ -67,7 +67,7 @@ class TaskState(LoginState):
             self.priority = "Medium"
             self.date_time = datetime.now().strftime("%m/%d/%y")
             self.recurring_checked = False
-            self.frequency = "Weekly"
+            self.frequency = ""
 
     def toggle_full_task_input(self):
         """Toggles visibility of full task name input."""
@@ -231,7 +231,7 @@ def task_input_form():
                 #Conditionally show the frequency dropdown if recurring is checked
                 rx.cond(
                     TaskState.recurring_checked,
-                    rx.vstack(
+                    rx.hstack(
                         rx.text("Frequency:"),
                         rx.select(
                             ["Daily", "Weekly", "Monthly"],
