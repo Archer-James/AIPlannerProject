@@ -201,7 +201,7 @@ class CanvasConnectState(rx.State): # Like extending a class
 
         # Grab all favorited courses and upcoming assignments
         #try:
-        result = self.grab_tasks()
+        assign_list = self.grab_tasks()
             #print(result)
             #print(type(result))
 
@@ -212,7 +212,35 @@ class CanvasConnectState(rx.State): # Like extending a class
         #print(LoginState.user_id)
         # print(result)
         #converter = ConvertToTasks()
-        ConvertToTasks.convert_to_tasks(result)
+        #ConvertToTasks.convert_to_tasks(result)
+
+        print("Before for loop")
+        
+        # Signed in as Mary - 6
+
+        for assignment in assign_list:
+
+            due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
+            # print(f"LoginState.user_id: {LoginState.user_id}")
+            print(f"")
+
+            new_task = database.Task(
+                recur_frequency=7,  # Example for recurring frequency
+                due_date=date(due_at.year, due_at.month, due_at.day),
+                is_deleted=False,
+                task_name=assignment['name'],
+                description="hello", #assignment['description'],
+                task_id=100,  # Example for unique task_id
+                priority_level={"Low": 1, "Medium": 2, "High": 3}["Low"],
+                assigned_block_date=date(due_at.year, due_at.month, due_at.day),  # Set to today or another relevant date
+                assigned_block_start_time=time(due_at.hour - 1, due_at.minute),  # Set a fixed start time (e.g., 2 PM)
+                assigned_block_duration=timedelta(hours=1),  # Set your desired duration
+                user_id=2 #LoginState.user_id # Referencing LoginState user_id attribute (to connect user to tasks)
+            )
+            with rx.session() as session:
+                session.add(new_task)
+                session.commit() 
+
         print("After convert class")
 
             # except TypeError as e:
@@ -242,6 +270,7 @@ class ConvertToTasks():
         for assignment in assign_list:
 
             due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
+            print(f"LoginState.user_id: {LoginState.user_id}")
 
             new_task = database.Task(
                 recur_frequency=7,  # Example for recurring frequency
@@ -366,7 +395,7 @@ def manualtokens_connect_page():
                 href="/",
                 is_external=False),
             rx.cond(LoginState.user_id,
-                rx.text(f"LoginState.user_id: {database.UserManagementState.user_id}"),
+                rx.text(f"LoginState.user_id: {LoginState.user_id}"),
                 rx.text("LoginState.user_id doesn't exist"),
             ),
             rx.cond(database.UserManagementState.user_id,

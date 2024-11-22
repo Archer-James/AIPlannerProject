@@ -138,9 +138,11 @@ class LoginState(rx.State):
         Reflex redirect user to home page.
         """
         self.reset() #Does same as self.username = None
-        database.UserManagementState.set_user_id(0)
+        #database.UserManagementState.set_user_id(0)
         #database.User.user_id = 0
-        print(f"Username: {self.username} (should be empty string), LoginState.user_id: {self.user_id}, UserManagementState.user_id: {database.UserManagementState.get_user_id()}")
+        print(f"Username: {self.username} (should be empty string)")
+        print(f"LoginState.user_id: {self.user_id}")
+        print(f"UserManagementState.user_id: {database.UserManagementState.get_user_id()}")
         return rx.redirect("/")
 
 
