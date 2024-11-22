@@ -6,7 +6,6 @@ from AIPlanner.pages.login import LoginState
 
 import reflex as rx
 import sqlmodel
-from rxconfig import config
 
 #class LoginUser(rx.Model, table)
 

@@ -3,7 +3,7 @@ from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
 from AIPlanner.classes.daily_cal import daily_cal
 class cal_comps():
-    """Class containing calendar Reflex components"""   
+    """Class containing calendar Reflex components"""
     def calendar_component():
         """
         Monthly calendar initializer and caller
@@ -47,10 +47,10 @@ class cal_comps():
                         rx.foreach(week, lambda day:
                                    rx.table.cell(
                                        rx.link(
-                                                day, 
+                                                day,
                                                 href = "/daily",
                                                 on_click=lambda: daily_cal.set_date(GenCalendar.current_month,GenCalendar.current_year,day),
-                                                text_align="center", 
+                                                text_align="center",
                                                 padding="10px"))
         )))),
             ),
@@ -74,14 +74,13 @@ class cal_comps():
                     rx.button("Monthly"),
                     href="/",
                     is_external=False,
-                ), 
-                rx.heading(GenWeeklyCal.label, size = "lg"), 
+                ),
+                rx.heading(GenWeeklyCal.label, size = "lg"),
                 rx.button("Previous", on_click=GenWeeklyCal.prev_week),
                 rx.button("Next", on_click=GenWeeklyCal.next_week),
             ),
-    
+
             # Create the table for the calendar
-            
 
             # Table header for days of the week
             rx.table.root(
@@ -102,12 +101,12 @@ class cal_comps():
                     # Table body for days in the month
                 rx.table.body(
                     rx.foreach(GenWeeklyCal.dates, lambda week: rx.table.row(
-                       rx.foreach(week, lambda day: 
+                       rx.foreach(week, lambda day:
                                   rx.table.cell(
-                                      rx.link(day, 
+                                      rx.link(day,
                                                 href = "/daily",
                                                 on_click=lambda: daily_cal.set_date(GenWeeklyCal.current_month,GenWeeklyCal.current_year,day),
-                                                text_align="center", 
+                                                text_align="center",
                                                 padding="10px"))
         )))),
             ),

@@ -109,7 +109,7 @@ def index() -> rx.Component:
 
 
             rx.link(
-                rx.button("Show All Users"),
+                rx.button("Show Debug Options"),
                 href="/userlist",
                 is_external=False,
             ),
@@ -180,8 +180,6 @@ app = rx.App(
 app.add_page(index)
 app.add_page(weekly)
 app.add_page(daily)
-
-
 
 # Megdalia Bromhal - 30 Sept. 2024
 # Adding a signup page (as defined in pages.signup)
