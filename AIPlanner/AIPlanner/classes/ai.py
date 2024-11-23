@@ -2,7 +2,6 @@
 
 import os
 import re
-import datetime
 import time
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
@@ -98,4 +97,3 @@ class AIState(UserManagementState):
                 task_string = task_string + f'{key}: {value}\n'
         #print(task_string)
         return task_string
-    
