@@ -23,7 +23,7 @@ from AIPlanner.classes. todo_list import todo_component
 
 from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
-from AIPlanner.classes.cal_comps import cal_comps
+from AIPlanner.classes.cal_comps import *
 from AIPlanner.pages.weekly import weekly
 from AIPlanner.classes.daily_cal import daily
 # to run test environment
@@ -140,7 +140,7 @@ def index() -> rx.Component:
             rx.color_mode.button(position="top-right"),
             rx.vstack(
                 rx.center(
-                cal_comps.calendar_component(),
+                calendar_component(),
                 todo_component(),
                 spacing="5",
                 justify="center",
