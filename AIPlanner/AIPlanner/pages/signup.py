@@ -6,8 +6,6 @@ Clicking submit adds their information as a User object in the database,
 The user must click "Go home" from the success page.
 User can also go back to the home page.
 """
-
-
 # Importing necessary modules
 import reflex as rx
 import AIPlanner.classes.database as database
@@ -37,10 +35,12 @@ class SignupState(rx.State):
     Attributes:
     email (str): user's email.
     password (str): user's password.
+    password_check (str): user's password entered twice to make sure it's the password the user wants
     is_submitting (bool): flag that tracks if the user has clicked "Enter" for the signup form.
     """
     email: str = ""
     password: str = "" # Passwords are usually strings in web development, apparently
+    password_check: str = ""
     is_submitting: bool = False
 
 
