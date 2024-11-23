@@ -6,7 +6,6 @@ import requests
 import reflex as rx
 from AIPlanner.pages.login import LoginState # Grabbing login credentials
 from AIPlanner.classes.database import Task
-from AIPlanner.classes.database import UserManagementState
 
 
 class CanvasConnectState(LoginState): # Like extending a class
@@ -201,7 +200,6 @@ class CanvasConnectState(LoginState): # Like extending a class
                     if task_already_exists:
                         # Task already in database, so skip it
                         print(f"Skipping task {assignment['name']} bc already in database.")
-                        continue
 
                     else:
                         # Task isn't already in database, so add it to database
@@ -221,7 +219,7 @@ class CanvasConnectState(LoginState): # Like extending a class
                         )
                         with rx.session() as session:
                             session.add(new_task)
-                            session.commit() 
+                            session.commit()
 
             except TypeError as e:
                 print(f"Error with converting Canvas tasks to task objects: {e}")
