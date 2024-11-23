@@ -174,10 +174,11 @@ class CanvasConnectState(LoginState): # Like extending a class
             try:
 
                 for assignment in assign_list:
-                    print(assignment)
+                    # print(assignment)
 
                     due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
 
+                    # Riley's way...not working right now.
                     # Check if task is already in the database
                     # We can use the task list to check rather than starting an rx session
                     # for task in UserManagementState.tasks:
@@ -186,59 +187,41 @@ class CanvasConnectState(LoginState): # Like extending a class
                     #         print(f"Skipping task {assignment['name']} bc already exists in database.")
                     #         continue
                     #     else:
-                            # Task doesn't already exist, so add it to database
-                    new_task = Task(
-                        recur_frequency=7,  # Example for recurring frequency
-                        due_date=date(due_at.year, due_at.month, due_at.day),
-                        is_deleted=False,
-                        task_name=assignment['name'],
-                        description="Task imported from Canvas", #assignment['description'], # For now not doing it
-                        task_id=100,  # Example for unique task_id
-                        priority_level={"Low": 1, "Medium": 2, "High": 3}["Low"],
-                        assigned_block_date=date(due_at.year, due_at.month, due_at.day),  # Set to today or another relevant date
-                        assigned_block_start_time=time(due_at.hour - 1, due_at.minute),  # Set a fixed start time (e.g., 2 PM)
-                        assigned_block_duration=timedelta(hours=1),  # Set your desired duration
-                        user_id=self.user_id # get_user_id(self),#2 #LoginState.user_id # Referencing LoginState user_id attribute (to connect user to tasks)
-                    )
+
+                    # Checking if task already in database and assigned to logged-in user
                     with rx.session() as session:
-                        session.add(new_task)
-                        session.commit() 
+                        task_already_exists = session.exec(
+                            Task.select().where(
+                                Task.user_id == self.user_id, # Making sure user is the same
+                                Task.task_name == assignment['name'], # Checking if assignment names are same
+                                Task.due_date == date(due_at.year, due_at.month, due_at.day), # Checking if due dates are the same
+                            ),
+                        ).first()
 
-                                # Run get user tasks, then reference state.tasks
-                    # with rx.session() as session:
-                    #     task_already_exists = session.exec(
-                    #         # UMS.tasks.select()
-                    #         Task.select().where(
-                    #             UserManagementState.tasks['task_name'] == assignment['name'],
-                    #             UserManagementState.tasks.Task.due_date == date(due_at.year, due_at.month, due_at.day),
-                    #         ),
-                    #     ).first()
+                    if task_already_exists:
+                        # Task already in database, so skip it
+                        print(f"Skipping task {assignment['name']} bc already in database.")
+                        continue
 
-                    # Skip already existing tasks
-                    # if task_already_exists:
-                    #     print(f"Skipping task {assignment['name']} bc already in database...")
-                    #     continue # Skip this task
-
-                    # Add task to database
-
-                                            # # If user found, allow log in
-                    # if task_already_in:
-                    #     print(f"Skipping task: {assignment['name']} because already in database...")
-                    #     continue # Skip this task
-
-                    # with rx.session() as session:
-                    #     if session.exec(
-                    #         select(Customer).where(Customer.email == self.current_user["email"])
-                    #     ).first():
-                    #         return rx.window_alert("User with this email already exists")
-
-                    # rx.foreach(
-                    #     state.tasks,
-                    #     lambda task: rx.text(
-                    #         f"Task Name: {task.task_name}, Due Date: {task.due_date}, "
-                    #         f"Description: {task.description}, Priority: {task.priority_level}, "
-                    #         f"Task ID: {task.task_id}, is_deleted: {task.is_deleted}"
-                    #     )
+                    else:
+                        # Task isn't already in database, so add it to database
+                        print(f"Adding task {assignment['name']} to database.")
+                        new_task = Task(
+                            recur_frequency=7,  # Example for recurring frequency
+                            due_date=date(due_at.year, due_at.month, due_at.day),
+                            is_deleted=False,
+                            task_name=assignment['name'],
+                            description="Task imported from Canvas", #assignment['description'], # For now not doing it
+                            task_id=100,  # Example for unique task_id
+                            priority_level={"Low": 1, "Medium": 2, "High": 3}["Low"],
+                            assigned_block_date=date(due_at.year, due_at.month, due_at.day),  # Set to today or another relevant date
+                            assigned_block_start_time=time(due_at.hour - 1, due_at.minute),  # Set a fixed start time (e.g., 2 PM)
+                            assigned_block_duration=timedelta(hours=1),  # Set your desired duration
+                            user_id=self.user_id # Referencing LoginState user_id attribute (to connect user to tasks)
+                        )
+                        with rx.session() as session:
+                            session.add(new_task)
+                            session.commit() 
 
             except TypeError as e:
                 print(f"Error with converting Canvas tasks to task objects: {e}")
