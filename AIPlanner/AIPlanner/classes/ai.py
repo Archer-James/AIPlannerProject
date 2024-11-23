@@ -3,6 +3,7 @@
 import os
 import re
 import datetime
+import time
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
 
@@ -15,12 +16,21 @@ class AIState(UserManagementState):
 
     processed_output = ""
 
-    def send_request(self):
+    def send_request(self, tasks):
         '''Function to send an OpenAI API request to generate task date/time/duration assignments, currently prints to console
         
         Returns:
         task_string: String that contains the result of processing the completion of the API request
         '''
+
+        inputMessage = ""
+        for task in tasks:
+            print(task)
+            if task['is_deleted'] is False:
+                inputMessage = inputMessage + f"task_id = {task['id']}\ntask_name = '{task['task_name']}\npriority_level = {task['priority_level']}\ndue_date = {task['due_date']}\n\n"
+                print(task['id'])
+        currentTime = time.ctime()
+
         OpenAI.api_key = os.environ["OPENAI_API_KEY"]
 
         client = OpenAI()
@@ -28,38 +38,29 @@ class AIState(UserManagementState):
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": """
-                You are a bot that takes user tasks and assigns them to slots on a calendar.
-                These tasks can have a priority level with (1) being the highest and (3) being the lowest. 
+                {"role": "system", "content": f"""
+                You are a bot that takes user tasks and assigns them to slots on a calendar. Tasks can have a priority level with (1) being the highest and (3) being the lowest. 
                 Higher priority tasks should be assigned to blocks before lower priority tasks. Do not make any changes or return anything other than the following format for each task. 
-                Do not include anything like "Here's the output" or "Let me know if you'd like any adjustments". 
-                Do not include the word hours in the response. Give output in the format as follows: 
-
-
+                Do not include anything like "Here's the output" or "Let me know if you'd like any adjustments". The current date is {currentTime}.
+                Do not include the word hours in the response. Give output in the format as follows:  
                 task_id = Integer from prompt
                 task_name = String from prompt
-                assigned_block_date = Generated date within the next 14 days from 11/7/2024
+                assigned_block_date = Generated date before task due date
                 assigned_block_start_time = Generated time between 9am and 5pm to begin the task, in military time
                 assigned_block_duration = How long the task should be worked on"""},
                 {
                     "role": "user",
-                    "content": """
-                task_id = 1
-                task_name = "work on computer science"
-                priority_level = 1
-
-                task_id = 2
-                task_name = "work on biology"
-                priority_level = 2
+                    "content": f"""
+                {inputMessage}
                 """
                 }
             ]
         )
 
-        print(completion.choices[0].message)
-        self.processed_output = self.process_output(completion)
+        print(completion.choices[0].message.content)
+        self.processed_output = self.process_output(completion.choices[0].message.content)
 
-    def process_output(self, completion):
+    def process_output(self, content):
         '''Processes the output of an OpenAI API call using regular expressions 
         and prints the string result to the console
         
@@ -69,72 +70,32 @@ class AIState(UserManagementState):
         Returns:
         task_string: String that contains the processed completion resuts
         '''
-        full_string = f"{completion.choices[0].message}"
-        # Define a regular expression pattern to match the content section
-        pattern = r"content='(.*?)'"
+        # Regular expression to extract task details
+        regex = re.compile(
+            r"task_id\s*=\s*(\d+)\s*"
+            r"task_name\s*=\s*'([^']+?)\s*'"
+            r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2})\s*"
+            r"assigned_block_start_time\s*=\s*([\d:]+)\s*"
+            r"assigned_block_duration\s*=\s*(\d+)",
+            re.DOTALL
+        )
 
-        # Extract the content using re.search
-        match = re.search(pattern, full_string)
-
-        # If a match is found, extract the content
-        if match:
-            content = match.group(1)
-            print(content)
-
-        # Define pattern to match key-value pairs (handles each key-value pair in a task)
-        key_value_pattern = r'(\w+[\w_]*\w*) = ("[^"]*"|\d+|\d{1,2}/\d{1,2}/\d{4}|[A-Za-z\s:]+)'
-
-        # Define a pattern to match the beginning of each task (starting with task_id)
-        task_pattern = r"(task_id\s*=\s*\d+)"
-
-        # Split the content into separate tasks using task_id
-        task_blocks = re.split(task_pattern, content)
-
-        # Initialize a list to store dictionaries for each task
-        tasks = []
-
-        # Process each task block
-        for task_block in task_blocks:
-            # Skip empty or non-task parts
-            if not task_block.strip():
-                continue
-
-            # Find all key-value pairs in the task block
-            matches = re.findall(key_value_pattern, task_block)
-
-            # Initialize a dictionary for the current task
-            task_dict = {}
-
-            # Process each key-value pair
-            for key, value in matches:
-                # Convert numerical values (like task_id and assigned_block_duration) to integers
-                if value.isdigit():  # If the value is a number, convert it to an integer
-                    value = int(value)
-                elif '/' in value:  # If it’s a date string
-                    try:
-                        # Parse the date and format it to MM/DD/YYYY
-                        date_obj = datetime.datetime.strptime(value, "%m/%d/%Y")
-                        value = date_obj.strftime("%m/%d/%Y")
-                    except ValueError:
-                        # If it doesn't match expected date format, keep it as-is
-                        pass
-                elif value.startswith('"') and value.endswith('"'):  # If it's a string enclosed in quotes
-                    value = value[1:-1]  # Remove the quotes
-                if key.startswith('n'):
-                    key = key[1:len(key)]
-
-                # Store the key-value pair in the task dictionary
-                task_dict[key] = value
-
-            # Add the task dictionary to the tasks list
-            tasks.append(task_dict)
-
-        # Output the list of task dictionaries
+        # Extract matches and build dictionaries
+        matches = regex.findall(content)
+        tasks = [
+            {
+                "task_id": int(match[0]),
+                "task_name": match[1].strip().replace("'", ""),
+                "assigned_block_date": match[2],
+                "assigned_block_start_time": match[3],
+                "assigned_block_duration": int(match[4]),
+            }
+            for match in matches
+        ]
         task_string = ""
         for task in tasks:
             for key, value in task.items():
                 task_string = task_string + f'{key}: {value}\n'
-            task_string = task_string + "\n"
-        print(task_string)
+        #print(task_string)
         return task_string
     
