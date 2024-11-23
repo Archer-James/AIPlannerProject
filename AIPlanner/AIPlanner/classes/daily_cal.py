@@ -1,7 +1,8 @@
 import reflex as rx
 from AIPlanner.classes.database import Task
 from AIPlanner.classes.database import UserManagementState
-from AIPlanner.classes.database import LoginState
+import calendar
+import datetime
 
 
 class daily_cal (rx.State):
@@ -16,12 +17,18 @@ class daily_cal (rx.State):
     selected_date: str = ""
     tasks_for_day: list[Task] = []
     title: str = ""
+    month : int
+    day: int
 
-    def set_date(self, year: str, month: str, day: str):
+    def set_date(self, month: str, year: str, day: str):
         """Sets the selected date using integer values for year, month, and day."""
         year = int(year)
         month = int(month)
+        self.month = month
         day = int(day)
+        self.day = day
+        self.selected_date = datetime.date(year,month,day)
+        self.title = str(calendar.month_name[int(self.month)])+" "+str(self.day)
 
 def daily() -> rx.Component:
     """
