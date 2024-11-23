@@ -36,19 +36,44 @@ def daily() -> rx.Component:
     Prints daily calendar
     """
     return rx.container(
-    rx.heading(f"Tasks for {daily_cal.title}", size="lg"),
-        # Display the filtered tasks or a message if there are none
-        rx.box(
-            rx.foreach(
-        UserManagementState.tasks,  # Iterate through all tasks
-        lambda task: rx.cond(
-            # Filter tasks where the due date matches the selected date
-            task.due_date == daily_cal.selected_date,
-            rx.text(f"- {task.task_name}: {task.description}"),  # If the task's due date matches, show it
-            None  # Otherwise, do not display anything
-        )
-    )
-
-        )
-    
+        # Top row for the "Home" button
+        rx.flex(
+            rx.link(
+                rx.button("Home"),
+                href="/",
+                is_external=False,
+            ),
+            justify="flex-start",  # Align the button to the left
+            width="100%",  # Full width for alignment
+        ),
+        # Main content below the "Home" button
+        rx.flex(
+            rx.vstack(
+                # Title at the top
+                rx.heading(f"Tasks for {daily_cal.title}", size="lg"),
+                # Tasks list
+                rx.foreach(
+                    UserManagementState.tasks,  # Iterate through all tasks
+                    lambda task: rx.cond(
+                        # Filter tasks where the due date matches the selected date
+                        task.due_date == daily_cal.selected_date,
+                        rx.text(
+                            f"- {task.task_name}: {task.description}",
+                            style={
+                                "color": Task.get_priority_color(task),  # Dynamically set text color
+                            },
+                        ),
+                        None,  # Otherwise, do not display anything
+                    ),
+                ),
+            ),
+            direction="column",  # Stack elements vertically
+            align="center",  # Center elements horizontally
+            justify="center",  # Center elements vertically
+            width="100%",  # Full width
+        ),
+        width="100%",  # Full width of the container
+        align="center",  # Align container to the center
+        justify="center",  # Center content vertically
+        padding="1rem",  # Optional: Add padding for spacing
     )

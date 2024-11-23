@@ -53,6 +53,17 @@ class Task(rx.Model, table=True):
     user_id: int = sqlmodel.Field(foreign_key="user.canvas_hash_id")
     user: Optional[User] = sqlmodel.Relationship(back_populates="tasks")
 
+    def get_priority_color(self):
+        """Return the color string for a given priority."""
+        priority = self["priority_level"]  # Access as dictionary
+        return rx.match(
+            priority,
+            (1, "red"),    # High priority
+            (2, "orange"), # Medium priority 
+            (3, "blue"),   # Low priority
+            "gray"         # Default
+        )
+
 class UserManagementState(rx.State):
     """Class that defines the state in which variables and functions are held relating to user management
     
@@ -148,6 +159,7 @@ class UserManagementState(rx.State):
                     print(f"Task {task_id} is already marked as deleted.")
             else:
                 print(f"No task found with ID: {task_id}")
+    
 
 class AddUser(rx.State):
     """Class that enables adding users to the database"""

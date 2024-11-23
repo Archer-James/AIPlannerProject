@@ -65,8 +65,6 @@ def weekly() -> rx.Component:
 
         # Developer & Task stack
         rx.hstack(
-
-
             rx.link(
                 rx.button("Show All Users"),
                 href="/userlist",
