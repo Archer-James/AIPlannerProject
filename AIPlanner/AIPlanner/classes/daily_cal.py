@@ -18,16 +18,29 @@ class daily_cal (rx.State):
     tasks_for_day: list[Task] = []
     title: str = ""
 
-    def set_date(self,month,year,day):
-        """
-        Sets the selected_date and title variables
-        Parameters:
-        month (int): integer number of month
-        year(int): integer number of year
-        day(int): integer number of day
-        """
-        self.selected_date = datetime.date(year,month,day)
-        self.title = str(calendar.month_name[int(month)])+" "+str(day)
+    def set_date(self, year: str, month: str, day: str):
+        """Sets the selected date using integer values for year, month, and day."""
+        try:
+            print(f"Setting date with year: {year}, month: {month}, day: {day}")  # Debug print
+
+            # Ensure that year, month, and day are integers
+            year = int(year)
+            month = int(month)
+            day = int(day)
+
+            # Validate that the month is within the correct range
+            if month < 1 or month > 12:
+                raise ValueError(f"Invalid month: {month}. Month must be between 1 and 12.")
+
+            # Validate that the day is within the correct range for the given month and year
+            try:
+                self.selected_date = datetime.date(year, month, day)
+                print(f"Selected date set to: {self.selected_date}")
+            except ValueError as e:
+                raise ValueError(f"Invalid day for {month}/{year}: {e}")
+            self.title = str(calendar.month_name[int(month)])+" "+str(day)
+        except ValueError as e:
+            print(f"Error setting date: {e}")
 
 def daily() -> rx.Component:
     """

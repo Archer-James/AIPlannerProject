@@ -108,7 +108,7 @@ class cal_comps():
                                     rx.link(
                                         day, 
                                         href="/daily",
-                                        on_click=lambda: daily_cal.set_date(GenWeeklyCal.current_month, GenWeeklyCal.current_year, day),
+                                        on_click=lambda: daily_cal.set_date(GenWeeklyCal.current_year, GenWeeklyCal.current_month, day),
                                         text_align="center", 
                                         padding="10px"
                                     )
