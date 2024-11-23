@@ -41,7 +41,7 @@ def daily() -> rx.Component:
         # Top row for the "Home" button
         rx.flex(
             rx.link(
-                rx.button("Home"),
+                rx.button("Go Home"),
                 href="/",
                 is_external=False,
             ),
