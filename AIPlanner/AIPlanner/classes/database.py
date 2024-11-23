@@ -1,5 +1,5 @@
 """Module containing classes and methods pertaining to the SQLite database built into Reflex"""
-from datetime import date, time, timedelta, datetime
+from datetime import date, time, timedelta
 from typing import List, Optional
 import random
 from AIPlanner.pages.login import LoginState
@@ -254,7 +254,7 @@ def add_user(new_user:User):
 #         """
 #         Method to add manual tasks into the database. Creates a new task object with inputted parameters
 #         and adds new task to the database. Creates a task id once added to the database.
-#         Used by canvas_connect.py to turn Canvas tasks into system task objects 
+#         Used by canvas_connect.py to turn Canvas tasks into system task objects
 #         and show them on the calendar.
 
 #         Parameters:
