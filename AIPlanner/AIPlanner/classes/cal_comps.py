@@ -40,7 +40,7 @@ def calendar_component():
             # Table body for days in the month
             rx.table.body(
                 rx.foreach(GenCalendar.dates, lambda week: rx.table.row(
-                    rx.foreach(week, lambda day: 
+                    rx.foreach(week, lambda day:
                         # Skip rendering 0
                         rx.cond(
                             day != 0,  # Check if the day is not 0
@@ -79,8 +79,8 @@ def weekly_component():
                 rx.button("Monthly"),
                 href="/",
                 is_external=False,
-            ), 
-            rx.heading(GenWeeklyCal.label, size="lg"), 
+            ),
+            rx.heading(GenWeeklyCal.label, size="lg"),
             rx.button("Previous", on_click=GenWeeklyCal.prev_week),
             rx.button("Next", on_click=GenWeeklyCal.next_week),
         ),
@@ -109,7 +109,9 @@ def weekly_component():
                                 rx.link(
                                     day,
                                     href="/daily",
-                                    on_click=lambda: daily_cal.set_date(GenWeeklyCal.current_month, GenWeeklyCal.current_year, day),
+                                    on_click=lambda: daily_cal.set_date(
+                                        GenWeeklyCal.current_month,
+                                        GenWeeklyCal.current_year, day),
                                     text_align="center",
                                     padding="10px"
                                 )
