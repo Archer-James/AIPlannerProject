@@ -1,6 +1,7 @@
 import reflex as rx
 from AIPlanner.classes.database import Task
 from AIPlanner.classes.database import UserManagementState
+from AIPlanner.classes.database import LoginState
 import datetime
 import calendar
 
@@ -43,14 +44,14 @@ def daily() -> rx.Component:
                 href="/",
                 is_external=False,
             ),
-            justify="flex-start",  # Align the button to the left
-            width="100%",  # Full width for alignment
+        justify="flex-start",  # Align the button to the left
+        width="100%",  # Full width for alignment
         ),
         # Main content below the "Home" button
         rx.flex(
             rx.vstack(
                 # Title at the top
-                rx.heading(f"Tasks for {daily_cal.title}", size="lg"),
+                rx.heading(f"Tasks for {daily_cal.title}", size="xlg"),
                 # Tasks list
                 rx.foreach(
                     UserManagementState.tasks,  # Iterate through all tasks
