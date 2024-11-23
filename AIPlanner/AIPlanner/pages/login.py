@@ -20,18 +20,6 @@ class LoginState(rx.State):
     username (str): username of user, which is the user's email before the '@'.
     user_id (int): the user's id number used to identify the user's tasks.
     """
-
-    # Init isn't really great for using the variables across states...
-    # def __init__(self, email=str, password=str, username=str, user_id=int):
-    #     """
-    #     Initialization function for LoginState.
-    #     Includes email, password, username (shortened email), and user_id as created in database.
-    #     """
-    #     self.email = email
-    #     self.password = password
-    #     self.username = username
-    #     self.user_id = user_id
-
     email: str = ""
     password: str = ""
     username: str
@@ -116,8 +104,6 @@ class LoginState(rx.State):
         """
         self.user_id = new_id
 
-    # processing_msg: str = "idle"
-    # is_processing: bool = False
 
     def direct_to_login(self):
         """
@@ -140,9 +126,9 @@ class LoginState(rx.State):
         self.reset() #Does same as self.username = None
         #database.UserManagementState.set_user_id(0)
         #database.User.user_id = 0
-        print(f"Username: {self.username} (should be empty string)")
-        print(f"LoginState.user_id: {self.user_id}")
-        print(f"UserManagementState.user_id: {database.UserManagementState.get_user_id()}")
+        # print(f"Username: {self.username} (should be empty string)")
+        # print(f"LoginState.user_id: {self.user_id}")
+        # print(f"UserManagementState.user_id: {database.UserManagementState.get_user_id()}")
         return rx.redirect("/")
 
 
