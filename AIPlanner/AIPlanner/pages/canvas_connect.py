@@ -6,7 +6,7 @@ import requests
 import reflex as rx
 from AIPlanner.pages.login import LoginState # Grabbing login credentials
 # Importing UserManagementState so we can create tasks in the system
-import AIPlanner.classes.database as database 
+import AIPlanner.classes.database as database
 
 
 class CanvasConnectState(rx.State): # Like extending a class
@@ -160,8 +160,8 @@ class CanvasConnectState(rx.State): # Like extending a class
 
     #         # Sending Canvas task to database.py to become a system task object and added to database
     #         # Making the start date to one hour before it's due, duration 1 hour
-    #         database.UserManagementState.manual_add_task(recur_freq=1, 
-    #                                             due_date=date(due_at.year, due_at.month, due_at.day), 
+    #         database.UserManagementState.manual_add_task(recur_freq=1,
+    #                                             due_date=date(due_at.year, due_at.month, due_at.day),
     #                                             task_name=assignment['name'],
     #                                             description=assignment['description'],
     #                                             priority_lvl=3,
@@ -222,7 +222,7 @@ class CanvasConnectState(rx.State): # Like extending a class
 
             due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
             # print(f"LoginState.user_id: {LoginState.user_id}")
-            print(f"")
+            #print(f"")
 
             new_task = database.Task(
                 recur_frequency=7,  # Example for recurring frequency
@@ -256,7 +256,7 @@ class CanvasConnectState(rx.State): # Like extending a class
         return rx.redirect("/")
 
 class ConvertToTasks():
-    def convert_to_tasks(assign_list):
+    def convert_to_tasks(self, assign_list):
         """
         Converts a list of Canvas assignments to system Task objects.
 
