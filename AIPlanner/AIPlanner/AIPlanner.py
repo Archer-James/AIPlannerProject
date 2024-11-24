@@ -17,6 +17,8 @@ from AIPlanner.pages.login import LoginState # Login State used to get the user'
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
 from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
 from AIPlanner.classes. todo_list import todo_component
+from AIPlanner.classes.ai import *
+from AIPlanner.classes.database import UserManagementState as state
 
 
 # from pages.signup import signup  # Sign up page
@@ -35,41 +37,41 @@ from AIPlanner.classes.daily_cal import daily
 class TestAI(rx.State):
     """Test class used to test AI output -> homescreen capabilities."""
 
-    def show_test_ai_data(self):
-        """
-        Shows test AI data from Riley's output in the terminal.
-        """
-        # From Riley's output
-        # output = ChatCompletionMessage(content='```json\n{\n  "calendar": [\n    {\n      "task": "Study for biology exam",\n      "time_slot": "09:00 AM - 10:00 AM"\n    },\n    {\n      "task": "Write user stories",\n      "time_slot": "10:00 AM - 11:00 AM"\n    },\n    {\n      "task": "Work on CSC 450 professor notes",\n      "time_slot": "11:00 AM - 12:00 PM"\n    },\n    {\n      "task": "Finish calendar",\n      "time_slot": "12:00 PM - 01:00 PM"\n    }\n  ]\n}\n```', refusal=None, role='assistant', audio=None, function_call=None, tool_calls=None)
+    # def show_test_ai_data(self):
+    #     """
+    #     Shows test AI data from Riley's output in the terminal.
+    #     """
+    #     # From Riley's output
+    #     # output = ChatCompletionMessage(content='```json\n{\n  "calendar": [\n    {\n      "task": "Study for biology exam",\n      "time_slot": "09:00 AM - 10:00 AM"\n    },\n    {\n      "task": "Write user stories",\n      "time_slot": "10:00 AM - 11:00 AM"\n    },\n    {\n      "task": "Work on CSC 450 professor notes",\n      "time_slot": "11:00 AM - 12:00 PM"\n    },\n    {\n      "task": "Finish calendar",\n      "time_slot": "12:00 PM - 01:00 PM"\n    }\n  ]\n}\n```', refusal=None, role='assistant', audio=None, function_call=None, tool_calls=None)
 
-        # Simplified version of Riley's output (help from Copilot AI for this)
-        hardcoded_response = {
-            "calendar": [
-                {
-                    "task": "Study for biology exam",
-                    "time_slot": "09:00 AM - 10:00 AM"
-                },
-                {
-                    "task": "Write user stories",
-                    "time_slot": "10:00 AM - 11:00 AM"
-                },
-                {
-                    "task": "Work on CSC 450 professor notes",
-                    "time_slot": "11:00 AM - 12:00 PM"
-                },
-                {
-                    "task": "Finish calendar",
-                    "time_slot": "12:00 PM - 01:00 PM"
-                }
-            ]
-        }
+    #     # Simplified version of Riley's output (help from Copilot AI for this)
+    #     hardcoded_response = {
+    #         "calendar": [
+    #             {
+    #                 "task": "Study for biology exam",
+    #                 "time_slot": "09:00 AM - 10:00 AM"
+    #             },
+    #             {
+    #                 "task": "Write user stories",
+    #                 "time_slot": "10:00 AM - 11:00 AM"
+    #             },
+    #             {
+    #                 "task": "Work on CSC 450 professor notes",
+    #                 "time_slot": "11:00 AM - 12:00 PM"
+    #             },
+    #             {
+    #                 "task": "Finish calendar",
+    #                 "time_slot": "12:00 PM - 01:00 PM"
+    #             }
+    #         ]
+    #     }
 
-        for entry in hardcoded_response["calendar"]:
-            task = entry["task"]
-            time_slot = entry["time_slot"]
+    #     for entry in hardcoded_response["calendar"]:
+    #         task = entry["task"]
+    #         time_slot = entry["time_slot"]
 
-            print(f"Task: {task}, Time slot: {time_slot}")
-            print()
+    #         print(f"Task: {task}, Time slot: {time_slot}")
+    #         print()
 
 
 class State(rx.State):
@@ -120,7 +122,8 @@ def index() -> rx.Component:
 
         ),
         rx.hstack(
-            rx.button("Have AI plan currently-imported tasks", on_click=TestAI.show_test_ai_data),
+            rx.button("Generate AI Schedule", on_click=lambda: AIState.send_request(state.tasks)),
+            rx.text(AIState.processed_output),
             spacing="5",
             justify="center",
             min_height="10vh",
