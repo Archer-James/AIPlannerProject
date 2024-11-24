@@ -111,4 +111,3 @@ class AIState(UserManagementState):
         task_duration = timedelta(hours=int(duration_match.group(1))) if duration_match else None
         UserManagementState.assign_block(task_id, task_date, task_start, task_duration)
         return task_string
-    

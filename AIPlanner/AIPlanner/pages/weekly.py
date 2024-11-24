@@ -4,18 +4,18 @@ import reflex as rx
 from rxconfig import config
 
 # Importing pages
-from AIPlanner.pages.signup import signup # Sign up page
-from AIPlanner.pages.processing import processing # Processing page used in sign up page
-from AIPlanner.pages.success import success # Success page shown after successful sign up
+#from AIPlanner.pages.signup import signup # Sign up page
+#from AIPlanner.pages.processing import processing # Processing page used in sign up page
+#from AIPlanner.pages.success import success # Success page shown after successful sign up
 from AIPlanner.classes.database import * # Database
-from AIPlanner.pages.userlist import userlist # Userlist debugging page
+#from AIPlanner.pages.userlist import userlist # Userlist debugging page
 
 
-from AIPlanner.pages.login import login # Log in page for existing users
+#from AIPlanner.pages.login import login # Log in page for existing users
 from AIPlanner.classes.taskform import task_input_form
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
-from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
+#from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
 from AIPlanner.classes.todo_list import todo_component
 
 
@@ -50,7 +50,7 @@ def weekly() -> rx.Component:
         rx.hstack(
 
             rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
-            #show_login_signup(), # rx condition that decides which 
+            #show_login_signup(), # rx condition that decides which
             #buttons to show (login, signup, log out)
             rx.link( # Button that takes user to Canvas Connect page
                 rx.button("Connect to Canvas"),
