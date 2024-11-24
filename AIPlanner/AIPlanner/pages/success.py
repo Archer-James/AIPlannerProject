@@ -6,12 +6,11 @@ There's a back button that takes the user back to the home screen.
 """
 
 import reflex as rx
-from AIPlanner.pages.userlist import userlist
-# import AIPlanner.classes.database as database
 
 
 def render_success_page():
     """
+    Returns:
     Success page with the back to home button that takes the user to home page.
     """
     return rx.card(
@@ -42,7 +41,10 @@ def render_success_page():
 
 
 def success() -> rx.Component:
-    """Base success page that calls render_success_page() to show button and text."""
+    """
+    Returns:
+    Base success page that calls render_success_page() to show button and text.
+    """
     return rx.center(
         render_success_page(),
         width="100%",

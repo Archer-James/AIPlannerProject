@@ -1,32 +1,32 @@
-'''
-Creates a "Todos" component displaying an ordered list of tasks.
-
-    Returns:
-        Component: A Reflex vertical stack with a heading, divider, 
-                and list of user tasks.
-'''
 import reflex as rx
 from AIPlanner.classes.database import UserManagementState
-
-
+from AIPlanner.pages.login import LoginState
+from AIPlanner.classes.database import Task
 
 def todo_component(state=UserManagementState) -> rx.Component:
     '''
     Creates a "Todos" component displaying an ordered list of tasks.
 
     Returns:
-        Component: A Reflex vertical stack with a heading, divider, 
-                and list of user tasks.
+    Prints heading and user tasks in a stack
     '''
     return rx.vstack(
-        rx.heading("To Do"),
+        rx.hstack(
+            rx.heading("To Do"),
+            rx.button(rx.icon("refresh-ccw")
+                      ,on_click = UserManagementState.get_user_tasks(LoginState.user_id)),
+        ),
         rx.divider(),
         rx.foreach(
             state.tasks,
             lambda task: rx.hstack(
                 rx.vstack(
                     f"{task.task_name}, Due: {task.due_date}",
-                    f"Description: {task.description}"
+                    f"Description: {task.description}",
+                    style={
+                                "color": 
+                                Task.get_priority_color(task),
+                            },
                 ),
                 # Task Name Editing
                 rx.cond(

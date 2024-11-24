@@ -12,7 +12,7 @@ from datetime import datetime # Used to grab assignment due date specifics
 import requests
 
 # Replace with your Canvas API token and Canvas URL
-API_TOKEN = 'YOUR_CANVAS_API_TOKEN'
+API_TOKEN = '8346~KKPDHJ2WCZrrvWLVKG3MGZ2xUUtVrv2AtUrrFP8HWH7TMWkJekWY4D7aZKD8xXeC'
 CANVAS_URL = 'https://uncw.instructure.com' # 'https://YOUR_CANVAS_INSTANCE_URL'
 
 # Set up the headers with your token
@@ -30,7 +30,8 @@ def get_all_courses():
     Includes all course info. We'll use the course's id in main to grab the assignments.
     Checks for pagination with Canvas API (sometimes the API doesn't return all courses bc data is too big).
 
-    return courses: Python list of courses
+    Returns:
+    courses (list): Python list of courses
     """
     courses = []
     # url = f'{CANVAS_URL}/api/v1/courses' # Grabbing all current and past courses
@@ -50,9 +51,11 @@ def get_assignments_for_course(course_id):
     Iterates through Canvas course and returns all assignments.
     Makes sure that Canvas API isn't paginating results.
 
-    param course_id: int, Canvas course id
+    Parameters:
+    course_id (int): Canvas course id used to identify course.
 
-    returns assignments: Python list of assignments
+    Returns:
+    assignments (list): Python list of assignment dictionaries (each assignment is a dictionary).
     """
 
     #total_assignments = []

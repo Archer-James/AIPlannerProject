@@ -4,23 +4,30 @@ Displays users in the database.
 """
 import reflex as rx
 from AIPlanner.classes.database import *
-import AIPlanner.classes.database as database
 from AIPlanner.pages.login import LoginState
 from AIPlanner.classes.ai import AIState
 
 def display_usernames(state=UserManagementState):
-    """Function to display usernames"""
+    """Function to display usernames
+    
+    Returns:
+    A reflex vertical stack component with all of the usernames, IDs, and tasks for all users in the database
+    """
     return rx.vstack(
     rx.text(state.message),  # Display number of users retrieved
     rx.foreach(  # Use rx.foreach for list rendering
         state.users,
         # Create a text component for each username
-            lambda user: rx.text(user.username, " ", user.canvas_hash_id, " ", user.id, user.tasks)
+            lambda user: rx.text(user.username, " ", user.id, user.tasks)
         )
     )
 
 def display_user_tasks(state=UserManagementState):
-    """Function to display tasks for the specified user"""
+    """Function to display tasks for the specified user
+    
+    Returns:
+    A reflex vertical stack component with the task names, due dates, descriptions, priority levels, IDs, and deletion status of tasks
+    """
     return rx.vstack(
         rx.foreach(
             state.tasks,
@@ -33,16 +40,18 @@ def display_user_tasks(state=UserManagementState):
         )
     )
 
-def call_api():
-    """Function to call AI API function"""
-    return AIState.send_request()
-
 def userlist(state=UserManagementState) -> rx.Component:
     """
     Calls display_usernames to display all users in database, 
     with buttons for quick addition of test users to the database
-    and repeated retreival of users from the database
+    and repeated retrieval of users from the database
+
+    Returns:
+    Reflex container component with a heading, several buttons, and the result of display_usernames and display_user_tasks
     """
+    state.fetch_all_users()
+    state.get_user_tasks()
+
     # User list debugging page
     return rx.container(
         rx.heading("User List", size="0"),
@@ -53,9 +62,9 @@ def userlist(state=UserManagementState) -> rx.Component:
         rx.button("Add task to test user with ID 1", on_click=lambda: state.add_test_task(1)),
         rx.button("Show tasks assigned to currently logged in user",
                   on_click=lambda: state.get_user_tasks(LoginState.user_id)),
-        rx.button("Show tasks assigned to user with ID 2",
-                  on_click=lambda: state.get_user_tasks(2)),
-        rx.button("Generate example AI schedule", on_click=lambda: AIState.send_request()),
+        # rx.button("Show tasks assigned to user with ID 2",
+        #           on_click=lambda: state.get_user_tasks(2)),
+        rx.button("Generate AI schedule for current user", on_click=lambda: AIState.send_request(state.tasks)),
         rx.text(AIState.processed_output),
         display_usernames(),
         display_user_tasks(),
