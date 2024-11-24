@@ -1,6 +1,6 @@
 # """User class file
 
-# Creates an instance of a User object with a username, password, and canvas_hash_id. 
+# Creates an instance of a User object with a username, password, and canvas_hash_id.
 # Includes getters and setters, as well as an example list.
 
 # """
@@ -25,19 +25,19 @@
 #         Returns a string including the username, password, and canvas_hash_id of the user.
 #         """
 #         return f"{self.username}'s password is {self.password} and the canvas hash id is {self.canvas_hash_id}!"
-    
+
 #     def get_username(self):
 #         """Returns the user's username."""
 #         return self.username
-    
+
 #     def get_password(self):
 #         """Returns the user's password."""
 #         return self.password
-    
+
 #     def get_canvas_hash_id(self):
 #         """Returns the user's canvas_hash_id."""
 #         return self.canvas_hash_id
-    
+
 #     def set_username(self, username):
 #         """Sets the user's username."""
 #         self.username = username
@@ -64,7 +64,6 @@
 #     returns success_code: int   returns 0 if no error in appending the user to the csv, else 1.
 #     """
 #     new_user = User(username=username, canvas_hash_id=canvas_hash_id, password=password)
-    
 #     success_code = append_user_csv(new_user=new_user)
 
 #     return new_user, success_code
@@ -83,8 +82,8 @@
 #         with open("AIPlanner/data/user_database.csv", mode='a', encoding="utf-8") as f:
 #             writer = csv.writer(f)
 #             writer.writerow([
-#                 new_user.get_username(), 
-#                 new_user.get_canvas_hash_id(), 
+#                 new_user.get_username(),
+#                 new_user.get_canvas_hash_id(),
 #                 new_user.get_password()
 #                 ])
 

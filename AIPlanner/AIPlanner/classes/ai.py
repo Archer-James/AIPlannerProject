@@ -1,8 +1,7 @@
 """Testing file and page for OpenAI integration. Must have OpenAI API key set as an environment variable OPENAI_API_KEY to use."""
-
 import os
 import re
-import datetime
+from datetime import date, timedelta
 import time
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
@@ -27,8 +26,12 @@ class AIState(UserManagementState):
         for task in tasks:
             print(task)
             if task['is_deleted'] is False:
-                inputMessage = inputMessage + f"task_id = {task['id']}\ntask_name = '{task['task_name']}\npriority_level = {task['priority_level']}\ndue_date = {task['due_date']}\n\n"
-                print(task['id'])
+                if task['recur_frequency'] == 0:
+                    inputMessage = inputMessage + f"task_id = {task['id']}\ntask_name = '{task['task_name']}\npriority_level = {task['priority_level']}\ndue_date = {task['due_date']}\n\n"
+                    print(task['id'])
+
+        if not tasks:
+            return "No tasks available to generate a schedule. Please add some and try again."
         currentTime = time.ctime()
 
         OpenAI.api_key = os.environ["OPENAI_API_KEY"]
@@ -41,7 +44,7 @@ class AIState(UserManagementState):
                 {"role": "system", "content": f"""
                 You are a bot that takes user tasks and assigns them to slots on a calendar. Tasks can have a priority level with (1) being the highest and (3) being the lowest. 
                 Higher priority tasks should be assigned to blocks before lower priority tasks. Do not make any changes or return anything other than the following format for each task. 
-                Do not include anything like "Here's the output" or "Let me know if you'd like any adjustments". The current date is {currentTime}.
+                Do not include anything like "Here's the output" or "Let me know if you'd like any adjustments". The current date is {currentTime}, only schedule tasks after this time.
                 Do not include the word hours in the response. Give output in the format as follows:  
                 task_id = Integer from prompt
                 task_name = String from prompt
@@ -92,10 +95,27 @@ class AIState(UserManagementState):
             }
             for match in matches
         ]
+        print("matching done")
         task_string = ""
+        temp_string = ""
         for task in tasks:
             for key, value in task.items():
                 task_string = task_string + f'{key}: {value}\n'
         #print(task_string)
+        for task in tasks:
+            task_id_match = None
+            date_match = None
+            time_match = None
+            task_duration = None
+            for key, value in task.items():
+                temp_string = f'{key}: {value}'
+                task_id_match = re.search(r"task_id\s*=\s*(\d+)", temp_string)
+                date_match = re.search(r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2})", temp_string)
+                time_match = re.search(r"assigned_block_start_time\s*=\s*([\d:]+)", temp_string)
+                duration_match = re.search(r"assigned_block_duration\s*=\s*(\d+)", temp_string)
+                task_id = int(task_id_match.group(1)) if task_id_match else None
+                task_date = date.fromisoformat(date_match.group(1)) if date_match else None
+                task_start = time.strptime(time_match.group(1)) if time_match else None
+                task_duration = timedelta(hours=int(duration_match.group(1))) if duration_match else None
+            UserManagementState.assign_block(task_id, task_date, task_start, task_duration)
         return task_string
-    
