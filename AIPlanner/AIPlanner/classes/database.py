@@ -59,13 +59,14 @@ class Task(rx.Model, table=True):
         return rx.match(
             priority,
             (1, "yellow"),    # High priority
-            (2, "orange"), # Medium priority 
+            (2, "orange"), # Medium priority
             (3, "blue"),   # Low priority
             "gray"         # Default
         )
 
 class UserManagementState(rx.State):
-    """Class that defines the state in which variables and functions are held relating to user management
+    """Class that defines the state in which variables and 
+    functions are held relating to user management
     
     Attributes:
     users: List of users to hold the result of retrieving all users from the database
@@ -159,7 +160,6 @@ class UserManagementState(rx.State):
                     print(f"Task {task_id} is already marked as deleted.")
             else:
                 print(f"No task found with ID: {task_id}")
-    
 
 class AddUser(rx.State):
     """Class that enables adding users to the database"""

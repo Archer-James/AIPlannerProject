@@ -2,7 +2,7 @@ import random
 from datetime import date, time, timedelta, datetime
 from AIPlanner.classes.database import *
 import reflex as rx
-from rxconfig import config
+#from rxconfig import config
 from AIPlanner.pages.login import LoginState
 
 class TaskState(LoginState):
