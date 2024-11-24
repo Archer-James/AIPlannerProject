@@ -1,8 +1,9 @@
 """Testing file and page for OpenAI integration. Must have OpenAI API key set as an environment variable OPENAI_API_KEY to use."""
 
+import reflex as rx
 import os
 import re
-import datetime
+from datetime import date, timedelta
 import time
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
@@ -100,5 +101,14 @@ class AIState(UserManagementState):
             for key, value in task.items():
                 task_string = task_string + f'{key}: {value}\n'
         #print(task_string)
+        task_id_match = re.search(r"task_id\s*=\s*(\d+)", task_string)
+        date_match = re.search(r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2})", task_string)
+        time_match = re.search(r"assigned_block_start_time\s*=\s*([\d:]+)", task_string)
+        duration_match = re.search(r"assigned_block_duration\s*=\s*(\d+)", task_string)
+        task_id = int(task_id_match.group(1)) if task_id_match else None
+        task_date = date.fromisoformat(date_match.group(1)) if date_match else None
+        task_start = time.strptime(time_match.group(1)) if time_match else None
+        task_duration = timedelta(hours=int(duration_match.group(1))) if duration_match else None
+        UserManagementState.assign_block(task_id, task_date, task_start, task_duration)
         return task_string
     
