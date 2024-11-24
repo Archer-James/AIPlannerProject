@@ -239,7 +239,7 @@ class CanvasConnectState(rx.State): # Like extending a class
             )
             with rx.session() as session:
                 session.add(new_task)
-                session.commit() 
+                session.commit()
 
         print("After convert class")
 
