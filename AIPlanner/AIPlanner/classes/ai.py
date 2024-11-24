@@ -26,7 +26,7 @@ class AIState(UserManagementState):
         for task in tasks:
             print(task)
             if task['is_deleted'] is False:
-                if task['recur_frequency'] == "0":
+                if task['recur_frequency'] == 0:
                     inputMessage = inputMessage + f"task_id = {task['id']}\ntask_name = '{task['task_name']}\npriority_level = {task['priority_level']}\ndue_date = {task['due_date']}\n\n"
                     print(task['id'])
 
@@ -95,21 +95,27 @@ class AIState(UserManagementState):
             }
             for match in matches
         ]
+        print("matching done")
         task_string = ""
         temp_string = ""
         for task in tasks:
             for key, value in task.items():
-                temp_string = f'{key}: {value}'
-                task_string = task_string + f'{temp_string}\n'
+                task_string = task_string + f'{key}: {value}\n'
         #print(task_string)
-            task_id_match = re.search(r"task_id\s*=\s*(\d+)", temp_string)
-            date_match = re.search(r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2})", temp_string)
-            time_match = re.search(r"assigned_block_start_time\s*=\s*([\d:]+)", temp_string)
-            duration_match = re.search(r"assigned_block_duration\s*=\s*(\d+)", temp_string)
-            task_id = int(task_id_match.group(1)) if task_id_match else None
-            task_date = date.fromisoformat(date_match.group(1)) if date_match else None
-            task_start = time.strptime(time_match.group(1)) if time_match else None
-            task_duration = timedelta(hours=int(duration_match.group(1))) if duration_match else None
-            print(task_id, task_date, task_start, task_duration)
+        for task in tasks:
+            task_id_match = None
+            date_match = None
+            time_match = None
+            task_duration = None
+            for key, value in task.items():
+                temp_string = f'{key}: {value}'
+                task_id_match = re.search(r"task_id\s*=\s*(\d+)", temp_string)
+                date_match = re.search(r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2})", temp_string)
+                time_match = re.search(r"assigned_block_start_time\s*=\s*([\d:]+)", temp_string)
+                duration_match = re.search(r"assigned_block_duration\s*=\s*(\d+)", temp_string)
+                task_id = int(task_id_match.group(1)) if task_id_match else None
+                task_date = date.fromisoformat(date_match.group(1)) if date_match else None
+                task_start = time.strptime(time_match.group(1)) if time_match else None
+                task_duration = timedelta(hours=int(duration_match.group(1))) if duration_match else None
             UserManagementState.assign_block(task_id, task_date, task_start, task_duration)
         return task_string
