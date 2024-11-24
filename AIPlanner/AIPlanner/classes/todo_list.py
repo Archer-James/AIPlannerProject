@@ -28,7 +28,7 @@ def todo_component(state=UserManagementState) -> rx.Component:
                                 Task.get_priority_color(task),
                             },
                 ),
-                # Task Name Editing
+                # Task Names Editing
                 rx.cond(
                     state.editing_task_id_name == task.id,
                     rx.hstack(
