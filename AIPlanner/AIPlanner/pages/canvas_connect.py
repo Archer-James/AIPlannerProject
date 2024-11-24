@@ -225,7 +225,7 @@ class CanvasConnectState(rx.State): # Like extending a class
             #print(f"")
 
             new_task = database.Task(
-                recur_frequency=7,  # Example for recurring frequency
+                recur_frequency=1,  # Example for recurring frequency
                 due_date=date(due_at.year, due_at.month, due_at.day),
                 is_deleted=False,
                 task_name=assignment['name'],

@@ -193,6 +193,7 @@ class UserManagementState(rx.State):
 
     def assign_block(self, task_id: int, task_date: date, task_start: time, task_duration: timedelta):
         """Edits tasks to match AI-assigned date, time, and duration values"""
+        print(task_date, task_start, task_duration)
         with rx.session() as session:
             # Try to get the task with the specified ID
             task = session.exec(
