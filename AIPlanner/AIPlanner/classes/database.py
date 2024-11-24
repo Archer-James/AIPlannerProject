@@ -57,8 +57,20 @@ class Task(rx.Model, table=True):
     #user_id: int = sqlmodel.Field(foreign_key="LoginState.user_id")
     user: Optional[User] = sqlmodel.Relationship(back_populates="tasks")
 
+    def get_priority_color(self):
+        """Return the color string for a given priority."""
+        priority = self["priority_level"]  # Access as dictionary
+        return rx.match(
+            priority,
+            (1, "yellow"),    # High priority
+            (2, "orange"), # Medium priority
+            (3, "blue"),   # Low priority
+            "gray"         # Default
+        )
+
 class UserManagementState(rx.State):
-    """Class that defines the state in which variables and functions are held relating to user management
+    """Class that defines the state in which variables and 
+    functions are held relating to user management
     
     Attributes:
     users: List of users to hold the result of retrieving all users from the database
@@ -91,6 +103,7 @@ class UserManagementState(rx.State):
             self.tasks = session.exec(
                 Task.select().where(Task.user_id == user_id)
             ).all()
+        print("calling")
         print(self.tasks)
 
     def fetch_all_users(self):

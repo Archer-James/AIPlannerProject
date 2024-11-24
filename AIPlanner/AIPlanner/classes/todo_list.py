@@ -1,7 +1,7 @@
 import reflex as rx
 from AIPlanner.classes.database import UserManagementState
-
-
+from AIPlanner.pages.login import LoginState
+from AIPlanner.classes.database import Task
 
 def todo_component( state = UserManagementState) -> rx.Component:
     '''
@@ -11,13 +11,21 @@ def todo_component( state = UserManagementState) -> rx.Component:
     Prints heading and user tasks in a stack
     '''
     return rx.vstack(
-        rx.heading("To Do"),
+        rx.hstack(
+            rx.heading("To Do"),
+            rx.button(rx.icon("refresh-ccw")
+                      ,on_click = UserManagementState.get_user_tasks(LoginState.user_id)),
+        ),
         rx.divider(),
         rx.foreach(
             state.tasks,
             lambda task: rx.hstack(
                 rx.vstack(
-                    f"{task.task_name}, Due: {task.due_date}"
+                    f"{task.task_name}, Due: {task.due_date}",
+                    style={
+                                "color": 
+                                Task.get_priority_color(task),
+                            },
                 ),
                 rx.menu.root(
                     rx.menu.trigger(

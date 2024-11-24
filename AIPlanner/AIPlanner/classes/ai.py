@@ -1,5 +1,4 @@
 """Testing file and page for OpenAI integration. Must have OpenAI API key set as an environment variable OPENAI_API_KEY to use."""
-
 import os
 import re
 from datetime import date, timedelta
