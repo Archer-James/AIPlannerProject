@@ -112,5 +112,3 @@ class ProcessCanvasToken(rx.State):
                         print(f"- {assignment['name']} (Due: {assignment['due_at']})")
 
             print("\n")
-
-    
