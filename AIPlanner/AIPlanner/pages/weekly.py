@@ -16,6 +16,10 @@ from AIPlanner.classes.taskform import task_input_form
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
 #from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
+
+from AIPlanner.classes.taskform import task_input_form
+from AIPlanner.pages.login import LoginState # Login State used to get the user's username
+from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
 from AIPlanner.classes.todo_list import todo_component
 
 
@@ -24,20 +28,12 @@ from AIPlanner.classes.todo_list import todo_component
 
 from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
-from AIPlanner.classes.cal_comps import cal_comps
+from AIPlanner.classes.cal_comps import *
 # to run test environment
 # >cd AIPlanner
 # >py -3 -m venv .venv
 # >reflex run
 # open http://localhost:3000/
-
-
-class State(rx.State):
-    """The app state."""
-
-
-
-
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def weekly() -> rx.Component:
     """Reflex component for base index page
@@ -65,8 +61,6 @@ def weekly() -> rx.Component:
 
         # Developer & Task stack
         rx.hstack(
-
-
             rx.link(
                 rx.button("Show All Users"),
                 href="/userlist",
@@ -93,7 +87,7 @@ def weekly() -> rx.Component:
             rx.color_mode.button(position="top-right"),
             rx.vstack(
                 rx.center(
-                cal_comps.weekly_component(),
+                weekly_component(),
                 todo_component(),
                 spacing="5",
                 justify="center",

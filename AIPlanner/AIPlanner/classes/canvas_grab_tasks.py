@@ -112,5 +112,3 @@
 #                         print(f"- {assignment['name']} (Due: {assignment['due_at']})")
 
 #             print("\n")
-
-# Eof

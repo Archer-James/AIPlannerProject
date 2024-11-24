@@ -64,7 +64,6 @@
 #     returns success_code: int   returns 0 if no error in appending the user to the csv, else 1.
 #     """
 #     new_user = User(username=username, canvas_hash_id=canvas_hash_id, password=password)
-
 #     success_code = append_user_csv(new_user=new_user)
 
 #     return new_user, success_code

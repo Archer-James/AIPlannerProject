@@ -1,6 +1,5 @@
 import calendar
 from datetime import datetime
-
 import reflex as rx
 
 
@@ -33,9 +32,7 @@ class GenCalendar(rx.State):
          int: first weekday of the month
          int: number of days in the month
          
-         
         """
-        cal = calendar.Calendar(firstweekday=6)  # Start the week on Sunday
         return calendar.monthrange(self.current_year, self.current_month)
 
     def get_month_year_label(self):
