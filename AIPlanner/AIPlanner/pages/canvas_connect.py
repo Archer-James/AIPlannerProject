@@ -215,7 +215,7 @@ class CanvasConnectState(rx.State): # Like extending a class
         #ConvertToTasks.convert_to_tasks(result)
 
         print("Before for loop")
-        
+
         # Signed in as Mary - 6
 
         for assignment in assign_list:
@@ -264,7 +264,7 @@ class ConvertToTasks():
         assign_list (list): List of Canvas Assignments in dictionary form.
         """
         print("Before for loop")
-        
+
         # Signed in as Mary - 6
 
         for assignment in assign_list:
@@ -287,7 +287,7 @@ class ConvertToTasks():
             )
             with rx.session() as session:
                 session.add(new_task)
-                session.commit() 
+                session.commit()
 
             # print(f"Assignment: {assignment}")
             # print(f"Type of assignment: {type(assignment)}")
@@ -328,8 +328,8 @@ class ConvertToTasks():
             # # Making the start date to one hour before it's due, duration 1 hour
             # print(date(due_at.year, due_at.month, due_at.day))
             # print(database.UserManagementState.user_id)
-            # database.manual_add_task(recur_freq=1, 
-            #                         due_date=date(due_at.year, due_at.month, due_at.day), 
+            # database.manual_add_task(recur_freq=1,
+            #                         due_date=date(due_at.year, due_at.month, due_at.day),
             #                         task_name=assignment['name'],
             #                         description=assignment['description'],
             #                         priority_lvl=1,

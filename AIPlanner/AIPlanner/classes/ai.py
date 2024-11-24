@@ -29,7 +29,7 @@ class AIState(UserManagementState):
             if task['is_deleted'] is False:
                 inputMessage = inputMessage + f"task_id = {task['id']}\ntask_name = '{task['task_name']}\npriority_level = {task['priority_level']}\ndue_date = {task['due_date']}\n\n"
                 print(task['id'])
-    
+
         if not tasks:
             return "No tasks available to generate a schedule. Please add some and try again."
         currentTime = time.ctime()
