@@ -28,7 +28,7 @@ from AIPlanner.classes.todo_list import todo_component
 
 from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
-from AIPlanner.classes.cal_comps import *
+from AIPlanner.classes.cal_comps import weekly_component
 # to run test environment
 # >cd AIPlanner
 # >py -3 -m venv .venv
