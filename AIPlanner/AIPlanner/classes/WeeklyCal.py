@@ -45,7 +45,7 @@ class GenWeeklyCal(rx.State):
             self.current_year += 1
         else:
             self.current_month += 1
-          
+
     def prev_month(self):
         """Decrement month and reinitialize calendar"""
         if self.current_month == 1:
