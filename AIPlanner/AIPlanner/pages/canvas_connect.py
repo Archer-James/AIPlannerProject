@@ -330,9 +330,12 @@ def manualtokens_connect_page():
             #     rx.text(f"LoginState.user_id: {LoginState.user_id}"),
             #     rx.text("LoginState.user_id doesn't exist"),
             # ),
-        spacing="2",
+        width="100%",
+        height="100vh",
+        padding="2em",
+        spacing="4",
         justify="center",
-        min_height="15vh",
+        align='center',
     )
 
 
@@ -358,6 +361,7 @@ def show_log_in_first():
     User can choose which page they want to redirect to.
     """
     return rx.vstack(
+        rx.heading("Connect your Canvas account!", size="8", min_height='10vh', align='center', justify='center'),
         # Log in first button
         rx.link(
             rx.button("Log in first to save Canvas entries"),
@@ -378,10 +382,22 @@ def show_log_in_first():
             href="/manualtokens_connect_page",
             is_external=False,
         ),
+        rx.heading(" ", spacing='2', justify='center', min_height='5vh'),
+        rx.link(
+            rx.button("Go back"),
+            href="/",
+            is_external=False),
         spacing="5",
         justify="center",
         align='center',
         min_height="15vh",
+            # rx.cond(LoginState.user_id,
+            #     rx.text(f"LoginState.user_id: {LoginState.user_id}"),
+            #     rx.text("LoginState.user_id doesn't exist"),
+            # ),
+        # spacing="2",
+        # justify="center",
+        # min_height="15vh",
     )
 
 
@@ -393,7 +409,6 @@ def canvas_connect() -> rx.Component:
     Includes a button that takes user back to home page.
     """
     return rx.container(
-        rx.heading("Connect your Canvas account!", size="8", min_height='10vh', align='center', justify='center'),
         rx.vstack(
             rx.cond(
                 check_if_logged_in(), # Checking if user is logged in
