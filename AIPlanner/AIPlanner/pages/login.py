@@ -202,6 +202,7 @@ class LoginState(rx.State):
             # Error handling
             except TypeError as e:
                 print(f"Error: {e}")
+                self.is_submitting = False
                 yield rx.toast("Error logging in, please retry.")
 
         # User not found

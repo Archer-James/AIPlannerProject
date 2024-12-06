@@ -237,6 +237,7 @@ class CanvasConnectState(LoginState): # Like extending a class
 
                 except TypeError as e:
                     print(f"Error with converting Canvas tasks to task objects: {e}")
+                    self.is_submitting_Canvas = False
                     return rx.toast("Error converting Canvas assignments to system tasks. Please try again.")
 
             # except requests.exceptions.HTTPError as e:
