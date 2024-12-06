@@ -174,6 +174,7 @@ def signup_form() -> rx.Component:
                     type="password",
                     required=True,
                 ),
+                rx.heading(" ", spacing='2', justify='center', min_height='3vh'),
             ),
             rx.button(
                 "Submit", 
@@ -185,8 +186,12 @@ def signup_form() -> rx.Component:
         ),
         #rx.text(f"{SignupState.set_processing_msg}"),
         #rx.text(f"Status: {SignupState.change_processing_msg}"),
+        width="100%",
+        padding="2em",
         spacing="50",
         justify="center",
+        align='center',
+        min_height="15vh",
     )
 
 def signup() -> rx.Component:
@@ -198,6 +203,7 @@ def signup() -> rx.Component:
     # Signup page
     return rx.container(
         signup_form(),
+        rx.heading(" ", spacing='2', justify='center', min_height='5vh'),
         rx.link(
             rx.button("Go back"),
             href="/",
@@ -207,6 +213,10 @@ def signup() -> rx.Component:
         width="100%",
         height="100vh",
         padding="2em",
+        spacing="2",
+        justify="center",
+        align='center',
+        min_height="15vh",
         # bg="grey", # Background
     )
 

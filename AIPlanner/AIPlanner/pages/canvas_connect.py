@@ -273,13 +273,20 @@ def manual_token_input() -> rx.Component:
                     required=True,
                 ),
             ),
+            rx.heading(" ", spacing='2', justify='center', min_height='3vh'),
             rx.button(
                 "Enter", 
                 type="submit",
                 disabled=CanvasConnectState.is_submitting_Canvas,
             ),
-            on_submit=CanvasConnectState.process_token
+            on_submit=CanvasConnectState.process_token,
         ),
+        width="100%",
+        padding="2em",
+        spacing="2",
+        justify="center",
+        # align='center',
+        min_height="15vh",
     )
 
 
@@ -298,7 +305,7 @@ def manualtokens_connect_page():
         # Have input & check input for errors
         manual_token_input(),
 
-        rx.vstack(
+        rx.card(
             rx.hstack(
                 rx.heading("Don't know how?"),
                 rx.link(
@@ -306,32 +313,26 @@ def manualtokens_connect_page():
                     href="https://community.canvaslms.com/t5/Canvas-Basics-Guide/How-do-I-manage-API-access-tokens-in-my-user-account/ta-p/615312",
                     is_external=True,
                 ),
+                width="100%",
+                padding="2em",
+                spacing="2",
+                # justify="center",
+                # align='center',
+                min_height="10vh",
             ),
-            rx.link(
-                rx.button("Go back"),
-                href="/",
-                is_external=False),
-            rx.cond(LoginState.user_id,
-                rx.text(f"LoginState.user_id: {LoginState.user_id}"),
-                rx.text("LoginState.user_id doesn't exist"),
-            ),
-            # rx.cond(database.UserManagementState.user_id,
-            #     rx.text(f"database.UserManagementState.user_id: {database.UserManagementState.user_id}"),
-            #     rx.text("database.UserManagementState.user_id doesn't exist"),
-            # ),
-            # rx.cond(database.Task.user_id,
-            #     rx.tIext(f"database.UserManagementState.user_id: {database.UserManagementState.user_id}"),
-            #     rx.text("database.UserManagementState.user_id doesn't exist"),
-            # ),
-            # rx.cond(database.Task.user_id,
-            #     rx.text(f"database.Task.user_id: {database.Task.user_id}"),
-            #     rx.text("database.Task.user_id doesn't exist"),
-            # ),
-            # rx.cond(database.Task.user,
-            #     rx.text(f"database.Task.user: {database.Task.user}"),
-            #     rx.text("database.Task.user doesn't exist"),
-            # ),
         ),
+        rx.heading(" ", spacing='2', justify='center', min_height='5vh'),
+        rx.link(
+            rx.button("Go back"),
+            href="/",
+            is_external=False),
+            # rx.cond(LoginState.user_id,
+            #     rx.text(f"LoginState.user_id: {LoginState.user_id}"),
+            #     rx.text("LoginState.user_id doesn't exist"),
+            # ),
+        spacing="2",
+        justify="center",
+        min_height="15vh",
     )
 
 
@@ -363,14 +364,14 @@ def show_log_in_first():
             href="/login",
             is_external=False,
         ),
-        rx.heading("--- Or ---"),
+        rx.divider(),
         # Sign up button
         rx.link(
             rx.button("Sign Up"),
             href="/signup",
             is_external=False,
         ),
-        rx.heading("--- Or ---"),
+        rx.divider(),
         # Continue without account button
         rx.link(
             rx.button("Continue without account"),
@@ -379,6 +380,8 @@ def show_log_in_first():
         ),
         spacing="5",
         justify="center",
+        align='center',
+        min_height="15vh",
     )
 
 
@@ -390,13 +393,17 @@ def canvas_connect() -> rx.Component:
     Includes a button that takes user back to home page.
     """
     return rx.container(
-        rx.heading("Connect your Canvas account!", size="8"),
+        rx.heading("Connect your Canvas account!", size="8", min_height='10vh', align='center', justify='center'),
         rx.vstack(
             rx.cond(
                 check_if_logged_in(), # Checking if user is logged in
                 manualtokens_connect_page(), # Take user to connect canvas if logged in
                 show_log_in_first() # Show option to log in first if not logged in
             ),
+            spacing="2",
+            justify="center",
+            align='center',
+            min_height="15vh",
             # rx.link(
             #     rx.button("Go back"),
             #     href="/",
@@ -408,6 +415,7 @@ def canvas_connect() -> rx.Component:
         padding="2em",
         spacing="4",
         justify="center",
+        align='center',
     )
 
 # Eof
