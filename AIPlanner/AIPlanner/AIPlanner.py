@@ -173,7 +173,7 @@ def show_login_signup():
 
 app = rx.App(
     theme=rx.theme(
-        appearance="light",
+        appearance="dark",
         has_background=True,
         radius="large",
         accent_color="pink",
