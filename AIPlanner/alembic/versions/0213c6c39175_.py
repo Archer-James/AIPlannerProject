@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 3acb577c11f0
+Revision ID: 0213c6c39175
 Revises: 
-Create Date: 2024-11-24 11:55:46.732911
+Create Date: 2024-12-06 23:43:47.403899
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 import sqlmodel
 
 # revision identifiers, used by Alembic.
-revision: str = '3acb577c11f0'
+revision: str = '0213c6c39175'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -36,9 +36,9 @@ def upgrade() -> None:
     sa.Column('description', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('task_id', sa.Integer(), nullable=False),
     sa.Column('priority_level', sa.Integer(), nullable=False),
-    sa.Column('assigned_block_date', sa.Date(), nullable=False),
-    sa.Column('assigned_block_start_time', sa.Time(), nullable=False),
-    sa.Column('assigned_block_duration', sa.Interval(), nullable=False),
+    sa.Column('assigned_block_date', sa.DateTime(), nullable=True),
+    sa.Column('assigned_block_start_time', sa.DateTime(), nullable=True),
+    sa.Column('assigned_block_duration', sa.Interval(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')

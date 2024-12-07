@@ -54,7 +54,7 @@ def userlist(state=UserManagementState) -> rx.Component:
 
     # User list debugging page
     return rx.container(
-        rx.heading("User List", size="0"),
+        rx.heading("User List", size="5"),
         rx.button("Fetch All Users From Database", on_click=[state.fetch_all_users]),
         rx.button("Add Test User",
                      # Button to add test user

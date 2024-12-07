@@ -1,5 +1,5 @@
 """Module containing classes and methods pertaining to the SQLite database built into Reflex"""
-from datetime import date, time, timedelta
+from datetime import date, datetime, time, timedelta
 from typing import List, Optional
 import random
 from AIPlanner.pages.login import LoginState
@@ -49,9 +49,9 @@ class Task(rx.Model, table=True):
     description: str
     task_id: int
     priority_level: int
-    assigned_block_date: date
-    assigned_block_start_time: time
-    assigned_block_duration: timedelta
+    assigned_block_date: Optional[datetime]
+    assigned_block_start_time: Optional[datetime]
+    assigned_block_duration: Optional[timedelta]
     # user_id: int = sqlmodel.Field(foreign_key="user.canvas_hash_id")
     user_id: int = sqlmodel.Field(foreign_key="user.id")
     #user_id: int = sqlmodel.Field(foreign_key="LoginState.user_id")
