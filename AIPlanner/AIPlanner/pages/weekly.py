@@ -55,7 +55,7 @@ def weekly() -> rx.Component:
             ),
             show_login_signup(),
             spacing="5",
-            justify="left",
+            justify="start",
             min_height="10vh",
         ),
 

@@ -1,7 +1,7 @@
 """Testing file and page for OpenAI integration. Must have OpenAI API key set as an environment variable OPENAI_API_KEY to use."""
 import os
 import re
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import time
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
@@ -97,25 +97,52 @@ class AIState(UserManagementState):
         ]
         #print("matching done")
         task_string = ""
-        temp_string = ""
         for task in tasks:
             for key, value in task.items():
                 task_string = task_string + f'{key}: {value}\n'
         #print(task_string)
+        # for task in tasks:
+        #     task_id_match = None
+        #     date_match = None
+        #     time_match = None
+        #     task_duration = None
+        #     for key, value in task.items():
+        #         temp_string = f'{key}: {value}'
+        #         task_id_match = re.search(r"task_id\s*=\s*(\d+)", temp_string)
+        #         date_match = re.search(r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2})", temp_string)
+        #         time_match = re.search(r"assigned_block_start_time\s*=\s*([\d:]+)", temp_string)
+        #         duration_match = re.search(r"assigned_block_duration\s*=\s*(\d+)", temp_string)
+        #         task_id = int(task_id_match.group(1)) if task_id_match else None
+        #         task_date = date.fromisoformat(date_match.group(1)) if date_match else None
+        #         task_start = time.strptime(time_match.group(1)) if time_match else None
+        #         task_duration = timedelta(hours=int(duration_match.group(1))) if duration_match else None
+        #     UserManagementState.assign_block(task_id, task_date, task_start, task_duration)
         for task in tasks:
-            task_id_match = None
-            date_match = None
-            time_match = None
+            print("in task loop")
+            task_id = None
+            task_date = None
+            task_start = None
             task_duration = None
             for key, value in task.items():
-                temp_string = f'{key}: {value}'
-                task_id_match = re.search(r"task_id\s*=\s*(\d+)", temp_string)
-                date_match = re.search(r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2})", temp_string)
-                time_match = re.search(r"assigned_block_start_time\s*=\s*([\d:]+)", temp_string)
-                duration_match = re.search(r"assigned_block_duration\s*=\s*(\d+)", temp_string)
-                task_id = int(task_id_match.group(1)) if task_id_match else None
-                task_date = date.fromisoformat(date_match.group(1)) if date_match else None
-                task_start = time.strptime(time_match.group(1)) if time_match else None
-                task_duration = timedelta(hours=int(duration_match.group(1))) if duration_match else None
-            UserManagementState.assign_block(task_id, task_date, task_start, task_duration)
+                if key == "task_id":
+                    task_id = int(value)
+                elif key == "assigned_block_date":
+                    try:
+                        task_date = datetime.strptime(value, "%Y-%m-%d").date()
+                    except ValueError:
+                        print(f"Invalid date format for task_id {task_id}: {value}")
+                elif key == "assigned_block_start_time":
+                    try:
+                        task_start = datetime.strptime(value, "%H:%M:%S").time()
+                    except ValueError:
+                        print(f"Invalid time format for task_id {task_id}: {value}")
+                elif key == "assigned_block_duration":
+                    try:
+                        task_duration = timedelta(hours=int(value))
+                    except ValueError:
+                        print(f"Invalid duration format for task_id {task_id}: {value}")
+            if task_id and task_date and task_start and task_duration:
+                UserManagementState.assign_block(task_id=task_id, task_date=task_date, task_start=task_start, task_duration=task_duration)
+            else:
+                print(f"Block assignment failed for task_id {task_id}")
         return task_string

@@ -219,16 +219,16 @@ class CanvasConnectState(LoginState): # Like extending a class
                             # Task isn't already in database, so add it to database
                             print(f"Adding task {assignment['name']} to database.")
                             new_task = Task(
-                                recur_frequency=7,  # Example for recurring frequency
+                                recur_frequency=0,  # Example for recurring frequency
                                 due_date=date(due_at.year, due_at.month, due_at.day),
                                 is_deleted=False,
                                 task_name=assignment['name'],
                                 description="Task imported from Canvas", #assignment['description'], # For now not doing it
                                 task_id=100,  # Example for unique task_id
                                 priority_level={"Low": 1, "Medium": 2, "High": 3}["Low"],
-                                assigned_block_date=date(due_at.year, due_at.month, due_at.day),  # Set to today or another relevant date
-                                assigned_block_start_time=time(due_at.hour - 1, due_at.minute),  # Set a fixed start time (e.g., 2 PM)
-                                assigned_block_duration=timedelta(hours=1),  # Set your desired duration
+                                # assigned_block_date=date(due_at.year, due_at.month, due_at.day),  # Set to today or another relevant date
+                                # assigned_block_start_time=time(due_at.hour - 1, due_at.minute),  # Set a fixed start time (e.g., 2 PM)
+                                # assigned_block_duration=timedelta(hours=1),  # Set your desired duration
                                 user_id=self.user_id # Referencing LoginState user_id attribute (to connect user to tasks)
                             )
                             with rx.session() as session:
