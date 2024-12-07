@@ -1,7 +1,7 @@
 """Page to connect user's Canvas account to system.
 """
 
-from datetime import datetime, date, time, timedelta # Used to grab assignment due date specifics
+from datetime import datetime, date # Used to grab assignment due date specifics
 import requests
 import reflex as rx
 from AIPlanner.pages.login import LoginState # Grabbing login credentials
