@@ -1,7 +1,7 @@
 """Testing file and page for OpenAI integration. Must have OpenAI API key set as an environment variable OPENAI_API_KEY to use."""
 import os
 import re
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 import time
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
@@ -141,8 +141,5 @@ class AIState(UserManagementState):
                         task_duration = timedelta(hours=int(value))
                     except ValueError:
                         print(f"Invalid duration format for task_id {task_id}: {value}")
-            if task_id and task_date and task_start and task_duration:
-                UserManagementState.assign_block(task_id=task_id, task_date=task_date, task_start=task_start, task_duration=task_duration)
-            else:
-                print(f"Block assignment failed for task_id {task_id}")
+            UserManagementState.assign_block(task_id=task_id, task_date=task_date, task_start=task_start, task_duration=task_duration)
         return task_string
