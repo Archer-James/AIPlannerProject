@@ -51,7 +51,9 @@
    reflex run # Running Reflex
    ```
 
-### Setting up Reflex database (automated by running dbresetscript.bat OR dbresetscriptMAC.sh)
+### Setting up Reflex database
+
+### NOTE: can be automated by running dbresetscript.bat OR dbresetscriptMAC.sh
 
 1. Initialize Reflex database
 
