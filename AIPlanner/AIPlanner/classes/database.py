@@ -201,8 +201,6 @@ class UserManagementState(rx.State):
             else:
                 print(f"No task found with ID: {task_id}")
 
-    
-
 class AddUser(rx.State):
     """Class that enables adding users to the database"""
     username: str
