@@ -79,7 +79,7 @@ def daily() -> rx.Component:
                         # Filter tasks where the due date matches the selected date
                         task.assigned_block_date == daily_cal.selected_date,
                         rx.text(
-                            f"- {task.task_name}: {task.description}" 
+                            f"- {task.task_name}: {task.description}"
                             f"<br>Assigned start time: {task.assigned_block_start_time}"
                             f"<br>Assigned block duration: {task.assigned_block_duration}",
                             style={
