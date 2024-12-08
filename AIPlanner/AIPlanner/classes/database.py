@@ -105,7 +105,7 @@ class UserManagementState(rx.State):
         """Method to retrieve all tasks for a given user"""
         with rx.session() as session:
             self.tasks = session.exec(
-                Task.select().where(Task.user_id == user_id)
+                Task.select().where(Task.user_id == user_id).where(Task.is_deleted.is_(False))
             ).all()
         print("calling")
         print(self.tasks)
