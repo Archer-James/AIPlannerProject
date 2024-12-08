@@ -1,5 +1,5 @@
 """Module containing classes and methods pertaining to the SQLite database built into Reflex"""
-from datetime import date, datetime, time, timedelta
+from datetime import date, time, timedelta
 from typing import List, Optional
 import random
 from AIPlanner.pages.login import LoginState
@@ -49,8 +49,8 @@ class Task(rx.Model, table=True):
     description: str
     task_id: int
     priority_level: int
-    assigned_block_date: Optional[datetime]
-    assigned_block_start_time: Optional[datetime]
+    assigned_block_date: Optional[date]
+    assigned_block_start_time: Optional[time]
     assigned_block_duration: Optional[timedelta]
     # user_id: int = sqlmodel.Field(foreign_key="user.canvas_hash_id")
     user_id: int = sqlmodel.Field(foreign_key="user.id")
@@ -198,27 +198,6 @@ class UserManagementState(rx.State):
                     print(f"Task {task_id} marked as deleted.")
                 else:
                     print(f"Task {task_id} is already marked as deleted.")
-            else:
-                print(f"No task found with ID: {task_id}")
-
-    def assign_block(self, task_id: int, task_date: date, task_start: time, task_duration: timedelta):
-        """Edits tasks to match AI-assigned date, time, and duration values"""
-        print(task_date, task_start, task_duration)
-        with rx.session() as session:
-            # Try to get the task with the specified ID
-            task = session.exec(
-                Task.select().where(Task.task_id == task_id)
-            ).first()
-            if task:
-                if not task.is_deleted:
-                    # Set block assignment values and commit to database
-                    task.assigned_block_date = task_date
-                    task.assigned_block_start_time = task_start
-                    task.assigned_block_duration = task_duration
-                    session.commit()
-                    print(f"Task {task_id} block attributes edited successfully.")
-                else:
-                    print(f"Task {task_id} has been deleted previously, and will not appear on the calendar or to-do list.")
             else:
                 print(f"No task found with ID: {task_id}")
 
