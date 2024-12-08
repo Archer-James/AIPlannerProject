@@ -51,7 +51,7 @@ class AIState(UserManagementState):
                 task_id = Integer from prompt
                 task_name = String from prompt
                 assigned_block_date = Generated date before task due date
-                assigned_block_start_time = Generated time between 9am and 5pm to begin the task
+                assigned_block_start_time = Choose a time between 09:00:00 and 17:00:00 to start the task
                 assigned_block_duration = How long the task should be worked on"""},
                 {
                     "role": "user",
@@ -136,7 +136,7 @@ class AIState(UserManagementState):
                         print(f"Invalid date format for task_id {task_id}: {value}")
                 elif key == "assigned_block_start_time":
                     try:
-                        task_start = datetime.strptime(value, "%H:%M:%S").time()
+                        task_start = datetime.strptime(value, "%H:%M:%s").time()
                     except ValueError:
                         print(f"Invalid time format for task_id {task_id}: {value}")
                 elif key == "assigned_block_duration":
