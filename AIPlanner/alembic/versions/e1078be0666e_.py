@@ -1,10 +1,5 @@
 """empty message
 
-<<<<<<<< HEAD:AIPlanner/alembic/versions/f588eab482ef_.py
-Revision ID: f588eab482ef
-Revises: 
-Create Date: 2024-12-08 15:10:29.277953
-========
 <<<<<<<< HEAD:AIPlanner/alembic/versions/e1078be0666e_.py
 Revision ID: e1078be0666e
 Revises: 
@@ -14,7 +9,6 @@ Revision ID: 21b44f0505f2
 Revises: 
 Create Date: 2024-12-08 15:14:18.617151
 >>>>>>>> beta:AIPlanner/alembic/versions/21b44f0505f2_.py
->>>>>>>> 9e95cfbef2086f9714ec1db12a4667a135845e92:AIPlanner/alembic/versions/21b44f0505f2_.py
 
 """
 from typing import Sequence, Union
@@ -24,11 +18,7 @@ import sqlalchemy as sa
 import sqlmodel
 
 # revision identifiers, used by Alembic.
-<<<<<<<< HEAD:AIPlanner/alembic/versions/f588eab482ef_.py
-revision: str = 'f588eab482ef'
-========
 revision: str = '21b44f0505f2'
->>>>>>>> 9e95cfbef2086f9714ec1db12a4667a135845e92:AIPlanner/alembic/versions/21b44f0505f2_.py
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
