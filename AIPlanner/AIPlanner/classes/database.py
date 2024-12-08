@@ -62,9 +62,9 @@ class Task(rx.Model, table=True):
         priority = self["priority_level"]  # Access as dictionary
         return rx.match(
             priority,
-            (1, "yellow"),    # High priority
-            (2, "orange"), # Medium priority
-            (3, "blue"),   # Low priority
+            (1, "red"),    # High priority
+            (2, "yellow"), # Medium priority
+            (3, "cyan"),   # Low priority
             "gray"         # Default
         )
 

@@ -28,6 +28,7 @@ class GenWeeklyCal(rx.State):
 
     def init_week(self):
         """Initialize the list of days in the current week"""
+        self.update_month_and_week()
         self.make_dates()  # Generate dates for the week
         self.get_week_label()
 
@@ -56,21 +57,17 @@ class GenWeeklyCal(rx.State):
     def next_week(self):
         """Increment week and reinitialize calendar"""
         self.current_week_start += timedelta(weeks=1)
-        if self.week_number == 4:
-            self.week_number = 1
-            self.next_month()
-        else:
-            self.week_number += 1
+        if self.current_week_start.month != self.current_month:  # Added this check
+            self.next_month()  # Call to update the month when crossing boundaries
+        self.week_number = self.current_week_start.isocalendar().week
         self.init_week()
 
     def prev_week(self):
         """Decrement week and reinitialize calendar"""
         self.current_week_start -= timedelta(weeks=1)
-        if self.week_number == 1:
-            self.week_number = 4
-            self.prev_month()
-        else:
-            self.week_number -= 1
+        if self.current_week_start.month != self.current_month:  # Added this check
+            self.prev_month()  # Call to update the month when crossing boundaries
+        self.week_number = self.current_week_start.isocalendar().week
         self.init_week()
 
     def make_dates(self):
@@ -78,3 +75,8 @@ class GenWeeklyCal(rx.State):
         self.days = [self.current_week_start + timedelta(days=i) for i in range(7)]
         self.dates = [[day.strftime(" %d") for day in self.days]]  # Format dates for display
         self.get_week_label()
+
+    def update_month_and_week(self):
+        """Update the month and week number based on the current week start date"""
+        self.current_month = self.current_week_start.month
+        self.week_number = self.current_week_start.isocalendar().week
