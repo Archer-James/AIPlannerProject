@@ -49,8 +49,8 @@ class Task(rx.Model, table=True):
     description: str
     task_id: int
     priority_level: int
-    assigned_block_date: Optional[datetime]
-    assigned_block_start_time: Optional[datetime]
+    assigned_block_date: Optional[date]
+    assigned_block_start_time: Optional[time]
     assigned_block_duration: Optional[timedelta]
     # user_id: int = sqlmodel.Field(foreign_key="user.canvas_hash_id")
     user_id: int = sqlmodel.Field(foreign_key="user.id")
