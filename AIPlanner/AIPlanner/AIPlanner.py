@@ -125,7 +125,7 @@ def index() -> rx.Component:
             min_height="10vh",
         )
     ), rx.container(
-        rx.color_mode.button(position="top-right"),
+        # rx.color_mode.button(position="top-right"),
         # rx.vstack(
         #     rx.heading("AIPlanner Home Page", size="9"),
         #     rx.text(
