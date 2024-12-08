@@ -78,16 +78,16 @@ def daily() -> rx.Component:
                     lambda task: rx.cond(
                         # Filter tasks where the due date matches the selected date
                         task.assigned_block_date == daily_cal.selected_date,
-                        rx.text(
-                            f"- {task.task_name}: {task.description}"
-                            f"<br>Assigned start time: {task.assigned_block_start_time}"
-                            f"<br>Assigned block duration: {task.assigned_block_duration}",
+                        rx.vstack(
+                            rx.text(f"- {task.task_name}: {task.description}"),
+                            rx.text(f" Assigned start time: {task.assigned_block_start_time}"),
+                            rx.text(f"Assigned block duration: {task.assigned_block_duration}"),
                             style={
                                 "color": Task.get_priority_color(task),
                                 "wordWrap": "break-word",
                                 "maxWidth": "800px",
+
                             },
-                            dangerously_allow_html=True,  # Allows the use of HTML tags like <br>
                         ),
                         None,  # Otherwise, do not display anything
                     ),

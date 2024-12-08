@@ -7,6 +7,7 @@ import reflex as rx
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
 from AIPlanner.classes.database import Task
+from AIPlanner.pages.login import LoginState
 
 class AIState(UserManagementState):
     """State that holds variables related to AI generation and functions that use those variables
@@ -165,3 +166,4 @@ class AIState(UserManagementState):
                 print(f"Task {task_id} block attributes edited successfully.")
             else:
                 print(f"No task found with ID: {task_id}")
+        UserManagementState.get_user_tasks(LoginState.user_id)

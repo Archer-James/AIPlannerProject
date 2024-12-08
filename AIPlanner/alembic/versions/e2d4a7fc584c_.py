@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<<< HEAD:AIPlanner/alembic/versions/e1078be0666e_.py
-Revision ID: e1078be0666e
+Revision ID: e2d4a7fc584c
 Revises: 
-Create Date: 2024-12-08 15:23:25.507271
-========
-Revision ID: 21b44f0505f2
-Revises: 
-Create Date: 2024-12-08 15:14:18.617151
->>>>>>>> beta:AIPlanner/alembic/versions/21b44f0505f2_.py
+Create Date: 2024-12-08 16:04:27.141078
 
 """
 from typing import Sequence, Union
@@ -18,7 +12,7 @@ import sqlalchemy as sa
 import sqlmodel
 
 # revision identifiers, used by Alembic.
-revision: str = '21b44f0505f2'
+revision: str = 'e2d4a7fc584c'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
