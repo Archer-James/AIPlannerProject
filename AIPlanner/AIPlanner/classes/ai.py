@@ -3,8 +3,10 @@ import os
 import re
 from datetime import datetime, timedelta
 import time
+import reflex as rx
 from openai import OpenAI
 from AIPlanner.classes.database import UserManagementState
+from AIPlanner.classes.database import Task
 
 class AIState(UserManagementState):
     """State that holds variables related to AI generation and functions that use those variables
@@ -33,7 +35,7 @@ class AIState(UserManagementState):
         if not tasks:
             return "No tasks available to generate a schedule. Please add some and try again."
         currentTime = time.ctime()
-
+        print("Tasks retrieved successfully.")
         OpenAI.api_key = os.environ["OPENAI_API_KEY"]
 
         client = OpenAI()
@@ -49,7 +51,7 @@ class AIState(UserManagementState):
                 task_id = Integer from prompt
                 task_name = String from prompt
                 assigned_block_date = Generated date before task due date
-                assigned_block_start_time = Generated time between 9am and 5pm to begin the task, in military time
+                assigned_block_start_time = Generated time between 9am and 5pm to begin the task
                 assigned_block_duration = How long the task should be worked on"""},
                 {
                     "role": "user",
@@ -75,31 +77,31 @@ class AIState(UserManagementState):
         '''
         # Regular expression to extract task details
         regex = re.compile(
-            r"task_id\s*=\s*(\d+)\s*"
-            r"task_name\s*=\s*'([^']+?)\s*'"
-            r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2})\s*"
-            r"assigned_block_start_time\s*=\s*([\d:]+)\s*"
+            r"task_id\s*=\s*(\d+).*?"
+            r"assigned_block_date\s*=\s*(\d{4}-\d{2}-\d{2}).*?"
+            r"assigned_block_start_time\s*=\s*(\d{2}:\d{2}).*?"
             r"assigned_block_duration\s*=\s*(\d+)",
             re.DOTALL
         )
 
         # Extract matches and build dictionaries
         matches = regex.findall(content)
+        print(f"Matches: {matches}")
         tasks = [
             {
                 "task_id": int(match[0]),
-                "task_name": match[1].strip().replace("'", ""),
-                "assigned_block_date": match[2],
-                "assigned_block_start_time": match[3],
-                "assigned_block_duration": int(match[4]),
+                "assigned_block_date": match[1],
+                "assigned_block_start_time": match[2],
+                "assigned_block_duration": int(match[3]),
             }
             for match in matches
-        ]
-        #print("matching done")
+            ]
+        print(f"Tasks: {tasks}")
         task_string = ""
         for task in tasks:
             for key, value in task.items():
                 task_string = task_string + f'{key}: {value}\n'
+        print("Task string constructed")
         #print(task_string)
         # for task in tasks:
         #     task_id_match = None
@@ -124,6 +126,7 @@ class AIState(UserManagementState):
             task_start = None
             task_duration = None
             for key, value in task.items():
+                print(key,value)
                 if key == "task_id":
                     task_id = int(value)
                 elif key == "assigned_block_date":
@@ -141,5 +144,23 @@ class AIState(UserManagementState):
                         task_duration = timedelta(hours=int(value))
                     except ValueError:
                         print(f"Invalid duration format for task_id {task_id}: {value}")
-            UserManagementState.assign_block(task_id=task_id, task_date=task_date, task_start=task_start, task_duration=task_duration)
+            self.assign_block(task_id=task_id, task_date=task_date, task_start=task_start, task_duration=task_duration)
         return task_string
+
+    def assign_block(self, task_id: int, task_date: datetime, task_start: datetime, task_duration: timedelta):
+        """Edits tasks to match AI-assigned date, time, and duration values"""
+        print(task_id, task_date, task_start, task_duration)
+        with rx.session() as session:
+            # Try to get the task with the specified ID
+            task = session.exec(
+                Task.select().where(Task.id == task_id)
+            ).first()
+            if task:
+                # Set block assignment values and commit to database
+                task.assigned_block_date = task_date
+                task.assigned_block_start_time = task_start
+                task.assigned_block_duration = task_duration
+                session.commit()
+                print(f"Task {task_id} block attributes edited successfully.")
+            else:
+                print(f"No task found with ID: {task_id}")
