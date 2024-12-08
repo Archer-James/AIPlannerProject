@@ -65,7 +65,7 @@ def daily() -> rx.Component:
                             style={
                                 "color":
                                 Task.get_priority_color(task),
-                                "wordWrap": "break-word",  
+                                "wordWrap": "break-word",
                                 "maxWidth": "800px",
                             },
                         ),
