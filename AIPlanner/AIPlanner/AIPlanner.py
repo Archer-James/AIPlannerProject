@@ -78,8 +78,6 @@ class State(rx.State):
     """The app state."""
 
 
-
-
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def index() -> rx.Component:
     """Reflex component for base index page
@@ -89,9 +87,7 @@ def index() -> rx.Component:
     """
     # Welcome Page (Index)
     return rx.container(
-        rx.color_mode.button(position="top-right"),
         rx.hstack(
-
             rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
             #show_login_signup(), # rx condition that decides which 
             #buttons to show (login, signup, log out)
@@ -140,19 +136,17 @@ def index() -> rx.Component:
         # )
 
         ), rx.container(
-            rx.color_mode.button(position="top-right"),
-            rx.vstack(
                 rx.center(
                 calendar_component(),
                 todo_component(),
-                spacing="5",
-                justify="center",
-                min_height="50vh", # Changing to 50 to squish it up more
+                style={
+                "alignItems": "top",  # Ensure the calendar stays at the top
+                "justifyContent": "flex-start",
+            },
             ),
 
             padding="50px",
         )
-    )
 
 
 def show_login_signup():
@@ -173,7 +167,7 @@ def show_login_signup():
 
 app = rx.App(
     theme=rx.theme(
-        appearance="light",
+        appearance="dark",
         has_background=True,
         radius="large",
         accent_color="pink",

@@ -5,7 +5,7 @@ import calendar
 import datetime
 
 
-class daily_cal (rx.State):
+class daily_cal(rx.State):
     """
     Class to set the variables for the daily calendar
 
@@ -17,7 +17,7 @@ class daily_cal (rx.State):
     selected_date: str = ""
     tasks_for_day: list[Task] = []
     title: str = ""
-    month : int
+    month: int
     day: int
 
     def set_date(self, month: str, year: str, day: str):
@@ -27,8 +27,9 @@ class daily_cal (rx.State):
         self.month = month
         day = int(day)
         self.day = day
-        self.selected_date = datetime.date(year,month,day)
-        self.title = str(calendar.month_name[int(self.month)])+" "+str(self.day)
+        self.selected_date = datetime.date(year, month, day)
+        self.title = str(calendar.month_name[int(self.month)]) + " " + str(self.day)
+
 
 def daily() -> rx.Component:
     """
@@ -45,15 +46,15 @@ def daily() -> rx.Component:
                 href="/",
                 is_external=False,
             ),
-        justify="start",  # Align the button to the left
-        width="100%",  # Full width for alignment
+            justify="start",  # Align the button to the left
+            width="100%",  # Full width for alignment
         ),
         # Main content below the "Home" button
         rx.flex(
+            rx.heading(f"Tasks for {daily_cal.title}", size="6"),
             rx.vstack(
-                # Title at the top
-                rx.heading(f"Tasks for {daily_cal.title}", size="6"),
                 # Tasks list
+                rx.text("Tasks Due:"),
                 rx.foreach(
                     UserManagementState.tasks,  # Iterate through all tasks
                     lambda task: rx.cond(
@@ -62,8 +63,28 @@ def daily() -> rx.Component:
                         rx.text(
                             f"- {task.task_name}: {task.description}",
                             style={
-                                "color": 
+                                "color":
                                 Task.get_priority_color(task),
+                                "wordWrap": "break-word",  
+                                "maxWidth": "400px",
+                            },
+                        ),
+                        None,  # Otherwise, do not display anything
+                    ),
+                ),
+                rx.text("Tasks assigned on this day:"),
+                rx.foreach(
+                    UserManagementState.tasks,  # Iterate through all tasks
+                    lambda task: rx.cond(
+                        # Filter tasks where the due date matches the selected date
+                        task.assigned_block_date == daily_cal.selected_date,
+                        rx.text(
+                            f"- {task.task_name}: {task.description}",
+                            style={
+                                "color":
+                                Task.get_priority_color(task),
+                                "wordWrap": "break-word",
+                                "maxWidth": "400px",
                             },
                         ),
                         None,  # Otherwise, do not display anything
@@ -72,11 +93,11 @@ def daily() -> rx.Component:
             ),
             direction="column",  # Stack elements vertically
             align="center",  # Center elements horizontally
-            justify="center",  # Center elements vertically
+            justify="start",  # Align items to the top
             width="100%",  # Full width
         ),
         width="100%",  # Full width of the container
         align="center",  # Align container to the center
-        justify="center",  # Center content vertically
+        justify="start",  # Align content to the top
         padding="1rem",  # Optional: Add padding for spacing
     )

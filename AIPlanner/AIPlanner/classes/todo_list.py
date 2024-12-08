@@ -22,10 +22,12 @@ def todo_component(state=UserManagementState) -> rx.Component:
             lambda task: rx.hstack(
                 rx.vstack(
                     f"{task.task_name}, Due: {task.due_date}",
-                    f"Description: {task.description}",
+                    f" Description: {task.description}",
                     style={
                                 "color": 
                                 Task.get_priority_color(task),
+                                "wordWrap": "break-word",  # Enable wrapping of long descriptions
+                                "maxWidth": "400px",
                             },
                 ),
                 # Task Names Editing
