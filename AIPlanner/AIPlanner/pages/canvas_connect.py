@@ -191,22 +191,12 @@ class CanvasConnectState(LoginState): # Like extending a class
 
                         due_at = datetime.strptime(assignment['due_at'], "%Y-%m-%dT%H:%M:%SZ")
 
-                        # Riley's way...not working right now.
-                        # Check if task is already in the database
-                        # We can use the task list to check rather than starting an rx session
-                        # for task in UserManagementState.tasks:
-                        #     if (task['task_name'] == assignment['name']) and (task['due_date'] == date(due_at.year, due_at.month, due_at.day)):
-                        #         # Then assignment already exists (assuming no different assignments with same name and due date)
-                        #         print(f"Skipping task {assignment['name']} bc already exists in database.")
-                        #         continue
-                        #     else:
-
                         # Checking if task already in database and assigned to logged-in user
                         with rx.session() as session:
                             task_already_exists = session.exec(
                                 Task.select().where(
                                     Task.user_id == self.user_id, # Making sure user is the same
-                                    Task.task_name == assignment['name'], # Checking if assignment names are same
+                                    Task.task_name == assignment['name'], # Checking if task names are same
                                     Task.due_date == date(due_at.year, due_at.month, due_at.day), # Checking if due dates are the same
                                 ),
                             ).first()
