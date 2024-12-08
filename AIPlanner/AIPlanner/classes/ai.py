@@ -136,7 +136,8 @@ class AIState(UserManagementState):
                         print(f"Invalid date format for task_id {task_id}: {value}")
                 elif key == "assigned_block_start_time":
                     try:
-                        task_start = datetime.strptime(value, "%H:%M:%s").time()
+                        value = value + ":00"
+                        task_start = datetime.strptime(value, "%H:%M:%S").time()
                     except ValueError:
                         print(f"Invalid time format for task_id {task_id}: {value}")
                 elif key == "assigned_block_duration":
