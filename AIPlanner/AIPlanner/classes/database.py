@@ -63,8 +63,8 @@ class Task(rx.Model, table=True):
         return rx.match(
             priority,
             (1, "red"),    # High priority
-            (2, "yellow"), # Medium priority
-            (3, "cyan"),   # Low priority
+            (2, "blue"), # Medium priority
+            (3, "green"),   # Low priority
             "gray"         # Default
         )
 
