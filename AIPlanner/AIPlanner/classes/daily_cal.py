@@ -53,7 +53,6 @@ def daily() -> rx.Component:
         rx.flex(
             rx.heading(f"Tasks for {daily_cal.title}", size="6"),
             rx.vstack(
-                
                 # Tasks list
                 rx.text("Tasks Due:"),
                 rx.foreach(
