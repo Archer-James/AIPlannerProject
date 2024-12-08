@@ -41,6 +41,7 @@
 3. Install Reflex & Other Packages
    ```
    pip install reflex # May have to use pip3
+   pip install openai # OpenAI API package
    pip install requests # For Canvas API requests, OR python3 -m pip install types-requests
    ```
    
@@ -50,7 +51,7 @@
    reflex run # Running Reflex
    ```
 
-### Setting up Reflex database
+### Setting up Reflex database (automated by running dbresetscript.bat OR dbresetscriptMAC.sh)
 
 1. Initialize Reflex database
 
