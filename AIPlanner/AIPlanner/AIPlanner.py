@@ -1,16 +1,12 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
 import reflex as rx
-from rxconfig import config
-
 # Importing pages
 from AIPlanner.pages.signup import signup # Sign up page
 from AIPlanner.pages.processing import processing # Processing page used in sign up page
 from AIPlanner.pages.success import success # Success page shown after successful sign up
 from AIPlanner.classes.database import * # Database
 from AIPlanner.pages.userlist import userlist # Userlist debugging page
-
-
 from AIPlanner.pages.login import login # Log in page for existing users
 from AIPlanner.classes.taskform import task_input_form
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
@@ -19,20 +15,12 @@ from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page 
 from AIPlanner.classes. todo_list import todo_component
 from AIPlanner.classes.ai import *
 from AIPlanner.classes.database import UserManagementState as state
-
-
-# from pages.signup import signup  # Sign up page
-
 from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
 from AIPlanner.classes.cal_comps import *
 from AIPlanner.pages.weekly import weekly
 from AIPlanner.classes.daily_cal import daily
-# to run test environment
-# >cd AIPlanner
-# >py -3 -m venv .venv
-# >reflex run
-# open http://localhost:3000/
+
 
 class TestAI(rx.State):
     """Test class used to test AI output -> homescreen capabilities."""
@@ -125,15 +113,6 @@ def index() -> rx.Component:
             min_height="10vh",
         )
     ), rx.container(
-        # rx.color_mode.button(position="top-right"),
-        # rx.vstack(
-        #     rx.heading("AIPlanner Home Page", size="9"),
-        #     rx.text(
-        #         "More coming soon! Currently coding ",
-        #         rx.code(f"{config.app_name}/{config.app_name}.py"),
-        #         size="5",
-        #     ),
-        # )
 
         ), rx.container(
                 rx.center(

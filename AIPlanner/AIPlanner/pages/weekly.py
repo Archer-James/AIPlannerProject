@@ -3,36 +3,18 @@
 import reflex as rx
 
 # Importing pages
-#from AIPlanner.pages.signup import signup # Sign up page
-#from AIPlanner.pages.processing import processing # Processing page used in sign up page
-#from AIPlanner.pages.success import success # Success page shown after successful sign up
 from AIPlanner.classes.database import * # Database
-#from AIPlanner.pages.userlist import userlist # Userlist debugging page
-
-
-#from AIPlanner.pages.login import login # Log in page for existing users
 from AIPlanner.classes.taskform import task_input_form
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
-#from AIPlanner.pages.canvas_connect import canvas_connect # Canvas connect page used to connect user's Canvas tasks
-
 from AIPlanner.classes.taskform import task_input_form
 from AIPlanner.pages.login import LoginState # Login State used to get the user's username
 from AIPlanner.pages.signup import SignupState # Sign up state used to redirect the user to the signup page
 from AIPlanner.classes.todo_list import todo_component
-
-
-
-# from pages.signup import signup  # Sign up page
-
 from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
 from AIPlanner.classes.cal_comps import weekly_component
-# to run test environment
-# >cd AIPlanner
-# >py -3 -m venv .venv
-# >reflex run
-# open http://localhost:3000/
+
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def weekly() -> rx.Component:
     """Reflex component for base index page
