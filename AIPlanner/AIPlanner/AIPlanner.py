@@ -3,7 +3,6 @@
 import reflex as rx
 # Importing pages
 from AIPlanner.pages.signup import signup # Sign up page
-from AIPlanner.pages.processing import processing # Processing page used in sign up page
 from AIPlanner.pages.success import success # Success page shown after successful sign up
 from AIPlanner.classes.database import * # Database
 from AIPlanner.pages.userlist import userlist # Userlist debugging page
@@ -20,47 +19,6 @@ from AIPlanner.classes.WeeklyCal import GenWeeklyCal
 from AIPlanner.classes.cal_comps import *
 from AIPlanner.pages.weekly import weekly
 from AIPlanner.classes.daily_cal import daily
-
-
-class TestAI(rx.State):
-    """Test class used to test AI output -> homescreen capabilities."""
-
-    # def show_test_ai_data(self):
-    #     """
-    #     Shows test AI data from Riley's output in the terminal.
-    #     """
-    #     # From Riley's output
-    #     # output = ChatCompletionMessage(content='```json\n{\n  "calendar": [\n    {\n      "task": "Study for biology exam",\n      "time_slot": "09:00 AM - 10:00 AM"\n    },\n    {\n      "task": "Write user stories",\n      "time_slot": "10:00 AM - 11:00 AM"\n    },\n    {\n      "task": "Work on CSC 450 professor notes",\n      "time_slot": "11:00 AM - 12:00 PM"\n    },\n    {\n      "task": "Finish calendar",\n      "time_slot": "12:00 PM - 01:00 PM"\n    }\n  ]\n}\n```', refusal=None, role='assistant', audio=None, function_call=None, tool_calls=None)
-
-    #     # Simplified version of Riley's output (help from Copilot AI for this)
-    #     hardcoded_response = {
-    #         "calendar": [
-    #             {
-    #                 "task": "Study for biology exam",
-    #                 "time_slot": "09:00 AM - 10:00 AM"
-    #             },
-    #             {
-    #                 "task": "Write user stories",
-    #                 "time_slot": "10:00 AM - 11:00 AM"
-    #             },
-    #             {
-    #                 "task": "Work on CSC 450 professor notes",
-    #                 "time_slot": "11:00 AM - 12:00 PM"
-    #             },
-    #             {
-    #                 "task": "Finish calendar",
-    #                 "time_slot": "12:00 PM - 01:00 PM"
-    #             }
-    #         ]
-    #     }
-
-    #     for entry in hardcoded_response["calendar"]:
-    #         task = entry["task"]
-    #         time_slot = entry["time_slot"]
-
-    #         print(f"Task: {task}, Time slot: {time_slot}")
-    #         print()
-
 
 class State(rx.State):
     """The app state."""
@@ -160,8 +118,6 @@ app.add_page(daily)
 # Megdalia Bromhal - 30 Sept. 2024
 # Adding a signup page (as defined in pages.signup)
 app.add_page(signup)
-# Adding processing page (used in sign up page)
-app.add_page(processing)
 # Adding success page (used in sign up page)
 app.add_page(success)
 # Adding debugging user list page
