@@ -74,15 +74,6 @@ def weekly() -> rx.Component:
         ),
     ), rx.container(
         rx.color_mode.button(position="top-right"),
-        rx.vstack(
-            rx.heading("AIPlanner Home Page", size="9"),
-            rx.text(
-                "More coming soon! Currently coding ",
-                rx.code(f"{config.app_name}/{config.app_name}.py"),
-                size="5",
-            ),
-        )
-
         ), rx.container(
             rx.color_mode.button(position="top-right"),
             rx.vstack(
