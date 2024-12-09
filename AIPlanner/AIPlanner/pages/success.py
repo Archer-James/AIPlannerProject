@@ -28,13 +28,13 @@ def render_success_page():
                         ),
                     ),
                 ),
-                rx.text(" -" * 25),
-                rx.text("Making sure user is added to database; will remove for final app"),
-                rx.link(
-                    rx.button("Show all users"),
-                    href='/userlist',
-                    is_external=False,
-                )
+                # rx.text(" -" * 25),
+                # rx.text("Making sure user is added to database; will remove for final app"),
+                # rx.link(
+                #     rx.button("Show all users"),
+                #     href='/userlist',
+                #     is_external=False,
+                # )
             ),
         ),
     )

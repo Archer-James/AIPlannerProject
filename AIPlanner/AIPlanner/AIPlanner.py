@@ -52,11 +52,11 @@ def index() -> rx.Component:
         rx.hstack(
 
 
-            rx.link(
-                rx.button("Show Debug Options"),
-                href="/userlist",
-                is_external=False,
-            ),
+            # rx.link(
+            #     rx.button("Show Debug Options"),
+            #     href="/userlist",
+            #     is_external=False,
+            # ),
             task_input_form(),
             spacing="5",
             justify="center",
@@ -122,9 +122,6 @@ app.add_page(signup)
 app.add_page(success)
 # Adding debugging user list page
 app.add_page(userlist)
-# Adding a signup page, alternative, **Discuss in meeting**
-#app.add_page(signup, on_load=UserManagementState.fetch_all_users)
-
 
 app.add_page(login) # Login page
 app.add_page(canvas_connect) # Page user can connect Canvas tasks in
