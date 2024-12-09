@@ -14,6 +14,8 @@ from AIPlanner.classes.todo_list import todo_component
 from AIPlanner.classes.CreateCal import GenCalendar
 from AIPlanner.classes.WeeklyCal import GenWeeklyCal
 from AIPlanner.classes.cal_comps import weekly_component
+from AIPlanner.classes.ai import AIState
+from AIPlanner.classes.database import UserManagementState as state
 
 @rx.page(on_load=[GenCalendar.init_calendar,GenWeeklyCal.init_week])
 def weekly() -> rx.Component:
@@ -43,7 +45,7 @@ def weekly() -> rx.Component:
         # Developer & Task stack
         rx.hstack(
             rx.link(
-                rx.button("Show All Users"),
+                rx.button("Show Debug Options"),
                 href="/userlist",
                 is_external=False,
             ),
@@ -53,6 +55,13 @@ def weekly() -> rx.Component:
             min_height="15vh", # Squishing it up a tad so we can see the giant text
 
         ),
+        rx.hstack(
+            rx.button("Generate AI Schedule", on_click=lambda: AIState.send_request(state.tasks)),
+            rx.text(f"{AIState.messageText}"),
+            spacing="5",
+            justify="center",
+            min_height="10vh",
+        )
     ), rx.container(
         rx.color_mode.button(position="top-right"),
         ), rx.container(

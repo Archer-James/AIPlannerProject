@@ -14,9 +14,11 @@ class AIState(UserManagementState):
     
     Attributes:
     processed_output: String state variable to hold final output of processing
+    message: String state variable to hold success or failure messages
     """
 
     processed_output = ""
+    messageText = ""
 
     def send_request(self, tasks):
         '''Function to send an OpenAI API request to generate task date/time/duration assignments, currently prints to console
@@ -26,6 +28,7 @@ class AIState(UserManagementState):
         '''
 
         inputMessage = ""
+        self.messageText = ""
         for task in tasks:
             print(task)
             if task['is_deleted'] is False:
@@ -34,7 +37,11 @@ class AIState(UserManagementState):
                     print(task['id'])
 
         if not tasks:
+            self.messageText = "No tasks available to generate a schedule. Please add some and try again."
             return "No tasks available to generate a schedule. Please add some and try again."
+        else:
+            self.messageText = "Tasks retrieved successfully."
+
         currentTime = time.ctime()
         print("Tasks retrieved successfully.")
         OpenAI.api_key = os.environ["OPENAI_API_KEY"]
@@ -88,6 +95,10 @@ class AIState(UserManagementState):
         # Extract matches and build dictionaries
         matches = regex.findall(content)
         print(f"Matches: {matches}")
+        if not matches:
+            self.messageText = "Matching unsuccessful. Please try again."
+        else:
+            self.messageText = "Matching successful."
         tasks = [
             {
                 "task_id": int(match[0]),
@@ -103,6 +114,10 @@ class AIState(UserManagementState):
             for key, value in task.items():
                 task_string = task_string + f'{key}: {value}\n'
         print("Task string constructed")
+        if not task_string:
+            self.messageText = "No tasks assigned. Please try again."
+        else:
+            self.messageText = "Task string constructed successfully."
         #print(task_string)
         # for task in tasks:
         #     task_id_match = None
@@ -147,6 +162,7 @@ class AIState(UserManagementState):
                     except ValueError:
                         print(f"Invalid duration format for task_id {task_id}: {value}")
             self.assign_block(task_id=task_id, task_date=task_date, task_start=task_start, task_duration=task_duration)
+            self.messageText = "Schedule generated successfully."
         return task_string
 
     def assign_block(self, task_id: int, task_date: datetime, task_start: datetime, task_duration: timedelta):

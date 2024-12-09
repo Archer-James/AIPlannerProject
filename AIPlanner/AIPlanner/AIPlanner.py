@@ -107,7 +107,7 @@ def index() -> rx.Component:
         ),
         rx.hstack(
             rx.button("Generate AI Schedule", on_click=lambda: AIState.send_request(state.tasks)),
-            rx.text(AIState.processed_output),
+            rx.text(f"{AIState.messageText}"),
             spacing="5",
             justify="center",
             min_height="10vh",
