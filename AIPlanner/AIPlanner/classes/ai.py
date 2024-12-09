@@ -95,9 +95,7 @@ class AIState(UserManagementState):
         # Extract matches and build dictionaries
         matches = regex.findall(content)
         print(f"Matches: {matches}")
-        if not matches:
-            self.messageText = "Matching unsuccessful. Please try again."
-        else:
+        if matches:
             self.messageText = "Matching successful."
         tasks = [
             {
@@ -114,10 +112,6 @@ class AIState(UserManagementState):
             for key, value in task.items():
                 task_string = task_string + f'{key}: {value}\n'
         print("Task string constructed")
-        if not task_string:
-            self.messageText = "No tasks assigned. Please try again."
-        else:
-            self.messageText = "Task string constructed successfully."
         #print(task_string)
         # for task in tasks:
         #     task_id_match = None
