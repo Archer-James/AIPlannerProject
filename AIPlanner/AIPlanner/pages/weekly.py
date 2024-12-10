@@ -70,6 +70,10 @@ def weekly() -> rx.Component:
                 rx.center(
                 weekly_component(),
                 todo_component(),
+                style={
+                "alignItems": "top",  # Ensure the calendar stays at the top
+                "justifyContent": "flex-start",
+            },
                 spacing="5",
                 justify="center",
                 min_height="50vh", # Changing to 50 to squish it up more
