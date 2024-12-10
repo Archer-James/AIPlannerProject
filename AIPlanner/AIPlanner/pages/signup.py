@@ -74,39 +74,57 @@ class SignupState(rx.State):
         self.password = signup_data.get('password')
         self.password_check = signup_data.get('password_check')
 
-        # Checking if password matches password check
-        if check_passwords(self.password, self.password_check) is True:
+        # Check to see if someone with email address is already registered
+        with rx.session() as session:
+            user_already_exists = session.exec(
+                database.User.select().where(
+                    database.User.username == self.email,
+                ),
+            ).first()
+        print(f"self.email: {self.email}")
 
-            # Checking that email is only 25 chars long max
-            if len(self.email) <= 25:
-                # Passwords match, so process account
-                print("Processing new account.")
+        if user_already_exists: # If user already exists, tell user to try with different email
+            self.is_submitting = False
+            yield rx.toast("Account already exists with this email. Try again with a different email.")
 
-                # Adding account to database
-                try:
-                    # Create a new user with Reflex database
-                    database.create_user(username=self.email,
-                                         canvas_hash_id=1, password=self.password)
-
-                    #self.is_processing = False # Changing back just in case
-                    #self.change_processing_msg()
-
-                    print("Account created in rx database")
-                    self.is_submitting = False
-                    return rx.redirect('/success')
-
-                # If error, tell user to try again
-                except ModuleNotFoundError as e:
-                    print(e)
-                    yield rx.toast("Error occurred while saving data. Please try again.")
-
-            # Email is too long; tell user
-            else:
-                yield rx.toast("Email is too long. Please enter appropriate email.")
-
-        # If passwords don't match, ask user to re-enter data
         else:
-            yield rx.toast("Passwords do not match. Please enter information again.")
+
+            # Checking if password matches password check
+            if check_passwords(self.password, self.password_check) is True:
+
+                # Checking that email is only 25 chars long max
+                if len(self.email) <= 25:
+                    # Passwords match, so process account
+                    print("Processing new account.")
+
+                    # Adding account to database
+                    try:
+                        # Create a new user with Reflex database
+                        database.create_user(username=self.email,
+                                            canvas_hash_id=1, password=self.password)
+
+                        #self.is_processing = False # Changing back just in case
+                        #self.change_processing_msg()
+
+                        print("Account created in rx database")
+                        self.is_submitting = False
+                        return rx.redirect('/success')
+
+                    # If error, tell user to try again
+                    except ModuleNotFoundError as e:
+                        print(e)
+                        self.is_submitting = False
+                        yield rx.toast("Error occurred while saving data. Please try again.")
+
+                # Email is too long; tell user
+                else:
+                    self.is_submitting = False
+                    yield rx.toast("Email is too long. Please enter appropriate email.")
+
+            # If passwords don't match, ask user to re-enter data
+            else:
+                self.is_submitting = False
+                yield rx.toast("Passwords do not match. Please enter information again.")
 
 
 def signup_form() -> rx.Component:
@@ -156,6 +174,7 @@ def signup_form() -> rx.Component:
                     type="password",
                     required=True,
                 ),
+                rx.heading(" ", spacing='2', justify='center', min_height='3vh'),
             ),
             rx.button(
                 "Submit", 
@@ -167,8 +186,12 @@ def signup_form() -> rx.Component:
         ),
         #rx.text(f"{SignupState.set_processing_msg}"),
         #rx.text(f"Status: {SignupState.change_processing_msg}"),
+        width="100%",
+        padding="2em",
         spacing="50",
         justify="center",
+        align='center',
+        min_height="15vh",
     )
 
 def signup() -> rx.Component:
@@ -180,6 +203,7 @@ def signup() -> rx.Component:
     # Signup page
     return rx.container(
         signup_form(),
+        rx.heading(" ", spacing='2', justify='center', min_height='5vh'),
         rx.link(
             rx.button("Go back"),
             href="/",
@@ -189,6 +213,10 @@ def signup() -> rx.Component:
         width="100%",
         height="100vh",
         padding="2em",
+        spacing="2",
+        justify="center",
+        align='center',
+        min_height="15vh",
         # bg="grey", # Background
     )
 

@@ -1,5 +1,5 @@
 import random
-from datetime import date, time, timedelta, datetime
+from datetime import timedelta, datetime
 from AIPlanner.classes.database import *
 import reflex as rx
 from AIPlanner.pages.login import LoginState
@@ -73,9 +73,6 @@ class TaskState(LoginState):
                         description=self.task_description,
                         task_id=random.randint(1, 1000000),  # Consider using UUID for unique task IDs
                         priority_level={"Low": 1, "Medium": 2, "High": 3}[self.priority],
-                        assigned_block_date=date.today(),
-                        assigned_block_start_time=time(14, 0),
-                        assigned_block_duration=timedelta(hours=1),
                         user_id=self.user_id,
                         stop_date=current_due_date + timedelta(days=90),  # Set stop date 90 days after due date
                     )
@@ -91,27 +88,11 @@ class TaskState(LoginState):
                     description=self.task_description,
                     task_id=random.randint(1, 1000000),
                     priority_level={"Low": 1, "Medium": 2, "High": 3}[self.priority],
-                    assigned_block_date=date.today(),
-                    assigned_block_start_time=time(14, 0),
-                    assigned_block_duration=timedelta(hours=1),
                     user_id=self.user_id,
                     stop_date=due_date + timedelta(days=90),  # Set stop date 90 days after the due date
                 )
                 tasks_to_create.append(new_task)
 
-            # new_task = Task(
-            #     recur_frequency=recur_frequency,  # Example for recurring frequency
-            #     due_date=due_date,
-            #     is_deleted=False,
-            #     task_name=self.task_name,
-            #     description=self.task_description,
-            #     task_id=random.randint(1, 1000000),  # Example for unique task_id
-            #     priority_level={"Low": 1, "Medium": 2, "High": 3}[self.priority],
-            #     assigned_block_date=date.today(),  # Set to today or another relevant date
-            #     assigned_block_start_time=time(14, 0),  # Set a fixed start time (e.g., 2 PM)
-            #     assigned_block_duration=timedelta(hours=1),  # Set your desired duration
-            #     user_id=self.user_id  # Referencing LoginState user_id attribute (to connect user to tasks)
-            # )
             with rx.session() as session:
                 session.add_all(tasks_to_create)
                 session.commit()  # Save to the database
@@ -344,7 +325,7 @@ def task_input_form():
                         align="center",
                     ),
                     rx.text("Recurring", font_size="sm", padding_right="5px"),
-                    spacing="3px",
+                    spacing="3",
                     align_items="center",
                 ),
                 #Conditionally show the frequency dropdown if recurring is checked

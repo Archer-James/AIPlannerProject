@@ -202,6 +202,7 @@ class LoginState(rx.State):
             # Error handling
             except TypeError as e:
                 print(f"Error: {e}")
+                self.is_submitting = False
                 yield rx.toast("Error logging in, please retry.")
 
         # User not found
@@ -248,6 +249,7 @@ def login_form() -> rx.Component:
                     required=True,
                 ),
             ),
+            rx.heading(" ", spacing='2', justify='center', min_height='5vh'),
             rx.button(
                 "Enter", 
                 type="submit",
@@ -256,8 +258,11 @@ def login_form() -> rx.Component:
             on_submit=LoginState.search_for_user,
             #reset_on_submit=True,
         ),
+        padding="2em",
         spacing="50",
         justify="center",
+        align='center',
+        min_height="15vh",
     )
 
 
@@ -266,26 +271,39 @@ def login() -> rx.Component:
     Returns:
     Base page for log in component.
     """
-    return rx.card(
-        #render_signup_form(),
+    return rx.container(
         login_form(),
+        rx.card(
+            rx.heading("Don't have an account?", spacing="2",
+                justify="center",
+                min_height="7vh",),
+            rx.link(
+                rx.button("Make an account instead", align='left'),
+                href="/signup",
+                is_external=False,
+            ),
+            rx.heading(" ", spacing='2', justify='center', min_height='5vh'),
+            width="100%",
+            padding="2em",
+            spacing="2",
+            justify="center",
+            align='center',
+            min_height="15vh",
+        ),
+        rx.heading(" ", spacing='2', justify='center', min_height='5vh'),
         rx.link(
             rx.button("Go back"),
             href="/",
             is_external=False,
-            position="top-right",
-        ),
-        rx.heading("Don't have an account?"),
-        rx.link(
-            rx.button("Make an account instead"),
-            href="/signup",
-            is_external=False,
-            position="top-right",
+            position="top-left",
         ),
         width="100%",
         height="100vh",
         padding="2em",
-        # bg="grey", # Background
+        spacing="2",
+        justify="center",
+        align='center',
+        min_height="15vh",
     )
 
 #Eof
