@@ -25,7 +25,6 @@ def weekly() -> rx.Component:
     """
     # Welcome Page (Index)
     return rx.container(
-        rx.color_mode.button(position="top-right"),
         rx.hstack(
 
             rx.heading("AIPlanner: Your Productivity Assistant", size="7"),
@@ -44,11 +43,6 @@ def weekly() -> rx.Component:
 
         # Developer & Task stack
         rx.hstack(
-            rx.link(
-                rx.button("Show Debug Options"),
-                href="/userlist",
-                is_external=False,
-            ),
             task_input_form(),
             spacing="5",
             justify="center",
@@ -63,9 +57,7 @@ def weekly() -> rx.Component:
             min_height="10vh",
         )
     ), rx.container(
-        rx.color_mode.button(position="top-right"),
         ), rx.container(
-            rx.color_mode.button(position="top-right"),
             rx.vstack(
                 rx.center(
                 weekly_component(),
